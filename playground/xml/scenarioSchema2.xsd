@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.example.org/scenarioSchema"
+	xmlns:tns="http://www.example.org/scenarioSchema" elementFormDefault="qualified">
+	<element name="scenario">
+		<complexType>
+			<sequence>
+				<element name="jadeConfig" maxOccurs="1" minOccurs="0">
+					<complexType>
+						<attribute name="isMain" type="boolean" use="optional"
+							default="false" />
+						<attribute name="IPaddress" type="string" use="optional" />
+						<attribute name="port" type="positiveInteger" use="optional" />
+						<attribute name="platformID" type="positiveInteger" use="optional" />
+						<attribute name="mainContainerName" type="string" use="optional" />
+					</complexType>
+				</element>
+				<element name="adfPath" type="string" minOccurs="0"
+					maxOccurs="unbounded" />
+				<element name="agentPackage" type="string" minOccurs="0"
+					maxOccurs="unbounded" />
+				<element name="initial" maxOccurs="1" minOccurs="0">
+					<complexType>
+						<sequence>
+							<element name="container" minOccurs="1" maxOccurs="unbounded">
+								<complexType>
+									<sequence>
+										<element name="agent" maxOccurs="unbounded" minOccurs="0">
+											<complexType>
+												<sequence>
+													<element name="parameter" minOccurs="0" maxOccurs="unbounded">
+														<complexType>
+															<attribute name="name" type="string" use="required" />
+															<attribute name="value" type="string" use="required" />
+														</complexType>
+													</element>
+												</sequence>
+											</complexType>
+										</element>
+									</sequence>
+									<attribute name="name" type="string" use="required" />
+									<attribute name="create" type="boolean" use="optional"
+										default="true" />
+								</complexType>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+				<element name="timeline" maxOccurs="1" minOccurs="0">
+					<complexType>
+						<sequence>
+							<element name="event" minOccurs="1" maxOccurs="unbounded">
+								<complexType>
+									<sequence>
+										<element name="CLAIMMessage" maxOccurs="unbounded"
+											minOccurs="0">
+											<complexType>
+												<sequence>
+													<element name="to" type="string" minOccurs="1"
+														maxOccurs="unbounded" />
+													<element name="protocol" type="string" minOccurs="0"
+														maxOccurs="1" />
+													<element name="content" type="string" minOccurs="0"
+														maxOccurs="1" />
+												</sequence>
+											</complexType>
+										</element>
+									</sequence>
+									<attribute name="time" type="positiveInteger" use="required" />
+								</complexType>
+							</element>
+						</sequence>
+						<attribute name="duration" type="positiveInteger" use="optional">
+						</attribute>
+					</complexType>
+				</element>
+			</sequence>
+		</complexType>
+	</element>
+
+</schema>

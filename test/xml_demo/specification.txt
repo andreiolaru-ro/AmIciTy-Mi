@@ -1,0 +1,118 @@
+General description of the content
+
+A scenario for KCA consists of an XML file with the following structure:
+- the root node is labeled "scenario" and has the single optional attribute
+"seed", which represents a long value that will be used as seed to initialize
+ the Random object that is to be used throughout the simulation.
+- the first child of the root node is a node labeled "map", which will describe the map
+	- the size of the map is established by two real-valued attributes "width" and "height"
+	- the top left corner of the map is given by the real-valued attributes "x" and "y"
+	- the "map" node contains as children nodes labeled "agent", which describe the position
+	of an agent using the real-valued attributes "location.x" and "location.y"
+- the second (and last) child of the root node is labeled "timeline" and describes the
+events that are to take place in the simulation
+	- the length of the simulation (in steps) is represented by the integer-valued
+	attribute "duration"
+	- the "timeline"  node contains nodes of type "event" representing the properties of
+	the events that will take place during the simulation
+		- each "event" node will have at least one attribute, of type String, namely "type",
+		so that the	type of the event can be known; so far only the "inject" event is 
+		implemented; the inject event has the following properties
+		- "time" = when will the event take place (integer)
+		- "location.x" and "location.y" give the position where the fact must be inserted (real);
+		if no agent is there, the agent that is closest to the destination will receive the
+		fact contained in the message
+		- "pressure" = the pressure of the injected fact (integer)
+		- "persistence" = the persistence of the injected fact (integer)
+		- "domain.a", "domain.b" and "domain.c" express the relatedness of the injected fact to
+		the given domains of interest
+
+
+Extended representation
+
+Note that many of the attributes are structured, that is to say that they can consists of
+several names separated by dots. Since a node may have lots of attributes (see for instance
+the "event" node) the parser will accept the following alternative way for specifying the
+attributes of a node:
+
+<node head.tail1="value1" head.tail2="value2"/> 
+
+is the same as
+
+ <node>
+ 	<node.head tail1="value1" tail2="value2"/>
+ </node>
+ 
+ The convention is that the attribute is represented as a child of the node, prepending the
+ name of the node to that of the first part of the attribute's name and using the second
+ part(s) as attribute names for specifying the corresponding values. 
+
+
+Node expansion
+
+Writing each agent or each event by hand can be very cumbersome, so the parser also accepts
+condensed notations for sets of nodes. In order to obtain a set of nodes instead of just a
+single node, it is enough to specify multiple values for some of its numerical attributes.
+In order to do so, instead of
+
+attribute="value"
+
+one will use a combination of the following attributes
+
+- attribute.for-each
+- attribute.list
+- attribute.mean
+- attribute.dev
+- attribute.min
+- attribute.max
+- attribute.first
+- attribute.last
+- attribute.count
+- attribute.step
+- attribute.select
+
+The ".for-each" construct instructs the parser to generate new values of the current attribute
+for each distinct tuple of values of the attributes given as a comma separated list of names.
+
+Expressing (random) the value(s) for attributes can be done in several ways:
+- a list of values => comma separated list given as value to .list
+- uniform random value between .min and .max
+- random value between .min and .max with average .mean and deviation .dev
+- a list of equidistant values (possibly randomly deviated) between given limits
+	- the limits for the values are .min and .max; in case .min is missing, .first must be
+	either present or computable and its value will be used also as value for .min; in case
+	.max is missing, .last must be either present or computable and its value will be used
+	also as a value for .max
+	- .last is computable if .first, .step and .count are given
+	- .first is computable if .last, .step and .count are given
+	- if .first is present, then .count (if present) should be at least 1 and the first
+	generated value will be the value of .first; otherwise the first value will be
+	.min + .step/2
+	- if .last is present, then .count (if present) should be at least 1 and the last
+	generated value will be the value of .last; otherwise the last value will be .last -.step/2
+	- if .count is missing, .step must be present and the value of .count will be computed
+	so as the generated values fit within the interval
+	- if .step is missing, .count must be present and .step will be computed
+	- the generated equidistant values can be deviated by using .dev; this means that the
+	generated values will have equidistant averages and .dev variance; a restriction is the
+	fact that the values will be enforced to the interval (average - .dev, average + .dev)
+	- .select can also be used to select only some of the generated values
+
+
+What it does
+
+Upon reading a scenario XML file, the Scenario class will expand "agent" and "event" nodes
+based on the given values and will export the following values:
+- the duration of the simulation
+- the top left corner and the size of the map
+- a list of agents
+- a list of data contained in inject events
+- a list of commands corresponding to inject events
+- the Random instance that was used for generating the values and that is to be used in the
+rest of the application in order to preserve reproducibility of experiments
+
+
+Examples
+
+demo.xml - after each 100 steps of the simulation, from around each corner of the map, one of
+8 data is injected into the system.

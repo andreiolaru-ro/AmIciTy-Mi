@@ -1,0 +1,74 @@
+<scenario seed="2693127392989849511">
+	<map x="0" y="0" width="31" height="31">
+		<agent>
+			<agent.location.x min="0" max="30" count = "1000" dev = ".5" select = "1000" />
+			<agent.location.y min="0" max="30" for-each = "location.x"/>
+		</agent>
+	</map>
+	
+	<timeline duration="1000">
+
+		<!--  preparation -->
+
+		<!-- dom X
+		
+		<event type="inject" time = "0" pressure="0.95" persistence=".99999999999" location.x="15" location.y="15">
+			<event.domain a="0" b="0" c="0.5" />
+		</event>
+		 -->
+		
+		<!-- A -->
+		<event type = "inject" pressure="0.1" persistence=".05">
+			<event.domain a="1" b="0" c="0" />
+			<event.time min="0" max="150" count="15" dev="2" />
+			<event.location.x min="0" max="12" dev="2" for-each="time"/>
+			<event.location.y min="0" max="12" select="1" for-each="location.x,time" />
+		</event>
+
+		<event type = "inject" pressure="0.1" persistence=".05">
+			<event.domain a="0" b="1" c="1" />
+			<event.time min="0" max="150" count="15" dev="2" />
+			<event.location.x min="17" max="30" dev="2" for-each="time"/>
+			<event.location.y min="0" max="12" select="1" for-each="location.x,time" />
+		</event>
+		
+		<event type = "inject" pressure="0.1" persistence=".05">
+			<event.domain a="0" b="0" c="1" />
+			<event.time min="0" max="150" count="15" dev="2" />
+			<event.location.x min="0" max="12" dev="2" for-each="time"/>
+			<event.location.y min="17" max="30" select="1" for-each="location.x,time" />
+		</event>
+		
+		<event type = "inject" pressure="0.1" persistence=".05">
+			<event.domain a="0" b="1" c="0" />
+			<event.time min="0" max="150" count="15" dev="2" />
+			<event.location.x min="17" max="30" dev="2" for-each="time"/>
+			<event.location.y min="17" max="30" select="1" for-each="location.x,time" />
+		</event>
+
+		
+		<event type="inject" time = "70" pressure="0.1" persistence=".02" location.x="5" location.y="5">
+			<event.domain a="0" b="1" c=".1" />
+		</event>
+		
+		<event type="inject" time = "130" pressure="0.1" persistence=".95">
+			<event.domain a="1" b=".1" c="0" />
+			<event.location.x min="12" max="17" select="1" for-each="time"/>
+			<event.location.y min="12" max="17" select="1" for-each="location.x,time" />
+		</event>
+		<event type="inject" time = "130" pressure="0.1" persistence=".95">
+			<event.domain a="0" b="1" c=".1" />
+			<event.location.x min="12" max="17" select="1" for-each="time"/>
+			<event.location.y min="12" max="17" select="1" for-each="location.x,time" />
+		</event>
+		<event type="inject" time = "130" pressure="0.1" persistence=".95">
+			<event.domain a=".1" b="0" c="1" />
+			<event.location.x min="12" max="17" select="1"/>
+			<event.location.y min="12" max="17" select="1" for-each="location.x,time" />
+		</event>
+		
+		<event type="inject" time = "300" pressure="0.9999" persistence=".7" location.x="5" location.y="5">
+			<event.domain a=".3" b=".3" c=".3" />
+		</event>
+	</timeline>
+</scenario>

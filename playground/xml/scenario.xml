@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scen:scenario xmlns:pr="http://www.example.org/parameterSchema"
+	xmlns:kb="http://www.example.org/kbSchema" xmlns:scen="http://www.example.org/scenarioSchema"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.example.org/scenarioSchema ./scenarioSchema2.xsd ">
+
+	<scen:jadeConfig mainContainerName="ContainerRoot" />
+	<scen:adfPath>scenario/examples/simpleScenarioC</scen:adfPath>
+	<scen:agentPackage>agent_packages.example</scen:agentPackage>
+
+	<scen:initial>
+		<scen:container name="ContainerRoot">
+			<scen:agent>
+				<scen:parameter name="loader" value="adf2" />
+				<scen:parameter name="class" value="UnitaryAgent" />
+				<scen:parameter name="name" value="root" />
+				<scen:parameter name="java-code" value="StringFunctions" />
+			</scen:agent>
+			<scen:agent>
+				<scen:parameter name="loader" value="adf2" />
+				<scen:parameter name="class" value="UnitaryAgent" />
+				<scen:parameter name="name" value="master" />
+				<scen:parameter name="parent" value="root" />
+			</scen:agent>
+		</scen:container>
+
+		<scen:container name="ContainerRoaming">
+			<scen:agent>
+				<scen:parameter name="loader" value="adf2" />
+				<scen:parameter name="class" value="UnitaryAgent" />
+				<scen:parameter name="name" value="roaming" />
+				<scen:parameter name="parent" value="root" />
+				<scen:parameter name="java-code" value="StringFunctions" />
+			</scen:agent>
+			<scen:agent>
+				<scen:parameter name="loader" value="adf2" />
+				<scen:parameter name="class" value="UnitaryAgent" />
+				<scen:parameter name="name" value="slave" />
+				<scen:parameter name="parent" value="roaming" />
+				<scen:parameter name="java-code" value="StringFunctions" />
+				<scen:parameter name="knowledge" value="masterAgent -is> master" />
+			</scen:agent>
+		</scen:container>
+	</scen:initial>
+	<scen:timeline>
+		<scen:event time="2000">
+			<scen:CLAIMMessage>
+				<scen:to>root</scen:to>
+				<scen:content>( struct message go-gather-root roaming )</scen:content>
+			</scen:CLAIMMessage>
+		</scen:event>
+	</scen:timeline>
+</scen:scenario>

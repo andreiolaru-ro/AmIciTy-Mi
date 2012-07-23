@@ -1,0 +1,34 @@
+
+In this file:
+  - always number in order, keep the numbers of items;
+  - move solved issues, comments and bugs to the solved section, keeping the same number
+  - use dokuwiki syntax [[http://www.dokuwiki.org/syntax]]; don't use enumeration for the indexes of bugs/issues/comments; use manual numbering.
+  
+=============================================================================================================================================
+
+===== Bugs - things that are expected to work and don't work as expected =====
+
+1.
+
+== solved ==
+0. --sample solved bug--
+
+
+
+=============================================================================================================================================
+
+===== Issues - things that work as expected, but should work in a different way / be implemented differently =====
+
+1.
+
+== solved ==
+
+
+=============================================================================================================================================
+
+===== Comments - general comments and questions =====
+
+1.
+
+== solved ==
+

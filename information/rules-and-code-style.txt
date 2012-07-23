@@ -1,0 +1,50 @@
+READ ALL OF THIS FILE. IT'S ONLY ONE PAGE.
+
+1. **FIRST RULE** 
+ Use comments. All comments, strings, and identifiers should be written in American English. Spellcheck your comments and strings (see Eclipse settings). 
+
+2. NAMING AND DOCUMENTING
+ For classes and class members (functions or objects) use JavaDoc [1]. A quick tutorial here [2] or just search Google.
+ Also, respect the the Java Naming Conventions [5]: lower case package names, upper CamelCase class/interface names, lower CamelCase method/field names, upper case constant names. 
+ 
+3. FORMATTING
+ Learn to use the automatic formatter in Eclipse so that you can quickly reformat the source according to your preferences.
+ Don't mind if other people's sources are formatted differently, just reformat it as you want. 
+ Conversely, write only code that can be autoformatted by Eclipse. Don't manually remove whitespace or blank lines. 
+
+4. COMMITS
+ Always comment when committing. Just say what small or big changes you have done. Spellcheck your comments.
+ Add the comments to the information/changelog.txt file (you can use dokuwiki format), and to the commit message.
+ It would be best if one commit should correspond to one bug / one issue / one thing to do.
+ **DO NOT COMMIT:** host-specific files: .class files, binaries, Jade-generated files, etc  
+
+5. LIBRARIES
+ Do place all necessary libraries in the repository, in the /lib folder, so that in Eclipse's build path editor they are added with 'Add JAR' (not with 'Add External JAR').
+ In fact, the rule of thumb is no external JARs. 
+
+6. **UPDATE BEFORE COMMIT**
+ Always update/fetch+pull before commit/push. (useful views in Eclipse are Synchronize and History) 
+
+7. CONSTANTS
+ If you define a constant (anything that is a fixed string, number, etc) define it in a single place across all sources,
+  as high (i.e. towards the beginning of the file) in the code as possible in the context where you define it (e.g. just after the class definition).
+ Final constants are best. 
+
+8. USE ENUMS
+ Whenever you need to define types for something, use enums (see [3]). Not number constants, not string constants. 
+
+9. WARNINGS AND TAGS
+ Do resolve all warnings in your code. Warnings are just like errors, but they don't stop you from executing. They still must be solved.
+ Learn to use // TODO: and // FIXME: They also appear in the Tasks view and in the scrollbar. Also, remove auto-completed TODOs once they are no more needed.
+ In Eclipse, activate ALL warnings, except for "Unqualified access" and "Non-externalized strings" (also, "Forbidden access" is an error), and check all boxes, except for the last two.  
+
+10. ACCESS QUALIFIERS
+ Make appropriate use of public, protected and private (see [4]) - not all members should be public. Don't make member objects public. Also be careful with static and final. 
+
+
+
+[1] http://en.wikipedia.org/wiki/Javadoc
+[2] http://research.cs.queensu.ca/home/cisc124/2001f/Javadoc.html
+[3] http://download.oracle.com/javase/tutorial/java/javaOO/enum.html
+[4] http://download.oracle.com/javase/tutorial/java/javaOO/accesscontrol.html
+[5] http://java.about.com/od/javasyntax/a/nameconventions.htm
