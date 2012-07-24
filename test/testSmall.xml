@@ -1,0 +1,11 @@
+<scenario time="1000">
+	<map type="full" width="31" height="31"/>
+	<data type="fixed">
+		<item id="0" size="1" a="1" b="0" c="0"/>
+		<item id="1" size="2" a="0" b="0" c="1"/>
+	</data>
+	<timeline>
+		<event type="inject" agent="(15,15)" data="0" pressure="0.5" persistence="0.1" time="0" />
+		<event type="inject" agent="(30,0)" data="1" pressure="0.2" persistence="0.1" time="0" />
+	</timeline>
+</scenario>

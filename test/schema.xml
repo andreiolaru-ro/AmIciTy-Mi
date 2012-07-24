@@ -1,0 +1,33 @@
+<root name="scenario">
+	<attribute name="seed" type="integer"/>
+	<node name="map">
+		<attribute name="x" type="real"/>
+		<attribute name="y" type="real"/>
+		<attribute name="width" type="real"/>
+		<attribute name="height" type="real"/>
+		<node name="agent">
+			<attribute name="location" type="composite">
+				<attribute name="x" type="real"/>
+				<attribute name="y" type="real"/>
+			</attribute>
+		</node>
+	</node>
+	<node name="timeline">
+		<attribute name="duration" type="integer"/>
+		<node name="event">
+			<attribute name="type" type="string"/>
+			<attribute name="time" type="integer"/>
+			<attribute name="location" type="composite">
+				<attribute name="x" type="integer"/>
+				<attribute name="y" type="integer"/>
+			</attribute>
+			<attribute name="pressure" type="real"/>
+			<attribute name="persistence" type="real"/>
+			<attribute name="domain" type="composite">
+				<attribute name="a" type="real"/>
+				<attribute name="b" type="real"/>
+				<attribute name="c" type="real"/>
+			</attribute>
+		</node>
+	</node>
+</root>

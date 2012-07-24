@@ -1,0 +1,18 @@
+<scenario>
+	<map x="0" y="0" width="31" height="31">
+		<agent>
+			<agent.location.x first="0" last="30" count="31"/>
+			<agent.location.y first="0" last="30" count="31"/>
+		</agent>
+	</map>
+	<timeline duration="1000">
+		<event type="inject" pressure="0.0" persistence="0.1">
+			<event.time first="0" max="1000" step="100"/>
+			<event.location.x first="0" last="30" count="2" dev="3" for-each="time"/>
+			<event.location.y first="0" last="30" count="2" dev="3" for-each="time"/>
+			<event.domain.a first="0" last="1" count="2" select="1" for-each="location.x,location.y"/>
+			<event.domain.b first="0" last="1" count="2" select="1" for-each="location.x,location.y"/>
+			<event.domain.c first="0" last="1" count="2" select="1" for-each="location.x,location.y"/>
+		</event>
+	</timeline>
+</scenario>

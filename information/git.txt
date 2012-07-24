@@ -1,0 +1,3 @@
+Git repo:
+
+gitosis@aimas.cs.pub.ro:AmIciTyMi.git
