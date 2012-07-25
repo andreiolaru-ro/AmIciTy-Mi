@@ -325,7 +325,7 @@ public class KCAScenario {
 
 		// initialization of the map
 		List<Map<Specification, String>> events = new ArrayList<Map<Specification, String>>();
-		events.add(new HashMap<Specification, String>());
+		events.add(new TreeMap<Specification, String>());
 
 		for (Specification path : specifications.keySet()) {
 			events = generateValues(path, specifications, events);
@@ -386,7 +386,7 @@ public class KCAScenario {
 			for (int i = 0; i < countNumberValues; i++) {
 				for (int j = 0; j < numberSameTuples; j++) {
 					for (int k = 0; k < numberValuesProduced; k++) {
-						Map<Specification, String> eventWithNewValue = new HashMap<Specification, String>(
+						Map<Specification, String> eventWithNewValue = new TreeMap<Specification, String>(
 								eventsUpdate.get(i * numberSameTuples + j));
 						eventWithNewValue.put(path, values.get(i * numberValuesProduced + k));
 						newEvents.add(eventWithNewValue);
