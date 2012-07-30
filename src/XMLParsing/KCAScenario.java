@@ -85,16 +85,17 @@ public class KCAScenario {
 		XMLTree scenario = getKCATree(scenarioXMLNode);
 
 		/*************************************** seed random ***************************************/
-		// attributes are always String
+		// attributes are always String with XMLParser
 		String stringSeed = scenario.getRoot().getAttributeValue("seed");
-		try {
+		
+		// speed specified in the xml
+		if(stringSeed != null){
 			seed = Long.parseLong(stringSeed);
 			KCAScenario.initRandom(seed);
-		} catch (NumberFormatException ex) {
-			// TODO: handle exception
-			// should be never called (because schema checks if it's an
-			// integeror not)
-			assert false : stringSeed;
+		}
+		// read seed in test/seed
+		else{
+			KCAScenario.initRandom();
 		}
 
 		/********************************* map : coordinates + size ********************************/
