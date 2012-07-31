@@ -123,8 +123,7 @@ public class KCAAgent extends AbstractAgent
 	}
 
 	@SuppressWarnings({ "hiding", "unused" })
-	KCAAgent(Environment parent, AgentID id, Location loc, double capacity,
-			Specialty spec, int nsteps)
+	KCAAgent(Environment parent, AgentID id, Location loc, double capacity, Specialty spec, int nsteps)
 	{
 		super();
 		neighbours = new HashMap<AgentID, KCAAgent>();

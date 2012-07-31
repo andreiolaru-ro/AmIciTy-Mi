@@ -1,9 +1,10 @@
 package P2PAgent;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -13,6 +14,7 @@ import base.Message.Type;
 import agent.AbstractAgent;
 import agent.AbstractMeasure.NumericMeasure;
 import agent.AgentID;
+import agent.Location;
 import agent.Measure;
 import agent.MeasureName;
 import agent.Measures;
@@ -24,33 +26,43 @@ import agent.Measures;
  */
 public class P2PAgent extends AbstractAgent
 {
-	private List<Item>					items; //List of items that our agent has
-	private List<Item>					itemsWanted;//List which contains the items that our agent wants			
-	private Map<AgentID, List<Item>>	pendingQueries;	//Map which contains the pending queries from the others agents		
-	private Map<Item, List<AgentID>>	itemsLocation; //Map which contains the items location that our agent knows
-	private List<AgentID>				contacts;//list of the other agent that our agent knows
+	private Set<Item>					items; //Set of items that our agent has
+	private Set<Item>					itemsWanted;//Set which contains the items that our agent wants			
+	private Map<AgentID, Set<Item>>		pendingQueries;	//Map which contains the pending queries from the others agents		
+	private Map<Item, Set<AgentID>>		itemsLocation; //Map which contains the items location that our agent knows
+	private Set<AgentID>				contacts;//Set of the other agent that our agent knows
 	private Measures					measures;
 	private NumericMeasure				probability;
 	final static int					maxNumberOfContacts	= 10;
+	private Location					location;
+	private List<Message<?>>			waitingMessage;
 
-	public P2PAgent(Environment parent, AgentID id,double probability, int nsteps)
+	@SuppressWarnings("hiding")
+	public P2PAgent(Environment parent, AgentID id,Location loc, double probability)
 	{
 		super();
 		this.id = id;
-		this.items = new ArrayList<Item>();
-		this.itemsWanted = new ArrayList<Item>();
-		this.pendingQueries = new HashMap<AgentID, List<Item>>();
-		this.itemsLocation = new HashMap<Item, List<AgentID>>();
-		this.contacts = new ArrayList<AgentID>();
+		this.items = new HashSet<Item>();
+		this.itemsWanted = new HashSet<Item>();
+		this.pendingQueries = new HashMap<AgentID, Set<Item>>();
+		this.itemsLocation = new HashMap<Item, Set<AgentID>>();
+		this.contacts = new HashSet<AgentID>();
 		this.measures=new Measures(this.id);
 		this.probability=(NumericMeasure) this.measures.createMeasure(new NumericMeasure(probability,MeasureName.PROBABILITY));
+		this.location=(Location) this.measures.createMeasure(loc);
 	}
 
 	@Override
 	protected void agentPrint()
 	{
-		// TODO Auto-generated method stub
-
+		// TODO Auto-generated method 
+		StringBuffer statPrint = new StringBuffer();
+		statPrint.append("\" agent ").append(this.id);
+		statPrint.append(" has ").append(this.items.size()).append(" items");
+		statPrint.append(" and it knows ").append(this.itemsLocation.size()).append("items");
+		statPrint.append(" and it wants ").append(this.itemsWanted.size()).append("items");
+		
+		log.li("~", statPrint);
 	}
 
 	/*protected void addPartner(AgentID agent, int step)
@@ -89,7 +101,6 @@ public class P2PAgent extends AbstractAgent
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	/**function to receive a message from the others agents
 	 * 
 	 * @param msg
@@ -97,66 +108,31 @@ public class P2PAgent extends AbstractAgent
 	public void receiveMessage(Message<?> msg)
 	{
 		log.lf("received ~", msg);
-		switch (msg.getType())
-		{
-			//An other agent asks our agent if he has this items or if he knows where to find them
-			case REQUEST:
-				List<Item> queriesItems=null;
-				if(pendingQueries.containsKey(msg.getFrom()))
-				{
-					queriesItems = this.pendingQueries.get(msg.getFrom());					
-				}
-				else
-				{
-					queriesItems=new ArrayList<Item>();
-				}
-				queriesItems.addAll((List<Item>) msg.getContents());
-				this.pendingQueries.put(msg.getFrom(), queriesItems);
-			break;
-			
-			//an other agent informs our agent where to find some items that he wants
-			case INFORM:
-				Map<AgentID, List<Item>> responseToOurRequests=(Map<AgentID, List<Item>>) msg.getContents();
-				for(Entry<AgentID, List<Item>> information: responseToOurRequests.entrySet())
-				{
-					//our agent reacts by sending a request to the agent which has the requested items
-					this.sendMessage(information.getKey(),new Message<List<Item>>(this.id,Type.REQUEST,information.getValue()));
-				}
-			break;
-			
-			//response to a request
-			case DATA:
-				for(Item itemResponse:(List<Item>) msg.getContents())
-				{
-					//the item is for him, our agent "downloads" it
-					if(this.itemsWanted.contains(itemResponse))
-					{
-						items.add(itemResponse);
-					}
-					//the item is not for him, he put it in the itemLocation
-					else
-					{
-						List<AgentID> possessor=null;
-						if(itemsLocation.containsKey(itemResponse))
-						{
-							possessor=itemsLocation.get(itemResponse);
-						}
-						else
-						{
-							possessor=new ArrayList<AgentID>();
-						}
-						this.itemsLocation.put(itemResponse, possessor);
-					}
-				}
-				this.itemsWanted.removeAll((List<Item>) msg.getContents());
-			break;
-		}
+		this.waitingMessage.add(msg);
 	}
+	
+	/**
+	 * step for one agent
+	 */
 	@Override
 	public void step()
 	{
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method 
 		
+		//print some information about the agent in the logs
+		agentPrint();
+		
+		//Treatment of the pending queries
+		this.pendingQueriesTreatement();
+		
+		// we send our requests to our contacts about the items that our agent wants
+		for(AgentID contact: this.contacts)
+		{
+			this.sendMessage(contact, new Message<Set<Item>>(this.id,Type.REQUEST, this.itemsWanted));
+		}
+		
+		//we treat all the waitingMessage that we had previously received
+		this.waitingMessageTreatment();
 	}
 	
 	/**
@@ -165,11 +141,11 @@ public class P2PAgent extends AbstractAgent
 	private void pendingQueriesTreatement()
 	{
 		Iterator<Item> iteratorQueries=null;
-		List<Item> itemsToSend=new ArrayList<Item>();
-		Map<AgentID, List<Item>> locationOfItemsRequested=new HashMap<AgentID, List<Item>>();
-		List<Item> itemsToRequest=new ArrayList<Item>();
+		Set<Item> itemsToSend=new HashSet<Item>();
+		Map<AgentID, Set<Item>> locationOfItemsRequested=new HashMap<AgentID, Set<Item>>();
+		Set<Item> itemsToRequest=new HashSet<Item>();
 		//our agent checks all the pendingQueries and try to respond
-		for(Entry<AgentID, List<Item>> queries: this.pendingQueries.entrySet())
+		for(Entry<AgentID, Set<Item>> queries: this.pendingQueries.entrySet())
 		{
 			iteratorQueries= queries.getValue().iterator();
 			
@@ -185,15 +161,16 @@ public class P2PAgent extends AbstractAgent
 				//if our agent doesn't possessed the item requested but he knows where to find it, he will inform the agent who queries this item
 				else if(this.itemsLocation.containsKey(items))
 				{
-					AgentID possessor=this.itemsLocation.get(items).get(this.itemsLocation.get(items).size()-1); //we take the last agent of the list, which possessed the item
-					List<Item> itemPossessed=null;
+					AgentID[] possessors=(AgentID[]) this.itemsLocation.get(items).toArray();
+					AgentID possessor= possessors[possessors.length-1];//we take the last agent of the list
+					Set<Item> itemPossessed=null;
 					if(locationOfItemsRequested.containsKey(possessor))
 					{
 						itemPossessed=locationOfItemsRequested.get(possessor);
 					}
 					else
 					{
-						itemPossessed=new ArrayList<Item>();
+						itemPossessed=new HashSet<Item>();
 					}
 					itemPossessed.add(requestedItem);
 					locationOfItemsRequested.put(possessor, itemPossessed);
@@ -215,22 +192,86 @@ public class P2PAgent extends AbstractAgent
 			//if we have some items locations, we send them here
 			if(!locationOfItemsRequested.isEmpty())
 			{
-				this.sendMessage(queries.getKey(), new Message<Map<AgentID,List<Item>>>(this.id,Type.INFORM,locationOfItemsRequested));
+				this.sendMessage(queries.getKey(), new Message<Map<AgentID,Set<Item>>>(this.id,Type.INFORM,locationOfItemsRequested));
 			}
 			//if we have some items to send, we send them here
 			if(!itemsToSend.isEmpty())
 			{
-				this.sendMessage(queries.getKey(), new Message<List<Item>>(this.id,Type.DATA,itemsToSend));
+				this.sendMessage(queries.getKey(), new Message<Set<Item>>(this.id,Type.DATA,itemsToSend));
 			}
 			//if we have some request to send, we send them here
 			if(!itemsToRequest.isEmpty())
 			{
 				for(AgentID contact: contacts)
 				{
-					this.sendMessage(contact, new Message<List<Item>>(this.id, Type.REQUEST,itemsToRequest));
+					this.sendMessage(contact, new Message<Set<Item>>(this.id, Type.REQUEST,itemsToRequest));
 				}
 			}			
 		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void waitingMessageTreatment()
+	{
+		for(Message<?> msg: waitingMessage)
+		{
+			switch (msg.getType())
+			{
+				//An other agent asks our agent if he has this items or if he knows where to find them
+				case REQUEST:
+					Set<Item> queriesItems=null;
+					if(pendingQueries.containsKey(msg.getFrom()))
+					{
+						queriesItems = this.pendingQueries.get(msg.getFrom());					
+					}
+					else
+					{
+						queriesItems=new HashSet<Item>();
+					}
+					queriesItems.addAll((Set<Item>) msg.getContents());
+					this.pendingQueries.put(msg.getFrom(), queriesItems);
+				break;
+				
+				//an other agent informs our agent where to find some items that he wants
+				case INFORM:
+					Map<AgentID, Set<Item>> responseToOurRequests=(Map<AgentID, Set<Item>>) msg.getContents();
+					for(Entry<AgentID, Set<Item>> information: responseToOurRequests.entrySet())
+					{
+						//our agent reacts by sending a request to the agent which has the requested items
+						this.sendMessage(information.getKey(),new Message<Set<Item>>(this.id,Type.REQUEST,information.getValue()));
+					}
+				break;
+				
+				//response to a request
+				case DATA:
+					for(Item itemResponse:(Set<Item>) msg.getContents())
+					{
+						//the item is for him, our agent "downloads" it
+						if(this.itemsWanted.contains(itemResponse))
+						{
+							items.add(itemResponse);
+						}
+						//the item is not for him, he put it in the itemLocation
+						else
+						{
+							Set<AgentID> possessor=null;
+							if(itemsLocation.containsKey(itemResponse))
+							{
+								possessor=itemsLocation.get(itemResponse);
+							}
+							else
+							{
+								possessor=new HashSet<AgentID>();
+							}
+							this.itemsLocation.put(itemResponse, possessor);
+						}
+					}
+					this.itemsWanted.removeAll((Set<Item>) msg.getContents());
+				break;
+			}
+		}
+		//we erase the inbox at the end
+		waitingMessage.clear();
 	}
 
 	@Override
