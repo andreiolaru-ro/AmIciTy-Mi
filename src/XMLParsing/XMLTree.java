@@ -10,18 +10,14 @@ import java.util.Stack;
 import XMLParsing.XMLTree.XMLNode.XMLAttribute;
 
 /**
- * A class that contains the data that was read from (or that will be written
- * to) an XML file.
+ * A class that contains the data that was read from (or that will be written to) an XML file.
  * 
- * The class also contains functions (like cNode(), finishNode() and reset())
- * and support (see newNode(), newAttribute()) to keep a current position
- * (current node) in the tree. See the JavaDoc for the functions for particular
- * details.
+ * The class also contains functions (like cNode(), finishNode() and reset()) and support (see newNode(),
+ * newAttribute()) to keep a current position (current node) in the tree. See the JavaDoc for the functions for
+ * particular details.
  * 
- * Most functions return the tree itself, so that chained calls can be used.
- * E.g. new
- * XMLTree(root).newNode(node1).newAttribute(someAttribute).finishNode()
- * .newNode(nodeSibilingWithNode1);
+ * Most functions return the tree itself, so that chained calls can be used. E.g. new
+ * XMLTree(root).newNode(node1).newAttribute(someAttribute).finishNode() .newNode(nodeSibilingWithNode1);
  * 
  * @author Andrei Olaru
  * 
@@ -29,13 +25,12 @@ import XMLParsing.XMLTree.XMLNode.XMLAttribute;
 public class XMLTree
 {
 	/**
-	 * A class that contains the data corresponding to a node (element) in an
-	 * {@link XMLTree} / XML file.
+	 * A class that contains the data corresponding to a node (element) in an {@link XMLTree} / XML file.
 	 * 
 	 * Contains a name, a string / integer value, attributes, and child nodes.
 	 * 
-	 * Some functions return the node itself, so that chained calls can be used.
-	 * E.g. new XMLNode(name).setValue("value").addNode("child");
+	 * Some functions return the node itself, so that chained calls can be used. E.g. new
+	 * XMLNode(name).setValue("value").addNode("child");
 	 * 
 	 * @author Andrei Olaru
 	 * 
@@ -43,8 +38,7 @@ public class XMLTree
 	public static class XMLNode
 	{
 		/**
-		 * An iterator that iterates only over the child nodes that have a
-		 * certain name (specified in constructor).
+		 * An iterator that iterates only over the child nodes that have a certain name (specified in constructor).
 		 * 
 		 * @author Andrei Olaru
 		 * 
@@ -53,43 +47,43 @@ public class XMLTree
 		{
 			String	search	= null;
 			int		cIndex	= 0;
-
+			
 			public NodeIterator(String searchName)
 			{
 				search = searchName;
 			}
-
+			
 			@Override
 			public boolean hasNext()
 			{
-				while (cIndex < nodes.size())
+				while(cIndex < nodes.size())
 				{
-					if (nodes.get(cIndex).name.equals(search))
+					if(nodes.get(cIndex).name.equals(search))
 						return true;
 					cIndex++;
 				}
 				return false;
 			}
-
+			
 			@Override
 			public XMLNode next()
 			{
-				while (cIndex < nodes.size())
+				while(cIndex < nodes.size())
 				{
-					if (nodes.get(cIndex).name.equals(search))
+					if(nodes.get(cIndex).name.equals(search))
 						return nodes.get(cIndex++);
 					cIndex++;
 				}
 				return null;
 			}
-
+			
 			@Override
 			public void remove()
 			{
 				throw new UnsupportedOperationException();
 			}
 		}
-
+		
 		/**
 		 * 
 		 * @author Andrei Olaru
@@ -99,7 +93,7 @@ public class XMLTree
 		{
 			String	name	= null;
 			String	value	= null;
-
+			
 			public XMLAttribute(String attrName, String attrValue)
 			{
 				super();
@@ -107,153 +101,158 @@ public class XMLTree
 				this.value = attrValue;
 			}
 		}
-
+		
 		protected String			name		= null;
 		protected String			namespace	= null;
 		protected String			fullName	= null;
-
+		
 		protected Set<XMLAttribute>	attributes	= new HashSet<XMLAttribute>();
-
+		
 		protected String			valueString	= null;
 		protected Integer			valueInt	= null;
 		protected Double			valueDouble	= null;
 		protected List<XMLNode>		nodes		= new LinkedList<XMLNode>();
-
+		
 		public XMLNode(String fullNodeName)
 		{
 			parseName(fullNodeName);
 		}
-
-		public XMLNode(XMLNode node){
+		
+		public XMLNode(XMLNode node)
+		{
 			// need to fix : getters should be a better thing
 			name = new String(node.name);
 			namespace = new String(node.namespace);
 			fullName = new String(node.fullName);
-			attributes.addAll(node.attributes) ;
-
+			attributes.addAll(node.attributes);
+			
 			if(node.valueString != null)
 				valueString = new String();
 			if(node.valueInt != null)
-				valueInt = new Integer(node.valueInt.intValue()) ;
+				valueInt = new Integer(node.valueInt.intValue());
 			if(node.valueDouble != null)
 				valueDouble = new Double(node.valueDouble.doubleValue());
-
-			nodes.addAll(node.nodes) ;
+			
+			nodes.addAll(node.nodes);
 		}
-
-
+		
 		protected void parseName(String fullNodeName)
 		{
 			int columnIndex = fullNodeName.lastIndexOf(':');
-			if (columnIndex < 0)
+			if(columnIndex < 0)
 			{ // no prefix
 				namespace = null;
 				name = fullNodeName;
-			} else
+			}
+			else
 			{
 				namespace = fullNodeName.substring(0, columnIndex);
 				name = fullNodeName.substring(columnIndex + 1);
 			}
 			this.fullName = fullNodeName;
 		}
-
+		
 		public XMLNode setValue(String string)
 		{
 			valueString = string;
 			return this;
 		}
-
+		
 		public XMLNode setValue(int integer)
 		{
 			valueInt = new Integer(integer);
 			return this;
 		}
-
+		
 		public XMLNode setValue(double dou)
 		{
 			valueDouble = new Double(dou);
 			return this;
 		}
-
+		
 		public XMLNode addNode(XMLNode node)
 		{
 			nodes.add(node);
 			return this;
 		}
-
+		
 		public XMLNode addAttribute(XMLAttribute attr)
 		{
 			attributes.add(attr);
 			return this;
 		}
-
+		
 		public String getName()
 		{
 			return name;
 		}
-
+		
 		public Object getValue()
 		{
-			if (valueString != null)
+			if(valueString != null)
 				return valueString;
-			if (valueInt != null)
+			if(valueInt != null)
 				return valueInt;
-			if (valueDouble != null)
+			if(valueDouble != null)
 				return valueDouble;
 			return null;
 		}
-
+		
 		public List<XMLNode> getNodes()
 		{
 			return nodes;
 		}
-
+		
 		/**
-		 * @param childName a {@link String} name corresponding at the name of the first child you want to get 
-		 * @return First child node of name input in parameters, null if it doesn't exist.
+		 * @param childName
+		 *            the name (a {@link String}) of the searched node.
+		 * @return the first child node with the specified name.
 		 */
-		public XMLNode getFirstNode(String childName){
-			return getNode(childName, 1) ; // get first indexOf
+		public XMLNode getFirstNode(String childName)
+		{
+			return getNode(childName, 0);
 		}
-
+		
 		/**
-		 * @param childName a {@link String} name corresponding at the name of the child you want to get
-		 * @param indexOf index of the child you want to get with this name, should be positive
-		 * @return child node of name and index input in parameters. Return null if there is no child of this name or at this index. 
+		 * @param childName
+		 *            the name (a {@link String}) of the searched node.
+		 * @param index
+		 *            index (0 - based) of the child with the specified name that should be returned. Only non-negative
+		 *            values are accepted.
+		 * @return the n-th child node with the specified name (n is the given index). Returns null if there is no child
+		 *         with this name or at this index.
 		 */
-		public XMLNode getNode(String childName, int indexOf){
-			int iterator = 0; // iterate on the node
-			int index = 0;
+		public XMLNode getNode(String childName, int index)
+		{
+			if(index < 0)
+				throw new IllegalArgumentException("Index should be non-negative.");
 			
-			if(indexOf > 0){
-				while (iterator < nodes.size())
-				{
-					if (nodes.get(iterator).name.equals(childName))
-						index ++ ;
-
-					if(index == indexOf)
-						return nodes.get(iterator) ;
-
-					iterator++ ;
-				}
+			int count = -1;
+			for(XMLNode child : nodes)
+			{
+				if(child.getName().equals(childName))
+					count++;
+				
+				if(index == count)
+					return child;
 			}
-			// child not find
-			return null ;
+			// child not found
+			return null;
 		}
-
+		
 		public Set<XMLAttribute> getAttributes()
 		{
 			return attributes;
 		}
-
+		
 		public String getAttributeValue(String attributeName)
 		{
-			for (XMLAttribute attr : attributes)
-				if (attr.name.equals(attributeName))
+			for(XMLAttribute attr : attributes)
+				if(attr.name.equals(attributeName))
 					return attr.value;
 			return null;
 		}
-
+		
 		/**
 		 * @return a {@link NodeIterator} for all child nodes
 		 */
@@ -261,74 +260,71 @@ public class XMLTree
 		{
 			return nodes.iterator();
 		}
-
+		
 		/**
 		 * @param search
 		 *            the name of the nodes to iterate over.
-		 * @return a {@link NodeIterator} for child nodes with the name given by
-		 *         search.
+		 * @return a {@link NodeIterator} for child nodes with the name given by search.
 		 */
 		public Iterator<XMLNode> getNodeIterator(String search)
 		{
 			return new NodeIterator(search);
 		}
-
+		
 		/**
-		 * @return a {@link String} representation of the node's name, value and
-		 *         attributes (one line).
+		 * @return a {@link String} representation of the node's name, value and attributes (one line).
 		 */
 		@Override
 		public String toString()
 		{
 			String ret = "";
 			ret += namespace + ":" + name;
-			if (valueString != null)
+			if(valueString != null)
 				ret += "[ String : " + valueString + "]";
-			if (valueInt != null)
+			if(valueInt != null)
 				ret += "[ Integer : " + valueInt + "]";
-			if (valueDouble != null)
+			if(valueDouble != null)
 				ret += "[ Double : " + valueDouble + "]";
-			for (XMLAttribute attr : attributes)
+			for(XMLAttribute attr : attributes)
 				ret += " [" + attr.name + ":" + attr.value + "]";
 			return ret;
 		}
-
+		
 		/**
-		 * @return a {@link String} representation of this node's name value,
-		 *         attributes and children (recursive). Each node has one line.
+		 * @return a {@link String} representation of this node's name value, attributes and children (recursive). Each
+		 *         node has one line.
 		 */
 		public String toStringDepth()
 		{
 			System.out.println();
 			return this.toStringDepth("");
 		}
-
+		
 		/**
 		 * @param indent
 		 *            to apply to the output.
-		 * @return a {@link String} representation of this node's name value,
-		 *         attributes and children (recursive). Each node has one line.
+		 * @return a {@link String} representation of this node's name value, attributes and children (recursive). Each
+		 *         node has one line.
 		 */
 		public String toStringDepth(String indent)
 		{
 			String ret = indent + this.toString() + "\n";
-			for (XMLNode node : this.nodes)
+			for(XMLNode node : this.nodes)
 				ret += node.toStringDepth(indent + "\t");
 			// ret += node.toStringDepth(indent + "|\t"); // alternative
 			// printout, with verticla lines
 			return ret;
 		}
 	}
-
+	
 	XMLNode			root	= null;
-
+	
 	/**
-	 * Keeps information for finding the current position in the tree (and
-	 * allowing going up and down in the tree). stack.peek() is the current
-	 * node.
+	 * Keeps information for finding the current position in the tree (and allowing going up and down in the tree).
+	 * stack.peek() is the current node.
 	 */
 	Stack<XMLNode>	stack	= new Stack<XMLNode>();
-
+	
 	/**
 	 * Creates a new {@link XMLTree}. The current node becomes the root.
 	 * 
@@ -340,25 +336,24 @@ public class XMLTree
 		this.root = rootNode;
 		stack.push(rootNode);
 	}
-
+	
 	public XMLNode getRoot()
 	{
 		return root;
 	}
-
+	
 	/**
 	 * @return the current node (see {@link XMLTree}).
 	 */
 	public XMLNode currentNode()
 	{
-		if (stack.empty())
+		if(stack.empty())
 			return null;
 		return stack.peek();
 	}
-
+	
 	/**
-	 * Inserts a new node in the tree, as a child of the current node. The new
-	 * node becomes current node.
+	 * Inserts a new node in the tree, as a child of the current node. The new node becomes current node.
 	 * 
 	 * @param node
 	 *            the {@link XMLNode} to insert.
@@ -370,7 +365,7 @@ public class XMLTree
 		stack.push(node);
 		return this;
 	}
-
+	
 	/**
 	 * Inserts a new attribute in the current node.
 	 * 
@@ -383,7 +378,7 @@ public class XMLTree
 		stack.peek().addAttribute(attr);
 		return this;
 	}
-
+	
 	/**
 	 * Alias of moveToChild()
 	 */
@@ -391,27 +386,26 @@ public class XMLTree
 	{
 		return moveToChild(node);
 	}
-
+	
 	/**
 	 * The specified child of the current node becomes current node.
 	 * 
 	 * @param node
-	 *            {@link XMLNode} to become current node; must be a child of the
-	 *            current node.
+	 *            {@link XMLNode} to become current node; must be a child of the current node.
 	 * @return the {@link XMLTree}.
 	 * @throws IllegalArgumentException
 	 *             if the specified node is not a child of the current node.
 	 */
 	public XMLTree moveToChild(XMLNode node)
 	{
-		if (stack.peek().getNodes().contains(node))
+		if(stack.peek().getNodes().contains(node))
 		{
 			stack.push(node);
 			return this;
 		}
 		throw new IllegalArgumentException();
 	}
-
+	
 	/**
 	 * Alias of finishNode().
 	 */
@@ -419,10 +413,9 @@ public class XMLTree
 	{
 		return finishNode();
 	}
-
+	
 	/**
-	 * Goes up one level in the tree: the parent of the current node becomes
-	 * current node.
+	 * Goes up one level in the tree: the parent of the current node becomes current node.
 	 * 
 	 * @return the {@link XMLTree}.
 	 */
@@ -431,7 +424,7 @@ public class XMLTree
 		stack.pop();
 		return this;
 	}
-
+	
 	/**
 	 * The root of the {@link XMLTree} becomes current node.
 	 * 
@@ -443,12 +436,11 @@ public class XMLTree
 		stack.push(root);
 		return this;
 	}
-
+	
 	/**
 	 * The function does not affect the current node.
 	 * 
-	 * @return a {@link String} representation of the tree, one node on each
-	 *         line, correctly indented.
+	 * @return a {@link String} representation of the tree, one node on each line, correctly indented.
 	 */
 	@Override
 	public String toString()
