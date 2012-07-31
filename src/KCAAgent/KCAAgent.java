@@ -25,12 +25,13 @@ import agent.AgentID;
 import agent.AbstractMeasure.FloatMeasure;
 import agent.AbstractMeasure.NumericMeasure;
 
+import agent.Location;
 import agent.Measure;
 import agent.Measures;
 import agent.MeasureName;
-import base.Message.Type;
 import base.Environment;
 import base.Message;
+import base.Message.Type;
 
 public class KCAAgent extends AbstractAgent 
 {
@@ -96,8 +97,8 @@ public class KCAAgent extends AbstractAgent
 																									// from
 																									// outside
 	// peer
-	private Queue<Message>			inbox					= new PriorityBlockingQueue<Message>();
-	private Queue<Message>			atemporalInbox			= new PriorityBlockingQueue<Message>();
+	private Queue<Message<Collection<Fact>>>			inbox					= new PriorityBlockingQueue<Message<Collection<Fact>>>();
+	private Queue<Message<Collection<Fact>>>			atemporalInbox			= new PriorityBlockingQueue<Message<Collection<Fact>>>();
 
 	private NumericMeasure				agentBalance;
 	private NumericMeasure				agentUselessFacts;
@@ -201,7 +202,8 @@ public class KCAAgent extends AbstractAgent
 		currentSpecialtyIndex = 0;
 	}
 
-	protected void sendMessage(AgentID to, Message msg)
+	@Override
+	protected void sendMessage(AgentID to, Message<?> msg)
 	{
 		if (to == null)
 			parent.produce(msg);
@@ -216,13 +218,15 @@ public class KCAAgent extends AbstractAgent
 	}
 
 
-	public void receiveMessage(Message msg)
+	@Override
+	@SuppressWarnings("unchecked")
+	public void receiveMessage(Message<?> message)
 	{
-		if (msg.getFrom() == null)
-			log.li("received ~", msg);
+		if (message.getFrom() == null)
+			log.li("received ~", message);
 		else
-			log.lf("received ~", msg);
-		atemporalInbox.offer(msg);
+			log.lf("received ~", message);
+		atemporalInbox.offer((Message<Collection<Fact>>) message);
 	}
 
 	@Override
@@ -234,9 +238,9 @@ public class KCAAgent extends AbstractAgent
 		agentPrint();
 
 		// fill the inbox for this time step
-		for (Iterator<Message> it = atemporalInbox.iterator(); it.hasNext();)
+		for (Iterator<Message<Collection<Fact>>> it = atemporalInbox.iterator(); it.hasNext();)
 		{
-			Message msg = it.next();
+			Message<Collection<Fact>> msg = it.next();
 			if (!msg.isFuture())
 			{
 				inbox.offer(msg);
@@ -425,14 +429,14 @@ public class KCAAgent extends AbstractAgent
 		// check received facts, limited by the allowed amount of processing
 		// (according to agent pressure)
 		int nHandled = 0;
-		for (Iterator<Message> it = inbox.iterator(); it.hasNext()
+		for (Iterator<Message<Collection<Fact>>> it = inbox.iterator(); it.hasNext()
 				&& nHandled < amount.intValue(); nHandled++)
 		{
-			Message m = it.next();
+			Message<Collection<Fact>> m = it.next();
 			switch (m.getType())
 			{
 			case INFORM:
-				for (Fact f : m.getFacts())
+				for (Fact f : m.getContents())
 				{ // getting informed on new facts
 
 					if (f.getAgent() != null)
@@ -780,7 +784,7 @@ public class KCAAgent extends AbstractAgent
 		// Fact(id, action.relatedData).toCollection()));
 		// break;
 		case INFORM:
-			sendMessage(action.targetAgent, new Message(id, Type.INFORM,
+			sendMessage(action.targetAgent, new Message<Collection<Fact>>(id, Type.INFORM,
 					action.relatedFact.toCollection()));
 			break;
 
@@ -884,7 +888,7 @@ public class KCAAgent extends AbstractAgent
 		return intentions;
 	}
 
-	public Queue<Message> getInbox() // for Drawer
+	public Queue<Message<Collection<Fact>>> getInbox() // for Drawer
 	{
 		return inbox;
 	}
@@ -925,5 +929,7 @@ public class KCAAgent extends AbstractAgent
 		// TODO Auto-generated method stub
 		return this.measures.getMeasures().get(measure);
 	}
+
+
 
 }

@@ -8,9 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 import KCAAgent.KCAAgent;
-import KCAAgent.Location;
-import KCAAgent.Logix;
 import agent.AgentID;
+import agent.Location;
 
 import scenario.Scenario;
 
@@ -44,7 +43,7 @@ public class Environment {
 
 	private Logger logger;
 	
-	private static int CAPACITY = Logix.agentCapacity;
+	//private static int CAPACITY = Logix.agentCapacity;
 
 	// sequence (sub-step) number for messages, used for comparing messages
 	private static int sequence = 0;
@@ -91,7 +90,7 @@ public class Environment {
 		sequence = 0;
 	}
 
-	public AgentID inject(Location location, Message msg) {
+	public AgentID inject(Location location, Message<?> message) {
 		double dist = Double.POSITIVE_INFINITY;
 		AgentID id = null;
 		for (AgentID agent : agents.keySet()) {
@@ -102,7 +101,7 @@ public class Environment {
 			}
 		}
 		assert agents.containsKey(id) : id;
-		agents.get(id).receiveMessage(msg);
+		agents.get(id).receiveMessage(message);
 		return id;
 	}
 	
@@ -121,7 +120,7 @@ public class Environment {
 	}
  
 	//FIXME parent is only used here, do we really need this?
-	public void produce(Message msg) {
+	public void produce(Message<?> msg) {
 		parent.doReply(msg);
 	}
 	
@@ -165,11 +164,11 @@ public class Environment {
 		return step;
 	}
 
-	public static int getCAPACITY() {
+	/*public static int getCAPACITY() {
 		return CAPACITY;
 	}
 
 	public static void setCAPACITY(int cAPACITY) {
 		CAPACITY = cAPACITY;
-	}
+	}*/
 }
