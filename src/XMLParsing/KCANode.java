@@ -13,7 +13,7 @@ import XMLParsing.XMLTree.XMLNode;
  * @author Alexandre Hocquard
  * 
  */
-public class KCANode extends XMLNode {
+public class KCANode extends XMLNode implements ScenarioNode {
 
 	KCAParameters	parameters;
 
@@ -23,11 +23,12 @@ public class KCANode extends XMLNode {
 		parameters = new KCAParameters(this);
 	}
 
-	public KCAParameters getParameters() {
+	@Override
+	public Parameters getParameters() {
 		return parameters;
 	}
 
-	public static class KCAParameters {
+	public static class KCAParameters implements Parameters {
 		private boolean		allValueNull	= true;
 		private String		value			= null;
 		private String		list			= null;
@@ -83,7 +84,8 @@ public class KCANode extends XMLNode {
 				allValueNull = false;
 		}
 
-		List<String> getValues() {
+		@Override
+		public List<String> getValues() {
 			List<String> res = new ArrayList<String>();
 			if (value != null) {
 				res.add(value);
@@ -181,14 +183,17 @@ public class KCANode extends XMLNode {
 			return res;
 		}
 
+		@Override
 		public boolean isAllValueNull() {
 			return allValueNull;
 		}
 
+		@Override
 		public ArrayList<String> getForeach() {
 			return foreach;
 		}
 
+		@Override
 		public Integer getSelect() {
 			return select;
 		}
