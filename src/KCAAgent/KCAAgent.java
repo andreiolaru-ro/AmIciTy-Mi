@@ -14,21 +14,18 @@ import java.util.TreeSet;
 import java.util.Vector;
 import java.util.concurrent.PriorityBlockingQueue;
 
-import scenario.Scenario;
-
 import logging.Log;
-
+import scenario.Scenario;
 import KCAAgent.Goal.GoalList;
 import KCAAgent.Logix.Domain;
 import agent.AbstractAgent;
-import agent.AgentID;
 import agent.AbstractMeasure.FloatMeasure;
 import agent.AbstractMeasure.NumericMeasure;
-
+import agent.AgentID;
 import agent.Location;
 import agent.Measure;
-import agent.Measures;
 import agent.MeasureName;
+import agent.Measures;
 import base.Environment;
 import base.Message;
 import base.Message.Type;
