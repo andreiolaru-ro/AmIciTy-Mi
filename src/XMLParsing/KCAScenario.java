@@ -82,7 +82,7 @@ public class KCAScenario {
 		// it transforms each XMLNodes in KCANodes
 		// permit to call getParameters() function
 		// getParameters() permit to generate random values
-		XMLTree scenario = getKCATree(scenarioXMLNode);
+		XMLTree scenario = getScenarioTree(scenarioXMLNode);
 
 		/*************************************** seed random ***************************************/
 		// attributes are always String with XMLParser
@@ -405,7 +405,7 @@ public class KCAScenario {
 	 * @return a new tree with each {@link XMLNode} transformed in
 	 *         {@link KCANode}
 	 */
-	private XMLTree getKCATree(XMLTree tree) {
+	private XMLTree getScenarioTree(XMLTree tree) {
 		XMLNode newRoot = getKCANodes(tree.getRoot());
 		return new XMLTree(newRoot);
 	}
