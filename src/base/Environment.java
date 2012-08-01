@@ -7,15 +7,16 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import logging.Logger;
 import KCAAgent.KCAAgent;
-import KCAAgent.Logix;
-import XMLParsing.KCAScenario;
 import agent.AgentID;
 import agent.Location;
 
+import scenario.Scenario;
+
+import logging.Logger;
+
 public class Environment {	
-	private KCA parent; /* = new Command[] {
+	private Simulation parent; /* = new Command[] {
 	// agent, fact, pressure
 	new Command(Command.Action.INJECT, new AgentID(KCA.NX / 2, KCA.NY / 2), new Fact(null, data[0]).setPressure(+0.3f).setPersistence(0.1f)),
 	new Command(Command.Action.INJECT, new AgentID(KCA.NX - 1, 0), new Fact(null, data[1]).setPressure(+0.2f).setPersistence(0.1f)),
@@ -42,7 +43,7 @@ public class Environment {
 
 	private Logger logger;
 	
-	private static int CAPACITY = Logix.agentCapacity;
+	//private static int CAPACITY = Logix.agentCapacity;
 
 	// sequence (sub-step) number for messages, used for comparing messages
 	private static int sequence = 0;
@@ -53,7 +54,7 @@ public class Environment {
 	
 	Collection<UpdateListener> listeners = new ArrayList<UpdateListener>();
 	
-	public Environment(@SuppressWarnings("hiding") KCA parent, KCAScenario scenario) {
+	public Environment(@SuppressWarnings("hiding") Simulation parent, Scenario scenario) {
 		this.parent = parent;
 		this.x = scenario.getX();
 		this.y = scenario.getY();
@@ -78,7 +79,7 @@ public class Environment {
 	}
 
 	//FIXME shouldn't the cells be updating simultaneously?
-	public void step() {
+	public void step() throws Exception {
 		for (KCAAgent agent : agents.values()) {
 			agent.step();
 		}
@@ -89,7 +90,7 @@ public class Environment {
 		sequence = 0;
 	}
 
-	public AgentID inject(Location location, Message msg) {
+	public AgentID inject(Location location, Message<?> message) {
 		double dist = Double.POSITIVE_INFINITY;
 		AgentID id = null;
 		for (AgentID agent : agents.keySet()) {
@@ -100,7 +101,7 @@ public class Environment {
 			}
 		}
 		assert agents.containsKey(id) : id;
-		agents.get(id).receiveMessage(msg);
+		agents.get(id).receiveMessage(message);
 		return id;
 	}
 	
@@ -119,7 +120,7 @@ public class Environment {
 	}
  
 	//FIXME parent is only used here, do we really need this?
-	public void produce(Message msg) {
+	public void produce(Message<?> msg) {
 		parent.doReply(msg);
 	}
 	
@@ -163,11 +164,11 @@ public class Environment {
 		return step;
 	}
 
-	public static int getCAPACITY() {
+	/*public static int getCAPACITY() {
 		return CAPACITY;
 	}
 
 	public static void setCAPACITY(int cAPACITY) {
 		CAPACITY = cAPACITY;
-	}
+	}*/
 }

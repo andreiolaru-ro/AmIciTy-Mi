@@ -20,7 +20,11 @@
 		<!-- A -->
 		<event type = "inject" pressure="0.1" persistence=".05">
 			<event.domain a="1" b="0" c="0" />
+<<<<<<< HEAD
 			<event.time min="0" max="150" count="15"  />
+=======
+			<event.time min="0" max="150" count="15" dev="2" />
+>>>>>>> origin/working-Guillaume
 			<event.location.x min="0" max="30" dev="2" for-each="time"/>
 			<event.location.y min="0" max="30" select="1" for-each="location.x,time" />
 		</event>

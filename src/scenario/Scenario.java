@@ -7,25 +7,18 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringReader;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Random;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.*;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.TransformerFactoryConfigurationError;
-
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import KCAAgent.DataContent;
 import KCAAgent.Fact;
 import KCAAgent.KCAAgent;
 import KCAAgent.Logix;
@@ -33,7 +26,6 @@ import KCAAgent.Specialty;
 import agent.AgentID;
 import agent.Location;
 import base.Command;
-import base.DataContent;
 
 
 public class Scenario extends DefaultHandler {
@@ -103,22 +95,33 @@ public class Scenario extends DefaultHandler {
 			if (!datamap.containsKey(dname)) {
 				datamap.put(dname, new DataContent(datamap.keySet().size()));
 			}
-			commandset.add(new Command(
-					Command.Action.INJECT, 
-					new Location(
-							Integer.parseInt(att.getValue("location.x")), 
-							Integer.parseInt(att.getValue("location.y"))
-					), 
-					new Fact(null, datamap.get(dname), 0)
-						.setPressure(Float.parseFloat(att.getValue("pressure")))
-						.setPersistence(Float.parseFloat(att.getValue("persistence")))
-						.setSpecialty(new Specialty(
-								Double.parseDouble(att.getValue("domain.a")),
-								Double.parseDouble(att.getValue("domain.b")),
-								Double.parseDouble(att.getValue("domain.c"))
-						)), 
-					Integer.parseInt(att.getValue("time"))
-			));
+			try
+			{
+				commandset.add(new Command(
+						Command.Action.INJECT, 
+						new Location(
+								Integer.parseInt(att.getValue("location.x")), 
+								Integer.parseInt(att.getValue("location.y"))
+						), 
+						new Fact(null, datamap.get(dname), 0)
+							.setPressure(Float.parseFloat(att.getValue("pressure")))
+							.setPersistence(Float.parseFloat(att.getValue("persistence")))
+							.setSpecialty(new Specialty(
+									Double.parseDouble(att.getValue("domain.a")),
+									Double.parseDouble(att.getValue("domain.b")),
+									Double.parseDouble(att.getValue("domain.c"))
+							)), 
+						Integer.parseInt(att.getValue("time"))
+				));
+			} catch (NumberFormatException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (Exception e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -137,13 +140,9 @@ public class Scenario extends DefaultHandler {
 		try {
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			SAXParser parser = factory.newSAXParser();
-			// parse and create random event + agent 
 			parser.parse(new File(fileName), doc);
 			InputSource is = new InputSource();
-			// new xml with random agents + events
-			System.out.println(doc.toString());
 			is.setCharacterStream(new StringReader(doc.toString()));
-			// parse again this new xml randomly generated
 			parser.parse(is, this);
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
