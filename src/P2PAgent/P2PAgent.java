@@ -31,11 +31,11 @@ public class P2PAgent extends AbstractAgent
 	private Map<AgentID, Set<Item>>		pendingQueries;	//Map which contains the pending queries from the others agents		
 	private Map<Item, Set<AgentID>>		itemsLocation; //Map which contains the items location that our agent knows
 	private Set<AgentID>				contacts;//Set of the other agent that our agent knows
-	private Measures					measures;
-	private NumericMeasure				probability;
+	private Measures					measures;//all the measures of our agent
+	private NumericMeasure				probability;//probability that our agent will send a request about a file that it doesn't want
 	final static int					maxNumberOfContacts	= 10;
-	private Location					location;
-	private List<Message<?>>			waitingMessage;
+	private Location					location;//location of our agent on the view
+	private List<Message<?>>			waitingMessage;//inbox for all the messages(request, data...) that our agent received
 
 	@SuppressWarnings("hiding")
 	public P2PAgent(Environment parent, AgentID id,Location loc, double probability)
