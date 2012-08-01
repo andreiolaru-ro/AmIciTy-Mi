@@ -16,7 +16,7 @@ import scenario.Scenario;
 import logging.Logger;
 
 public class Environment {	
-	private Simulation parent; /* = new Command[] {
+	private SimulationKCA parent; /* = new Command[] {
 	// agent, fact, pressure
 	new Command(Command.Action.INJECT, new AgentID(KCA.NX / 2, KCA.NY / 2), new Fact(null, data[0]).setPressure(+0.3f).setPersistence(0.1f)),
 	new Command(Command.Action.INJECT, new AgentID(KCA.NX - 1, 0), new Fact(null, data[1]).setPressure(+0.2f).setPersistence(0.1f)),
@@ -54,7 +54,7 @@ public class Environment {
 	
 	Collection<UpdateListener> listeners = new ArrayList<UpdateListener>();
 	
-	public Environment(@SuppressWarnings("hiding") Simulation parent, Scenario scenario) {
+	public Environment(@SuppressWarnings("hiding") SimulationKCA parent, Scenario scenario) {
 		this.parent = parent;
 		this.x = scenario.getX();
 		this.y = scenario.getY();
