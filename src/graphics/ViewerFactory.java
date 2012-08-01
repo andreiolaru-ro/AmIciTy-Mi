@@ -15,7 +15,7 @@ import KCAAgent.Logix.Domain;
 import KCAAgent.Specialty;
 import agent.MeasureName;
 import base.Environment;
-import base.Simulation;
+import base.SimulationKCA;
 
 public class ViewerFactory
 {
@@ -277,7 +277,7 @@ public class ViewerFactory
 			if(params[i].type == Type.CONTROL)
 				control = params[i];
 		
-		Simulation kca = (Simulation)(control.data);
+		SimulationKCA kca = (SimulationKCA)(control.data);
 		kca.createMainWindow(control.x, control.y, control.width, control.height);
 		
 		for(int i = 0; i < params.length; i++)
