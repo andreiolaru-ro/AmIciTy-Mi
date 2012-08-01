@@ -1,7 +1,7 @@
 package base;
 
+import agent.Location;
 import KCAAgent.Fact;
-import KCAAgent.Location;
 
 
 public class Command

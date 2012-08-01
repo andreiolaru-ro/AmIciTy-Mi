@@ -16,6 +16,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
+import java.util.Collection;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -29,6 +30,7 @@ import javax.swing.WindowConstants;
 import logging.Log;
 import scenario.Scenario;
 import KCAAgent.DataContent;
+import KCAAgent.Fact;
 import KCAAgent.Goal.GoalType;
 import KCAAgent.Logix.Domain;
 import agent.AgentID;
@@ -266,13 +268,13 @@ public class Simulation extends JFrame implements Runnable, UpdateListener
 		if(command.getAction() == Command.Action.INJECT)
 		{
 			log.le("injecting ~ at ~", command.getFact(), command.getLocation());
-			AgentID receiver = cm.inject(command.getLocation(), new Message(null, Message.Type.INFORM, command.getFact().toCollection()));
+			AgentID receiver = cm.inject(command.getLocation(), new Message<Collection<Fact>>(null, Message.Type.INFORM, command.getFact().toCollection()));
 			log.le("received by ~", receiver);
 		}
 		else if(command.getAction() == Command.Action.REQUEST)
 		{
 			log.le("requesting ~ from ~", command.getFact(), command.getLocation());
-			cm.inject(command.getLocation(), new Message(null, Message.Type.REQUEST, command.getFact().toCollection()));
+			cm.inject(command.getLocation(), new Message<Collection<Fact>>(null, Message.Type.REQUEST, command.getFact().toCollection()));
 		}
 		else if(command.getAction() == Command.Action.SNAPSHOT)
 		{
@@ -308,7 +310,7 @@ public class Simulation extends JFrame implements Runnable, UpdateListener
 		
 	}
 	
-	void doReply(Message msg)
+	void doReply(Message<?> msg)
 	{
 		log.le("received ~", msg);
 	}

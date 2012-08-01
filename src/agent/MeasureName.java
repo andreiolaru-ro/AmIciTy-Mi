@@ -32,6 +32,8 @@ public enum MeasureName{
 	
 	AGENT_BALANCE("agent balance"),
 	
+	PROBABILITY("probability"),
+	
 	AGENT_USELESS_FACT("agent useless fact");
 	
 	private String nameEnum;

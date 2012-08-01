@@ -21,10 +21,10 @@ import org.xml.sax.helpers.DefaultHandler;
 import KCAAgent.DataContent;
 import KCAAgent.Fact;
 import KCAAgent.KCAAgent;
-import KCAAgent.Location;
 import KCAAgent.Logix;
 import KCAAgent.Specialty;
 import agent.AgentID;
+import agent.Location;
 import base.Command;
 
 
