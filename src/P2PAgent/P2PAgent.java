@@ -1,6 +1,5 @@
 package P2PAgent;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -155,11 +154,11 @@ public class P2PAgent extends AbstractAgent
 		Set<Item> itemsToSend=new HashSet<Item>();
 		Map<AgentID, Set<Item>> locationOfItemsRequested=new HashMap<AgentID, Set<Item>>();
 		Set<Item> itemsToRequest=new HashSet<Item>();
+
 		//our agent checks all the pendingQueries and try to respond
 		for(Entry<AgentID, Set<Item>> queries: this.pendingQueries.entrySet())
 		{
 			iteratorQueries= queries.getValue().iterator();
-			
 			for(Iterator<Item> it = iteratorQueries; it.hasNext();)
 			{
 				Item requestedItem = it.next();
@@ -167,6 +166,7 @@ public class P2PAgent extends AbstractAgent
 				if(items.contains(requestedItem))
 				{
 					itemsToSend.add(requestedItem);
+
 				}
 				//if our agent doesn't possessed the item requested but he knows where to find it, he will inform the agent who queries this item
 				else if(this.itemsLocation.containsKey(requestedItem))
@@ -184,6 +184,7 @@ public class P2PAgent extends AbstractAgent
 						itemPossessed=new HashSet<Item>();
 					}
 					itemPossessed.add(requestedItem);
+					
 					locationOfItemsRequested.put(possessor, itemPossessed);
 				}
 				//else our agent interrogate this contacts with a certain probability
@@ -194,7 +195,7 @@ public class P2PAgent extends AbstractAgent
 					//we calculate the probability, to know if we have to send the request to our contacts
 					if(calculateProba<=this.probability.getValue().doubleValue())
 					{
-						System.out.println("ajoute requête");
+						System.out.println(this.id+"ajoute requête");
 						//we will send the request for the item
 						itemsToRequest.add(requestedItem);
 					}
@@ -220,6 +221,7 @@ public class P2PAgent extends AbstractAgent
 				}
 			}			
 		}
+
 	}
 	
 	/**
@@ -252,7 +254,6 @@ public class P2PAgent extends AbstractAgent
 					
 					//an other agent informs our agent where to find some items that he wants
 					case INFORM:
-						System.out.println("informe");
 						Map<AgentID, Set<Item>> responseToOurRequests=(Map<AgentID, Set<Item>>) msg.getContents();
 						for(Entry<AgentID, Set<Item>> information: responseToOurRequests.entrySet())
 						{
@@ -268,7 +269,7 @@ public class P2PAgent extends AbstractAgent
 							//the item is for him, our agent "downloads" it
 							if(this.itemsWanted.contains(itemResponse))
 							{
-								System.out.println("l'agent "+this.id+" download");
+								System.out.println("l'agent "+this.id+" download"+itemResponse);
 								items.add(itemResponse);
 							}
 							//the item is not for him, he put it in the itemLocation
@@ -338,6 +339,9 @@ public class P2PAgent extends AbstractAgent
 			
 			agent1.itemsWanted.add(item2);
 			agent1.itemsWanted.add(item3);
+			
+			System.out.println(item2);
+			System.out.println(item3);
 			
 			List<P2PAgent> agents= new ArrayList<P2PAgent>();
 			agents.add(agent1);
