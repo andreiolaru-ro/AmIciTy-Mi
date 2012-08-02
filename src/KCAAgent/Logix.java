@@ -4,11 +4,9 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
-import agent.AbstractMeasure.NumericMeasure;
+import KCAAgent.Intention.IntentionList;
 import agent.AgentID;
-import agent.MeasureName;
 
 
 
@@ -60,7 +58,7 @@ public class Logix
 	}
 	
 	public enum Domain {
-		A, B, C;
+		A, B, C
 	}
 	
 	public static int	agentCapacity					= 12;
@@ -70,14 +68,14 @@ public class Logix
 	static float			zeroPersistence					= 0.01f;
 	
 	// measures
-	static float		neighbourDataFactPersistence	= 0.8f;
-	static float		newFactGoalImportance			= 1.0f;
-	static float		specUpdateRatio					= 0.01f;
-
-	static float		primaryPressureFade				= 0.01f;
-	static float		secondaryPressureFade			= 0.1f;
-
-	static float		secondaryPersistenceFade		= 0.01f;
+	static float			neighbourDataFactPersistence	= 0.8f;
+	static float			newFactGoalImportance			= 1.0f;
+	static float			specUpdateRatio					= 0.01f;
+	
+	static float			primaryPressureFade				= 0.01f;
+	static float			secondaryPressureFade			= 0.1f;
+	
+	static float			secondaryPersistenceFade		= 0.01f;
 	
 	// fading
 	static float			goalFadeRate					= 0.2f;
@@ -121,23 +119,23 @@ public class Logix
 	
 	// /////////// specialty & interest
 	
-	static Map<Domain, NumericMeasure> normSpecialty(Map<Domain, NumericMeasure> specMap)
+	static Map<Domain, Double> normSpecialty(Map<Domain, Double> map)
 	{
 		double norm = 0.0;
-		for(Entry<Domain, NumericMeasure> component : specMap.entrySet())
+		for(Map.Entry<Domain, Double> component : map.entrySet())
 		{
-			double val = component.getValue().getValue().doubleValue();
+			double val = component.getValue().doubleValue();
 			if(val < 0)
-				component.setValue(new NumericMeasure(0.0,MeasureName.SPECIALTY));
+				component.setValue(new Double(0.0));
 			if(val > 1)
-				component.setValue(new NumericMeasure(1.0,MeasureName.SPECIALTY));
+				component.setValue(new Double(1.0));
 			norm += val * val;
 		}
 		if(norm > 1)
-			for(Entry<Domain, NumericMeasure> component : specMap.entrySet())
-				component.setValue(new NumericMeasure(component.getValue().getValue().doubleValue() / norm,MeasureName.SPECIALTY));
+			for(Map.Entry<Domain, Double> component : map.entrySet())
+				component.setValue(new Double(component.getValue().doubleValue() / norm));
 		
-		return specMap;
+		return map;
 	}
 	
 	public static float similarity(Specialty s1, Specialty s2)
@@ -161,12 +159,12 @@ public class Logix
 	
 	static Specialty merge(Specialty s1, Specialty s2, float data2factsMergeRatio2)
 	{
-		Map<Domain, NumericMeasure> result = new HashMap<Domain, NumericMeasure>();
+		Map<Domain, Double> result = new HashMap<Domain, Double>();
 		for(Domain dom : Domain.values())
 		{
 			double v1 = s1.getValue(dom);
 			double v2 = s2.getValue(dom);
-			result.put(dom, new NumericMeasure(Math.sqrt((1 - data2factsMergeRatio2) * v1 * v1 + data2factsMergeRatio2 * v2 * v2),MeasureName.SPECIALTY));
+			result.put(dom, new Double(Math.sqrt((1 - data2factsMergeRatio2) * v1 * v1 + data2factsMergeRatio2 * v2 * v2)));
 		}
 		return new Specialty(result);
 	}
@@ -175,7 +173,7 @@ public class Logix
 	{
 		// calculate the mean specialty of facts that we have
 		Specialty factSpec;
-		Map<Domain, NumericMeasure> factSpecMap = new HashMap<Domain, NumericMeasure>();
+		Map<Domain, Double> factSpecMap = new HashMap<Domain, Double>();
 		for(Domain dom : Domain.values())
 		{
 			double sum = 0.0;
@@ -186,7 +184,7 @@ public class Logix
 				n++;
 			}
 			if(n > 0)
-				factSpecMap.put(dom, new NumericMeasure(sum / n,MeasureName.SPECIALTY));
+				factSpecMap.put(dom, new Double(sum / n));
 		}
 		factSpec = new Specialty(factSpecMap);
 		
@@ -256,7 +254,7 @@ public class Logix
 	
 	// //////////// new fact setting functions
 	
-	static Fact setNewFact(Fact newFact, Fact relatedFact) throws Exception
+	static Fact setNewFact(Fact newFact, Fact relatedFact)
 	{
 		newFact.setPressure((relatedFact.getPressure() >= 1) ? relatedFact.getPressure() : (relatedFact.getPressure() * (1.0f - primaryPressureFade)));
 		newFact.setSpecialty(relatedFact.getSpecialty());
@@ -264,7 +262,7 @@ public class Logix
 		return newFact;
 	}
 	
-	static Fact setDistantFactFact(Fact newFact, Fact relatedFact) throws Exception
+	static Fact setDistantFactFact(Fact newFact, Fact relatedFact)
 	{
 		newFact.setPressure(relatedFact.getPressure() * (1.0f - secondaryPressureFade));
 		newFact.setSpecialty(relatedFact.getSpecialty());
@@ -310,7 +308,7 @@ public class Logix
 		return new Goal(f).setImportance(f.getPressure());
 	}
 	
-	static Goal makeGoalInformGoal(Goal g, AgentID id, int step) throws Exception
+	static Goal makeGoalInformGoal(Goal g, AgentID id, int step)
 	{
 		Fact holder = new Fact(id, g, step);
 		holder.setPressure(g.getImportance());

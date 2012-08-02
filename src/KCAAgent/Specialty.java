@@ -4,34 +4,28 @@ import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
 
-import agent.AbstractMeasure.NumericMeasure;
-import agent.Measure;
-import agent.MeasureName;
-
 import KCAAgent.Logix.Domain;
 
 
 
-public class Specialty implements Measure<Map<Domain,NumericMeasure>>//NumericMeasure now
+public class Specialty
 {
-	private Map<Domain, NumericMeasure>	specMap	= new HashMap<Domain, NumericMeasure>();
-	private MeasureName name;
+	private Map<Domain, Double>	specMap	= new HashMap<Domain, Double>();
 	
 	public Specialty()
 	{
 		this(0, 0, 0);
-		name=MeasureName.SPECIALTY;
 	}
 	
 	public Specialty(double a, double b, double c)
 	{
-		specMap.put(Domain.A, new NumericMeasure(a,MeasureName.SPECIALTY));
-		specMap.put(Domain.B, new NumericMeasure(b,MeasureName.SPECIALTY));
-		specMap.put(Domain.C, new NumericMeasure(c,MeasureName.SPECIALTY));
+		specMap.put(Domain.A, new Double(a));
+		specMap.put(Domain.B, new Double(b));
+		specMap.put(Domain.C, new Double(c));
 		Logix.normSpecialty(specMap);
 	}
 	
-	public Specialty(Map<Domain, NumericMeasure> map)
+	public Specialty(Map<Domain, Double> map)
 	{
 		specMap = Logix.normSpecialty(map);
 	}
@@ -41,8 +35,8 @@ public class Specialty implements Measure<Map<Domain,NumericMeasure>>//NumericMe
 	{
 		String ret = null;
 		for(Domain dom : Domain.values())
-			if(specMap.containsKey(dom) && (specMap.get(dom).getValue().doubleValue() > 0))
-				ret = ((ret == null) ? "" : (ret + " ")) + dom + ":" + (int)(100 * specMap.get(dom).getValue().doubleValue());
+			if(specMap.containsKey(dom) && (specMap.get(dom).doubleValue() > 0))
+				ret = ((ret == null) ? "" : (ret + " ")) + dom + ":" + (int)(100 * specMap.get(dom).doubleValue());
 		return ret;
 	}
 	
@@ -50,7 +44,7 @@ public class Specialty implements Measure<Map<Domain,NumericMeasure>>//NumericMe
 	{
 		if(specMap.containsKey(dom))
 		{
-			return specMap.get(dom).getValue().doubleValue();
+			return specMap.get(dom).doubleValue();
 		}
 		return 0.0;
 	}
@@ -67,28 +61,7 @@ public class Specialty implements Measure<Map<Domain,NumericMeasure>>//NumericMe
 	public Specialty set(Specialty spec)
 	{
 		for(Domain dom: Domain.values())
-			this.specMap.put(dom, new NumericMeasure(spec.getValue(dom),MeasureName.SPECIALTY));
+			this.specMap.put(dom, new Double(spec.getValue(dom)));
 		return this;
-	}
-
-	@Override
-	public Map<Domain,NumericMeasure> getValue()
-	{
-		// TODO Auto-generated method stub
-		return this.specMap;
-	}
-
-	@Override
-	public MeasureName getName()
-	{
-		// TODO Auto-generated method stub
-		return this.name;
-	}
-
-	@Override
-	public void setValue(Map<Domain, NumericMeasure> value)
-	{
-		// TODO Auto-generated method stub
-			this.specMap=value;
 	}
 }

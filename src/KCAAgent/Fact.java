@@ -7,9 +7,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
-import agent.AbstractMeasure.FloatMeasure;
 import agent.AgentID;
-import agent.MeasureName;
+import base.DataContent;
 
 
 public class Fact
@@ -34,16 +33,16 @@ public class Fact
 												
 	// private float interest = 0.0f; // [0, 1] interest manifested by the agent towards this fact
 	
-	private Specialty		specialty			= null; //it's a measure too
+	private Specialty	specialty		= null;
 	
-	private FloatMeasure	pressure			= new FloatMeasure(0.0f, MeasureName.AGENT_PRESSURE);	// [-1, 1] positive / negative for push / pull
+	private float		pressure		= 0.0f; // [-1, 1] positive / negative for push / pull
 	// actually, negative pressure facts should be goals and positive should be data (informs)
 	
-	private FloatMeasure	persistence			= new FloatMeasure(0.0f, MeasureName.PERSISTENCE); // [0, 1]; 1 is for forever. 0 is that nobody else should care about it, i.e. do not continue to inform on it
+	private float		persistence		= 0.0f; // [0, 1]; 1 is for forever. 0 is that nobody else should care about it, i.e. do not continue to inform on it
 	
-	public int				firstStep			= 0;
-
-	private double			agentFactBalance	= 0.0;
+	public int			firstStep		= 0;
+	
+	private double		agentFactBalance= 0.0;
 	
 	// at the time, persistence refers only to space
 	
@@ -180,7 +179,7 @@ public class Fact
 	
 	public float getPressure()
 	{
-		return pressure.getValue().floatValue();
+		return pressure;
 	}
 	
 	// public float getInterest()
@@ -194,32 +193,26 @@ public class Fact
 	}
 	
 	@SuppressWarnings("hiding")
-	public Fact setPressure(float pressure) throws Exception
+	public Fact setPressure(float pressure)
 	{
-		this.pressure.setValue(new Float(pressure));
+		this.pressure = pressure;
 		return this;
 	}
 	
 	@SuppressWarnings("hiding")
-	public Fact setPressure(float pressure, float fade) throws Exception
+	public Fact setPressure(float pressure, float fade)
 	{
 		return setPressure(pressure * fade);
 	}
 	
-	public void fadePressure(float fadeRate) throws Exception
+	public void fadePressure(float fadeRate)
 	{
-		if (pressure.getValue().floatValue() < 1)
-			pressure.setValue(new Float(pressure.getValue().floatValue() * (1.0f - fadeRate)));
-		else
-			pressure.setValue(pressure.getValue());
+		pressure = (pressure < 1) ? pressure * (1.0f - fadeRate) : pressure;
 	}
 	
-	public void fadePersistence(float fadeRate) throws Exception
+	public void fadePersistence(float fadeRate)
 	{
-		if (persistence.getValue().floatValue() < 1)
-			persistence.setValue(new Float(persistence.getValue().floatValue() * (1.0f - fadeRate)));
-		else
-			persistence.setValue(persistence.getValue());
+		persistence = (persistence < 1) ? persistence * (1.0f - fadeRate) : persistence;
 	}
 	
 	@SuppressWarnings("hiding")
@@ -231,13 +224,13 @@ public class Fact
 	
 	public float getPersistence()
 	{
-		return persistence.getValue().floatValue();
+		return persistence;
 	}
 	
 	@SuppressWarnings("hiding")
-	public Fact setPersistence(float persistence) throws Exception
+	public Fact setPersistence(float persistence)
 	{
-		this.persistence.setValue(new Float(persistence));
+		this.persistence = persistence;
 		return this;
 	}
 	
@@ -289,7 +282,7 @@ public class Fact
 		String ret, end;
 		if(depthIn < 2 || depthTo < 2)
 		{
-			ret = agent + ".!" + (int)(pressure.getValue().floatValue() * 100) + ".*" + specialty.toString() + (spec != null ? "(" + (int)(Logix.similarity(specialty, spec) * 100) + ")" : "") + ".~" + (int)(persistence.getValue().floatValue() * 100) + "(";
+			ret = agent + ".!" + (int)(pressure * 100) + ".*" + specialty.toString() + (spec != null ? "(" + (int)(Logix.similarity(specialty, spec) * 100) + ")" : "") + ".~" + (int)(persistence * 100) + "(";
 			end = ")";
 		}
 		else

@@ -6,16 +6,14 @@ import java.awt.Color;
 import java.util.Collection;
 
 import logging.LogViewer;
-import KCAAgent.DataContent;
 import KCAAgent.Fact;
 import KCAAgent.Goal;
 import KCAAgent.KCAAgent;
 import KCAAgent.Goal.GoalType;
 import KCAAgent.Logix.Domain;
-import KCAAgent.Specialty;
-import agent.MeasureName;
+import base.DataContent;
 import base.Environment;
-import base.SimulationKCA;
+import base.KCA;
 
 public class ViewerFactory
 {
@@ -277,7 +275,7 @@ public class ViewerFactory
 			if(params[i].type == Type.CONTROL)
 				control = params[i];
 		
-		SimulationKCA kca = (SimulationKCA)(control.data);
+		KCA kca = (KCA)(control.data);
 		kca.createMainWindow(control.x, control.y, control.width, control.height);
 		
 		for(int i = 0; i < params.length; i++)
@@ -325,7 +323,7 @@ public class ViewerFactory
 				@Override
 				public Color getColor(KCAAgent cell)
 				{
-					return ((Specialty)cell.getMeasure(MeasureName.SPECIALTY)).getColor();
+					return cell.getSpecialty().getColor();
 				}
 			}.setTitle("Interest Grid - all");
 		case PRESSURE_GRID:
@@ -333,7 +331,7 @@ public class ViewerFactory
 				@Override
 				public Color getColor(KCAAgent cell)
 				{
-					double pressure = ((Float) cell.getMeasure(MeasureName.AGENT_PRESSURE).getValue()).doubleValue();
+					double pressure = cell.getPressure();
 					if(pressure >= 0)
 					{
 						double pr = 1 - Math.pow(1 - pressure, 2); // make low pressure look slightly higher
@@ -354,7 +352,7 @@ public class ViewerFactory
 				public Color getColor(KCAAgent cell)
 				{
 					Domain domain = (Domain)data;
-					float val = (float)(double)((Specialty)cell.getMeasure(MeasureName.SPECIALTY)).getValue(domain);
+					float val = (float)(double)cell.getSpecialty().getValue(domain);
 					float a = 1;
 					float b = 1 - val;
 					switch(domain)
@@ -467,7 +465,7 @@ public class ViewerFactory
 				@Override
 				public double getCellValue(KCAAgent cell)
 				{
-					return (Float) cell.getMeasure(MeasureName.AGENT_PRESSURE).getValue();
+					return cell.getPressure();
 				}
 				
 				@Override
@@ -486,7 +484,7 @@ public class ViewerFactory
 				@Override
 				public double getCellValue(KCAAgent cell)
 				{
-					return (Float) cell.getMeasure(MeasureName.AGENT_PRESSURE).getValue();
+					return cell.getPressure();
 				}
 				
 				@Override
@@ -526,7 +524,7 @@ public class ViewerFactory
 					if(n > 0)
 						return uselessFacts / n;
 					return 0;*/
-					return (Double) cell.getMeasure(MeasureName.AGENT_USELESS_FACT).getValue();
+					return cell.getAgentUselessFacts();
 				}
 				
 				@Override
@@ -540,7 +538,7 @@ public class ViewerFactory
 				@Override
 				public Color getColor(KCAAgent cell)
 				{	// more red -> higher balance value -> good
-					double sim = ((Double) cell.getMeasure(MeasureName.AGENT_BALANCE).getValue()).doubleValue();
+					double sim = cell.getAgentBalance();
 					return new Color(1.0f, 1.0f - (float)sim, 1.0f - (float)sim);
 				}
 			}.setTitle("Agent Balance");
@@ -549,7 +547,7 @@ public class ViewerFactory
 				@Override
 				public double getCellValue(KCAAgent cell)
 				{	// mean balance, in percentage
-					return (Double) cell.getMeasure(MeasureName.AGENT_BALANCE).getValue();
+					return cell.getAgentBalance();
 				}
 				
 				@Override

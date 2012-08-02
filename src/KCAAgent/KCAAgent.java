@@ -15,24 +15,21 @@ import java.util.Vector;
 import java.util.concurrent.PriorityBlockingQueue;
 
 import logging.Log;
-import scenario.Scenario;
 import KCAAgent.Goal.GoalList;
 import KCAAgent.Logix.Domain;
+import XMLParsing.KCAScenario;
 import agent.AbstractAgent;
-import agent.AbstractMeasure.FloatMeasure;
-import agent.AbstractMeasure.NumericMeasure;
 import agent.AgentID;
 import agent.Location;
 import agent.Measure;
-import agent.MeasureName;
-import agent.Measures;
 import base.Environment;
 import base.Message;
 import base.Message.Type;
 
-public class KCAAgent extends AbstractAgent 
+public class KCAAgent extends AbstractAgent
 {
 	private static double			balanceMinimum			= 0.4;
+
 
 	// payload
 	private int						usedCapacity			= 0;
@@ -60,29 +57,26 @@ public class KCAAgent extends AbstractAgent
 	// action
 	// for
 	// them
-	
-	private NumericMeasure capacity;
-	
 	private Goal					freeGoal				= null;
 	private Intention.IntentionList	intentions				= new Intention.IntentionList();
 
 	// behaviour
-	private Specialty				agent_specialty	;								// sorry
-																									// for
-																							// the
-																									// naming
-																									// convention
-	public Specialty[]				specialtyHistory;
-	public int						currentSpecialtyIndex	= -1;
-	private FloatMeasure			agent_pressure;					// sorry
+	private Specialty				agent_specialty			= null;								// sorry
 																									// for
 																									// the
 																									// naming
 																									// convention
-	private FloatMeasure			lowPressure;
-	private FloatMeasure			highPressure;					// only
-	// positive
-	// measures
+	public Specialty[]				specialtyHistory;
+	public int						currentSpecialtyIndex	= -1;
+	private float					agent_pressure			= 0.0f;								// sorry
+																									// for
+																									// the
+																									// naming
+																									// convention
+	private float					lowPressure				= 0.0f;
+	private float					highPressure			= 0.0f;								// only
+																									// positive
+																									// measures
 
 	// communication
 	// up
@@ -94,18 +88,16 @@ public class KCAAgent extends AbstractAgent
 																									// from
 																									// outside
 	// peer
-	private Queue<Message<Collection<Fact>>>			inbox					= new PriorityBlockingQueue<Message<Collection<Fact>>>();
-	private Queue<Message<Collection<Fact>>>			atemporalInbox			= new PriorityBlockingQueue<Message<Collection<Fact>>>();
+	private Queue<Message>			inbox					= new PriorityBlockingQueue<Message>();
+	private Queue<Message>			atemporalInbox			= new PriorityBlockingQueue<Message>();
+	private Map<AgentID, KCAAgent>		neighbours				= new HashMap<AgentID, KCAAgent>();
 
-	private NumericMeasure				agentBalance;
-	private NumericMeasure				agentUselessFacts;
+	private double					agentBalance			= 0.0;
+	private double					agentUselessFacts		= 0.0;
 
 	// logging
 	private boolean					selected				= false;
-
-	private Map<AgentID, KCAAgent> neighbours;
-	private Measures measures;
-	public Location location;
+	private Log						log						= new Log(this);
 
 	@SuppressWarnings("hiding")
 	public KCAAgent(Environment parent, AgentID id, Location loc, int capacity,
@@ -120,34 +112,24 @@ public class KCAAgent extends AbstractAgent
 	}
 
 	@SuppressWarnings({ "hiding", "unused" })
-	KCAAgent(Environment parent, AgentID id, Location loc, double capacity, Specialty spec, int nsteps)
+	KCAAgent(Environment parent, AgentID id, Location loc, int capacity,
+			Specialty spec, int nsteps)
 	{
 		super();
-		neighbours = new HashMap<AgentID, KCAAgent>();
 		this.id = id;
-		this.measures=new Measures(id);
-		
+		this.location = loc;
 		this.parent = parent;
-		this.log=new Log(this);
-		
-		//definition of all the measures of the agent
-		this.location = (Location) this.measures.createMeasure(loc);
-		this.capacity = (NumericMeasure) this.measures.createMeasure(new NumericMeasure(capacity,MeasureName.CAPACITY));
-		this.agent_specialty = (Specialty) ((spec == null) ? this.measures.createMeasure(new Specialty()) : this.measures.createMeasure(spec));
-		this.agent_pressure= (FloatMeasure) this.measures.createMeasure(new FloatMeasure(0.0f,MeasureName.AGENT_PRESSURE));
-		this.lowPressure=(FloatMeasure) this.measures.createMeasure(new FloatMeasure(0.0f, MeasureName.LOWPRESSURE));
-		this.highPressure=(FloatMeasure) this.measures.createMeasure(new FloatMeasure(0.0f,MeasureName.HIGHPRESSURE));
-		this.agentBalance=(NumericMeasure) this.measures.createMeasure(new NumericMeasure(0.0,MeasureName.AGENT_BALANCE));
-		this.agentUselessFacts=(NumericMeasure) this.measures.createMeasure(new NumericMeasure(0.0, MeasureName.AGENT_USELESS_FACT));
+		this.capacity = capacity;
+		this.agent_specialty = (spec == null) ? new Specialty() : spec;
 		// specialtyHistory = new Specialty[nsteps+1];
 		/*
 		 * specialtyHistory = new Specialty[10000]; specialtyHistory[0] = new
 		 * Specialty(); specialtyHistory[0].set(agent_specialty);
 		 * currentSpecialty = 0;
 		 */
-		
+
 		this.kb = new KnowledgeBase(this, agent_specialty);
-		
+
 		this.freeGoal = new Goal();
 	}
 
@@ -180,15 +162,6 @@ public class KCAAgent extends AbstractAgent
 		}
 	}
 
-	public Location getLocation()
-	{
-		return location;
-	}
-
-	public void setLocation(Location location)
-	{
-		this.location = location;
-	}
 
 	public void setHistory(int nsteps)
 	{
@@ -199,7 +172,7 @@ public class KCAAgent extends AbstractAgent
 	}
 
 	@Override
-	protected void sendMessage(AgentID to, Message<?> msg)
+	protected void sendMessage(AgentID to, Message msg)
 	{
 		if (to == null)
 			parent.produce(msg);
@@ -213,20 +186,18 @@ public class KCAAgent extends AbstractAgent
 		}
 	}
 
-
 	@Override
-	@SuppressWarnings("unchecked")
-	public void receiveMessage(Message<?> message)
+	public void receiveMessage(Message msg)
 	{
-		if (message.getFrom() == null)
-			log.li("received ~", message);
+		if (msg.getFrom() == null)
+			log.li("received ~", msg);
 		else
-			log.lf("received ~", message);
-		atemporalInbox.offer((Message<Collection<Fact>>) message);
+			log.lf("received ~", msg);
+		atemporalInbox.offer(msg);
 	}
 
 	@Override
-	public void step() throws Exception
+	public void step()
 	{
 		// We will really make it BDI this time
 		// really? we could just make it cognitive... why necessarily BDI?
@@ -234,9 +205,9 @@ public class KCAAgent extends AbstractAgent
 		agentPrint();
 
 		// fill the inbox for this time step
-		for (Iterator<Message<Collection<Fact>>> it = atemporalInbox.iterator(); it.hasNext();)
+		for (Iterator<Message> it = atemporalInbox.iterator(); it.hasNext();)
 		{
-			Message<Collection<Fact>> msg = it.next();
+			Message msg = it.next();
 			if (!msg.isFuture())
 			{
 				inbox.offer(msg);
@@ -276,8 +247,8 @@ public class KCAAgent extends AbstractAgent
 		 * check if plans are impossible and remove them if they are.
 		 */
 		reviseBeliefs(Math.max(Logix.minimalBeliefProcessing(), (int) (inbox
-				.size() * Logix.availableBeliefProcessing(agent_pressure.getValue().doubleValue(),
-				lowPressure.getValue().doubleValue(), highPressure.getValue().doubleValue()))));
+				.size() * Logix.availableBeliefProcessing(agent_pressure,
+				lowPressure, highPressure))));
 
 		/*
 		 * select goal
@@ -308,20 +279,18 @@ public class KCAAgent extends AbstractAgent
 	{
 		StringBuffer statPrint = new StringBuffer();
 		statPrint.append("* ").append(agent_specialty).append("\t");
-		int compareAgentpWithLowp=agent_pressure.getValue().compareTo(lowPressure.getValue());
-		int compareAgentpWithHighp=agent_pressure.getValue().compareTo(highPressure.getValue());
-		if (compareAgentpWithLowp==-1)
-			statPrint.append("!").append((int) (100 * agent_pressure.getValue().floatValue()))
-					.append("<").append((int) (100 * lowPressure.getValue().doubleValue())).append("<")
-					.append((int) (100 * highPressure.getValue().doubleValue()));
-		if (compareAgentpWithLowp!=-1 && compareAgentpWithHighp!=1)
-			statPrint.append((int) (100 * lowPressure.getValue().doubleValue())).append("<!")
-					.append((int) (100 * agent_pressure.getValue().floatValue())).append("<")
-					.append((int) (100 * highPressure.getValue().doubleValue()));
-		if (compareAgentpWithHighp==1)
-			statPrint.append((int) (100 * lowPressure.getValue().doubleValue())).append("<")
-					.append((int) (100 * highPressure.getValue().doubleValue())).append("<!")
-					.append((int) (100 * agent_pressure.getValue().doubleValue()));
+		if (agent_pressure < lowPressure)
+			statPrint.append("!").append((int) (100 * agent_pressure))
+					.append("<").append((int) (100 * lowPressure)).append("<")
+					.append((int) (100 * highPressure));
+		if (agent_pressure >= lowPressure && agent_pressure <= highPressure)
+			statPrint.append((int) (100 * lowPressure)).append("<!")
+					.append((int) (100 * agent_pressure)).append("<")
+					.append((int) (100 * highPressure));
+		if (agent_pressure > highPressure)
+			statPrint.append((int) (100 * lowPressure)).append("<")
+					.append((int) (100 * highPressure)).append("<!")
+					.append((int) (100 * agent_pressure));
 		statPrint
 		/* .append("\t Kfading: ").append(Logix.memoryFade()) */.append("\t")
 				.append(usedCapacity).append("/").append(capacity);
@@ -377,9 +346,8 @@ public class KCAAgent extends AbstractAgent
 	 * @param amount
 	 *            specifies how many external perceptions should be processed in
 	 *            this call
-	 * @throws Exception 
 	 */
-	protected void reviseBeliefs(Integer amount) throws Exception
+	protected void reviseBeliefs(Integer amount)
 	{
 		// analyze received data
 		// if already had. then why was it received again? - this to solve later
@@ -425,21 +393,21 @@ public class KCAAgent extends AbstractAgent
 		// check received facts, limited by the allowed amount of processing
 		// (according to agent pressure)
 		int nHandled = 0;
-		for (Iterator<Message<Collection<Fact>>> it = inbox.iterator(); it.hasNext()
-				&& nHandled < amount.intValue(); nHandled++)
+		for (Iterator<Message> it = inbox.iterator(); it.hasNext()
+				&& nHandled < amount; nHandled++)
 		{
-			Message<Collection<Fact>> m = it.next();
+			Message m = it.next();
 			switch (m.getType())
 			{
 			case INFORM:
-				for (Fact f : m.getContents())
+				for (Fact f : m.getFacts())
 				{ // getting informed on new facts
 
 					if (f.getAgent() != null)
 					{
 						Fact fa = new Fact(id, f.getAbstractContentRecursive(),
-								Environment.getStep()); // integrate basic knowledge
-						Fact fb = new Fact(id, f, Environment.getStep()); // integrate
+								parent.getStep()); // integrate basic knowledge
+						Fact fb = new Fact(id, f, parent.getStep()); // integrate
 																		// knowledge
 																		// about
 																		// other
@@ -459,7 +427,7 @@ public class KCAAgent extends AbstractAgent
 					} else
 					{
 						Fact fa = new Fact(id, f.getAbstractContent(),
-								Environment.getStep());
+								parent.getStep());
 						kb.insert(Logix.setNewFact(fa, f));
 						// goals.add(Logix.makeInformGoal(fa));
 					}
@@ -517,34 +485,27 @@ public class KCAAgent extends AbstractAgent
 				switch (i.goal.type)
 				{
 				case INFORM:
-					try
-					{
-						{
-							// int nsuccess = 0;
-							// for(AgentID agent : neighbours.keySet())
-							// if(kb.doesAgentKnowFact(agent, i.goal.relatedFact))
-							// nsuccess++;
-							// if(nsuccess >= (neighbours.size() *
-							// Logix.getInformFraction()))
-							// {
-							i.goal.relatedFact.fadePressure(0.01f); // if it was
-																	// pressure 1, take
-																	// it down from
-																	// there
+				{
+					// int nsuccess = 0;
+					// for(AgentID agent : neighbours.keySet())
+					// if(kb.doesAgentKnowFact(agent, i.goal.relatedFact))
+					// nsuccess++;
+					// if(nsuccess >= (neighbours.size() *
+					// Logix.getInformFraction()))
+					// {
+					i.goal.relatedFact.fadePressure(0.01f); // if it was
+															// pressure 1, take
+															// it down from
+															// there
 
-							log.li("plan done: ~", i);
-							// goal is satisfied
-							goals.remove(i.goal);
-							// plan done
-							it.remove();
-							// }
-							break;
-						}
-					} catch (Exception e)
-					{
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+					log.li("plan done: ~", i);
+					// goal is satisfied
+					goals.remove(i.goal);
+					// plan done
+					it.remove();
+					// }
+					break;
+				}
 				// case GET:
 				// if(kb.doesAgentHaveData(id, i.goal.relatedData))
 				// {
@@ -556,7 +517,7 @@ public class KCAAgent extends AbstractAgent
 				// }
 				// break;
 				case FREE:
-					if (usedCapacity <= Logix.memoryThresh() * capacity.getValue().intValue())
+					if (usedCapacity <= Logix.memoryThresh() * capacity)
 					{
 						log.li("plan done: ~", i);
 						// goal is satisfied
@@ -577,10 +538,9 @@ public class KCAAgent extends AbstractAgent
 		kb.fade(Logix.pressureFade(), Logix.persistenceFade());
 
 		// revise agent pressure, interest, knowledge
-		agent_pressure.setValue(new Float(kb.totalPressure()));
+		agent_pressure = kb.totalPressure();
 		revisePressureLimits();
 		agent_specialty = kb.reviseSpecialty();
-		this.measures.getMeasures().put(MeasureName.SPECIALTY, agent_specialty);
 		currentSpecialtyIndex++;
 		specialtyHistory[currentSpecialtyIndex] = new Specialty();
 		specialtyHistory[currentSpecialtyIndex].set(agent_specialty);
@@ -604,9 +564,9 @@ public class KCAAgent extends AbstractAgent
 
 		// keep capacity free
 		usedCapacity = kb.size();
-		if (usedCapacity > Logix.memoryThresh() * capacity.getValue().intValue())
+		if (usedCapacity > Logix.memoryThresh() * capacity)
 		{
-			Logix.setFreeGoal(usedCapacity, capacity.getValue().intValue(), freeGoal);
+			Logix.setFreeGoal(usedCapacity, capacity, freeGoal);
 			if (goals.containsReturn(freeGoal) != null)
 				goals.update(freeGoal);
 			else
@@ -640,7 +600,7 @@ public class KCAAgent extends AbstractAgent
 			if (i != null)
 			{ // goal is already planned for
 				if (i.isWaiting())
-					if (i.nStepsWaited > Logix.nWaits2replan.intValue())
+					if (i.nStepsWaited > Logix.nWaits2replan)
 					{ // should try to re-plan
 						intentions.remove(i);
 						chosenGoal = i.goal;
@@ -731,12 +691,12 @@ public class KCAAgent extends AbstractAgent
 					});
 			List<AgentID> shuffled = new LinkedList<AgentID>(
 					neighbours.keySet());
-			Collections.shuffle(shuffled, Scenario.rand());
+			Collections.shuffle(shuffled, KCAScenario.rand());
 			sortedN.addAll(shuffled);
 			Intention intention = new Intention(primaryGoal);
 			for (AgentID a : neighbours.keySet())
 			{
-				if ((Scenario.rand().nextFloat() < f.getPressure())
+				if ((KCAScenario.rand().nextFloat() < f.getPressure())
 						&& !kb.doesAgentKnowFact(a, f.recurse()))
 					intention.plan.add(new Action(f, a));
 			}
@@ -769,8 +729,8 @@ public class KCAAgent extends AbstractAgent
 		switch (action.type)
 		{
 		case FREE:
-			if (usedCapacity > Logix.memoryThresh() * capacity.getValue().intValue())
-				kb.reduce((usedCapacity) / capacity.getValue().floatValue()
+			if (usedCapacity > Logix.memoryThresh() * capacity)
+				kb.reduce((usedCapacity) / (float) capacity
 						- Logix.memoryThresh());
 			// data.remove(action.relatedFact.getData());
 			// usedCapacity -= action.relatedFact.getData().getSize();
@@ -780,7 +740,7 @@ public class KCAAgent extends AbstractAgent
 		// Fact(id, action.relatedData).toCollection()));
 		// break;
 		case INFORM:
-			sendMessage(action.targetAgent, new Message<Collection<Fact>>(id, Type.INFORM,
+			sendMessage(action.targetAgent, new Message(id, Type.INFORM,
 					action.relatedFact.toCollection()));
 			break;
 
@@ -792,10 +752,10 @@ public class KCAAgent extends AbstractAgent
 
 	private void revisePressureLimits()
 	{
-		highPressure = new FloatMeasure(Logix.highPressureRevise(agent_pressure.getValue().floatValue(), highPressure.getValue().floatValue(),
-				lowPressure.getValue().floatValue()),MeasureName.HIGHPRESSURE);
-		lowPressure = new FloatMeasure(Logix.lowPressureRevise(agent_pressure.getValue().floatValue(), highPressure.getValue().floatValue(),
-				lowPressure.getValue().floatValue()),MeasureName.HIGHPRESSURE);
+		highPressure = Logix.highPressureRevise(agent_pressure, highPressure,
+				lowPressure);
+		lowPressure = Logix.lowPressureRevise(agent_pressure, highPressure,
+				lowPressure);
 	}
 
 	public double gradeFactHistory(Specialty factSpec, int firstStep)
@@ -818,15 +778,15 @@ public class KCAAgent extends AbstractAgent
 						- (double) firstStep + 1.0f));
 	}
 
-	public double calculateAgentBalance() throws Exception
+	public double calculateAgentBalance()
 	{
 		// FIXME not flexible Domain implementation
 		Collection<Fact> facts = getFacts(false);
 		double n = (double) facts.size();
 		if (n == 0)
 		{
-			agentBalance.setValue(new Double(0.0));
-			agentUselessFacts.setValue(new Double(0.0));
+			agentBalance = 0.0;
+			agentUselessFacts = 0.0;
 			return 0;
 		}
 		Specialty factSpec;
@@ -857,10 +817,20 @@ public class KCAAgent extends AbstractAgent
 		grade /= n;
 		// grade *= Logix.similarity(getSpecialty(), new Specialty(a1, b1, c1));
 		grade *= Logix.similarity(agent_specialty, new Specialty(a1, b1, c1));
-		agentBalance.setValue(new Double(grade)); // AO: mean degree of usefulness
-		agentUselessFacts.setValue(new Double(uselessFacts / n)); // AO: facts with balance <
+		agentBalance = grade; // AO: mean degree of usefulness
+		agentUselessFacts = uselessFacts / n; // AO: facts with balance <
 												// balanceMinimum
 		return grade;
+	}
+
+	public double getAgentBalance()
+	{
+		return agentBalance;
+	}
+
+	public double getAgentUselessFacts()
+	{
+		return agentUselessFacts;
 	}
 
 	// public Collection<Data> getData() // for Drawing, snapshotting. etc
@@ -884,9 +854,19 @@ public class KCAAgent extends AbstractAgent
 		return intentions;
 	}
 
-	public Queue<Message<Collection<Fact>>> getInbox() // for Drawer
+	public Queue<Message> getInbox() // for Drawer
 	{
 		return inbox;
+	}
+
+	public Specialty getSpecialty()
+	{
+		return agent_specialty;
+	}
+
+	public float getPressure()
+	{
+		return agent_pressure;
 	}
 
 	public boolean isSelected()
@@ -904,7 +884,10 @@ public class KCAAgent extends AbstractAgent
 		parent.doUpdate();
 	}
 
-
+	public Log getLog()
+	{
+		return log;
+	}
 
 	@Override
 	public String toString()
@@ -913,19 +896,18 @@ public class KCAAgent extends AbstractAgent
 	}
 
 	@Override
-	public Map<MeasureName, Measure<?>> getAllMeasures()
+	public Measure getMeasure()
 	{
 		// TODO Auto-generated method stub
-		return this.measures.getMeasures();
+		return null;
 	}
 
 	@Override
-	public Measure<?> getMeasure(MeasureName measure)
+	public Map<String, Measure> getAllMeasures()
 	{
 		// TODO Auto-generated method stub
-		return this.measures.getMeasures().get(measure);
+		return null;
 	}
-
 
 
 }

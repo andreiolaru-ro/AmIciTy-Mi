@@ -1,7 +1,6 @@
 package agent;
 
 
-<<<<<<< HEAD
 import java.util.Map;
 
 import base.Message;
@@ -52,46 +51,13 @@ public abstract class AbstractAgent implements Measurable
 	{
 		this.neighbours = neighbours;
 	}
-=======
-import base.Message;
-import logging.Log;
-
-/**
- * 
- * abstract class to define a basic agent 
- *
- */
-@SuppressWarnings("rawtypes")
-public abstract class AbstractAgent implements Measurable 
-{
-	protected AgentID id; 
-	protected Log log;
-	protected abstract void agentPrint();
-	public abstract void step() throws Exception;
-	protected abstract void sendMessage(AgentID to, Message<?> msg);
-	public abstract void receiveMessage(Message<?> message);
-	
->>>>>>> origin/working-Guillaume
 	public AgentID getId()
 	{
 		return id;
 	}
-<<<<<<< HEAD
-=======
-	@SuppressWarnings("hiding")
->>>>>>> origin/working-Guillaume
 	public void setId(AgentID id)
 	{
 		this.id = id;
 	}
 
-<<<<<<< HEAD
-=======
-	public Log getLog()
-	{
-		return log;
-	}
-	
-	
->>>>>>> origin/working-Guillaume
 }
