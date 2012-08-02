@@ -1,3 +1,4 @@
+
 package logging;
 
 import java.util.HashSet;
@@ -5,9 +6,8 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Set;
 
-import scenario.Scenario;
-
-import agent.AbstractAgent;
+import KCAAgent.KCAAgent;
+import XMLParsing.KCAScenario;
 import base.Environment;
 
 public class Log
@@ -17,12 +17,12 @@ public class Log
 	}
 	
 	private int					MAX_SIZE	= 50;
-	private AbstractAgent				owner;
+	private KCAAgent				owner;
 	private Queue<LogEntry>		entries		= new LinkedList<LogEntry>();
 	private Set<LogListener>	listeners	= new HashSet<LogListener>();
 	
 	@SuppressWarnings("hiding")
-	public Log(AbstractAgent owner)
+	public Log(KCAAgent owner)
 	{
 		this.owner = owner;
 	}
@@ -36,7 +36,7 @@ public class Log
 			listener.add(entry);
 		}
 		
-		if(Scenario.rand().nextDouble() < 0.01)
+		if(KCAScenario.rand().nextDouble() < 0.01)
 			// clean
 			while(entries.size() > MAX_SIZE)
 				entries.poll();
