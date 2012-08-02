@@ -179,16 +179,13 @@ class DocNode {
 		List<List<String>> attval = new ArrayList<List<String>>();
 		Collection<List<Integer>> nodes = new ArrayList<List<Integer>>();
 		nodes.add(new ArrayList<Integer>());
-
 		for (int i = 0; i < order.size(); i++) {
 			String att = order.get(i);
 			String[] foreach = attributes.containsKey(att + ".for-each") ? attributes.get(att + ".for-each").split(",") : new String[0];
 			int prod = 1;
-			// size of the set (because cartesian product)
 			for (int j = 0; j < foreach.length; j++) {
 				prod *= attval.get(order.indexOf(foreach[j])).size();
 			}
-			// generation of random values
 			List<String> vals = new ArrayList<String>();
 			for (int j = 0; j < prod; j++) {
 				vals.addAll(new Value(att).getValues());

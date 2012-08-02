@@ -1,2 +1,7 @@
-bin
-.DS_STORE
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
+/bin

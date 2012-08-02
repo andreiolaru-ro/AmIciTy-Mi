@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+	xmlns:tns="http://www.example.org/kbSchema"
+	elementFormDefault="qualified"
+	targetNamespace="http://www.example.org/kbSchema">
+
+	<complexType name="knowledgeType">
+		<sequence>
+			<element name="relation" type="tns:relationType" minOccurs="0" maxOccurs="unbounded"></element>
+		</sequence>
+	</complexType>
+
+	<complexType name="relationType">
+		<sequence>
+			<element name="node" type="string" minOccurs="2" maxOccurs="2"></element>
+		</sequence>
+		<attribute name="relationType" type="string"></attribute>
+	</complexType>
+</schema>

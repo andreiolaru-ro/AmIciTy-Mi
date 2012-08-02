@@ -7,7 +7,6 @@ import java.util.Map;
 
 import logging.Log;
 
-import KCAAgent.Logix.FactComparator;
 import agent.AgentID;
 import base.QuickSet;
 import base.QuickSet.QuickForgetConfirmer;
@@ -54,7 +53,7 @@ public class KnowledgeBase implements QuickForgetConfirmer<Fact>
 			insertSub(f.getFact());
 	}
 	
-	public void insert(Fact f)
+	public void insert(Fact f) throws Exception
 	{
 		// check if Fact doesn't refer circularly to this agent // more than once
 		boolean circular = false;
@@ -207,7 +206,7 @@ public class KnowledgeBase implements QuickForgetConfirmer<Fact>
 		return spec;
 	}
 	
-	public void fade(float pressureFade, float persistenceFade)
+	public void fade(float pressureFade, float persistenceFade) throws Exception
 	{
 		int nremovals = 0;
 		for(Fact f : base.keySet())

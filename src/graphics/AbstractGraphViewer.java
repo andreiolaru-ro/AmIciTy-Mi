@@ -15,9 +15,9 @@ public abstract class AbstractGraphViewer extends AbstractViewer2D
 {
 	public static class GraphParam
 	{
-		Color		color;
-		GraphLink	link;
-		int			traces;
+		Color color;
+		GraphLink link;
+		int traces;
 		
 		@SuppressWarnings("hiding")
 		public GraphParam(Color color, GraphLink link, Integer traces)
@@ -30,10 +30,10 @@ public abstract class AbstractGraphViewer extends AbstractViewer2D
 	
 	public static class GraphLink
 	{
-		String	name		= null;
-		double	maxValue	= 0;
-		double	minValue	= 0;
-		boolean	initialized	= false;
+		String name = null;
+		double maxValue = 0;
+		double minValue = 0;
+		boolean initialized = false;
 		
 		public GraphLink()
 		{
@@ -81,7 +81,7 @@ public abstract class AbstractGraphViewer extends AbstractViewer2D
 			update(value);
 			return getMin();
 		}
-	}
+}
 	
 	public static class GraphPoint
 	{
@@ -97,8 +97,8 @@ public abstract class AbstractGraphViewer extends AbstractViewer2D
 	}
 	
 	List<List<GraphPoint>>	points	= new LinkedList<List<GraphPoint>>();
-	boolean					dolines	= true;
-	GraphParam				param;
+	boolean				dolines	= true;
+	GraphParam param;
 	
 	@SuppressWarnings("hiding")
 	protected AbstractGraphViewer(Environment cm, Object data)
@@ -151,7 +151,7 @@ public abstract class AbstractGraphViewer extends AbstractViewer2D
 		String maxS = ((maxA >= 10) ? new Double(maxA) : new DecimalFormat("0.00").format(maxA)).toString();
 		
 		return maxS + (val < max ? " : " + valS : "");
-		// return max + ":" + val;
+//		return max + ":" + val;
 	}
 	
 	// we suppose that an update means 1 step
@@ -177,8 +177,8 @@ public abstract class AbstractGraphViewer extends AbstractViewer2D
 	@Override
 	protected void draw(Graphics2D g)
 	{
-		int w = getWidth(); // width of the window
-		int h = getHeight(); // height of the window
+		int w = getWidth();
+		int h = getHeight();
 		g.setBackground(Color.white);
 		g.clearRect(0, 0, w, h);
 		
@@ -189,19 +189,19 @@ public abstract class AbstractGraphViewer extends AbstractViewer2D
 			g.setColor(param.color);
 			g.setStroke(new BasicStroke(1.0f));
 			
-			int n = trace.size(); // the number of points (simulation steps)
-			double graphStep = (double)w / n; // the size (on x) of one simulation step
-			double yMax = param.link.getMax(); // limits of all linked graphs
-			double yMin = param.link.getMin(); // limits of all linked graphs
-			double ry = (yMax == yMin) ? 1 : ((double)h / (yMax - yMin)); // ratio on y
+			int n = trace.size();
+			double step = (double)w / n;
+			double yMax = param.link.getMax();
+			double yMin = param.link.getMin();
+			double ry = (yMax == yMin) ? 1 : (h / (yMax - yMin));
 			
 			double val = 0;
 			double area = 0;
 			double dx = 0;
 			boolean first = true;
 			
-			int x = 0; // actual graph x (in windows space)
-			int y = 0; // actual graph y (in windows space) (reversed)
+			int x = 0;
+			int y = 0;
 			
 			for(GraphPoint point : trace)
 			{
@@ -211,20 +211,20 @@ public abstract class AbstractGraphViewer extends AbstractViewer2D
 					first = false;
 					continue;
 				}
-				dx += graphStep; // difference between displayed x and simulation step x
+				dx += step;
 				val = point.value;
-				area += val * graphStep; // sort of the same role as dx
+				area += val * step;
 				if(dx > 1)
 				{
-					int idx = (int)Math.floor(dx); // integer part of dx
-					double ival = (area - (dx - idx) * val) / idx; // the correct integer representation of the graph value
-					int nx = x + idx; // new x
-					int ny = (int)Math.round(yMin + ry * (ival - yMin)); // new y
-					g.drawLine(x, h - y, nx, h - ny); // line x, y -> nx, ny
-					area -= ival * idx; // leftover for area
-					dx -= idx; // leftover for x
-					x = nx; // x is advanced to the new x
-					y = ny; // y is advanced to the new y
+					int idx = (int)Math.floor(dx);
+					double ival = (area - (dx - idx) * val) / idx;
+					int nx = x + idx;
+					int ny = (int)Math.round(yMin + ry * (ival - yMin));
+					g.drawLine(x, h - y, nx, h - ny);
+					area -= ival * idx;
+					dx -= idx;
+					x = nx;
+					y = ny;
 				}
 			}
 			
