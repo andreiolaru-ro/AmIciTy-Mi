@@ -7,7 +7,7 @@ import java.util.Set;
 
 import scenario.Scenario;
 
-import KCAAgent.KCAAgent;
+import agent.AbstractAgent;
 import base.Environment;
 
 public class Log
@@ -17,12 +17,12 @@ public class Log
 	}
 	
 	private int					MAX_SIZE	= 50;
-	private KCAAgent				owner;
+	private AbstractAgent				owner;
 	private Queue<LogEntry>		entries		= new LinkedList<LogEntry>();
 	private Set<LogListener>	listeners	= new HashSet<LogListener>();
 	
 	@SuppressWarnings("hiding")
-	public Log(KCAAgent owner)
+	public Log(AbstractAgent owner)
 	{
 		this.owner = owner;
 	}

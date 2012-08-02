@@ -1,6 +1,6 @@
 package logging;
 
-import KCAAgent.KCAAgent;
+import agent.AbstractAgent;
 
 public class LogEntry implements Comparable<LogEntry>
 {
@@ -8,7 +8,7 @@ public class LogEntry implements Comparable<LogEntry>
 	private static int	REPLACE_STRING_LEN	= REPLACE_STRING.length();
 	private static long		crtTime			= 0;
 	
-	private KCAAgent			owner;
+	private AbstractAgent			owner;
 	private int				step;
 	private Log.Level		level;
 	private String			msg;
@@ -18,7 +18,7 @@ public class LogEntry implements Comparable<LogEntry>
 	private StringBuffer	entry			= null;
 	
 	@SuppressWarnings("hiding")
-	public LogEntry(KCAAgent owner, int step, Log.Level level, String msg, Object... data)
+	public LogEntry(AbstractAgent owner, int step, Log.Level level, String msg, Object... data)
 	{
 		this.owner = owner;
 		this.step = step;
