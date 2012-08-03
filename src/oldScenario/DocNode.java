@@ -1,13 +1,15 @@
 /**
  * 
  */
-package scenario;
+package oldScenario;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import scenario.AbstractScenario;
 
 
 class DocNode {
@@ -88,7 +90,7 @@ class DocNode {
 				for (int i = 0; i < select.intValue(); i++) {
 					if (mean != null && stdev != null) {
 						while (true) {
-							double val = mean.doubleValue() + Scenario.rand().nextGaussian() * stdev.doubleValue();
+							double val = mean.doubleValue() + AbstractScenario.rand().nextGaussian() * stdev.doubleValue();
 							if (max.doubleValue() <= val && val <= min.doubleValue()) {
 								res.add(getStr(new Double(val)));
 								break;
@@ -96,7 +98,7 @@ class DocNode {
 						}						
 					} else {
 						assert mean == null && stdev == null;
-						res.add(getStr(new Double(min.doubleValue() + (max.doubleValue() - min.doubleValue()) * Scenario.rand().nextDouble())));
+						res.add(getStr(new Double(min.doubleValue() + (max.doubleValue() - min.doubleValue()) * AbstractScenario.rand().nextDouble())));
 					}
 				}
 			} else {
@@ -139,7 +141,7 @@ class DocNode {
 				for (int i = 0; i < count.intValue(); i++) {
 					if (stdev != null) {
 						while (true) {
-							double v = val + Scenario.rand().nextDouble() * stdev.doubleValue();
+							double v = val + AbstractScenario.rand().nextDouble() * stdev.doubleValue();
 							boolean ok1 = i == 0 && v >= min.doubleValue() || v >= val - stdev.doubleValue();
 							boolean ok2 = i == count.intValue() - 1 && v <= max.doubleValue() || v <= val + stdev.doubleValue();
 							if (ok1 && ok2) {
@@ -154,7 +156,7 @@ class DocNode {
 				}
 				if (select != null) {
 					for (int i = 0; i < count.intValue() - select.intValue(); i++) {
-						res.remove(Scenario.rand().nextInt(res.size()));
+						res.remove(AbstractScenario.rand().nextInt(res.size()));
 					}
 				}
 			}

@@ -7,16 +7,16 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import logging.Logger;
+import scenario.AbstractScenario;
+import scenario.KCAScenario;
 import KCAAgent.KCAAgent;
 import agent.AgentID;
 import agent.Location;
 
-import scenario.Scenario;
-
-import logging.Logger;
-
 public class Environment {	
-	private Simulation parent; /* = new Command[] {
+	
+	private SimulationKCA parent; /* = new Command[] {
 	// agent, fact, pressure
 	new Command(Command.Action.INJECT, new AgentID(KCA.NX / 2, KCA.NY / 2), new Fact(null, data[0]).setPressure(+0.3f).setPersistence(0.1f)),
 	new Command(Command.Action.INJECT, new AgentID(KCA.NX - 1, 0), new Fact(null, data[1]).setPressure(+0.2f).setPersistence(0.1f)),
@@ -54,7 +54,8 @@ public class Environment {
 	
 	Collection<UpdateListener> listeners = new ArrayList<UpdateListener>();
 	
-	public Environment(@SuppressWarnings("hiding") Simulation parent, Scenario scenario) {
+	@SuppressWarnings("hiding")
+	public Environment(SimulationKCA parent, KCAScenario scenario) {
 		this.parent = parent;
 		this.x = scenario.getX();
 		this.y = scenario.getY();
@@ -140,12 +141,12 @@ public class Environment {
 	
 	public void addSelected(KCAAgent agent) {
 		selected.add(agent);
-		logger.addLog(agent.getLog());
+//		logger.addLog(agent.getLog());
 	}
 	
 	public void removeSelected(KCAAgent agent) {
 		selected.remove(agent);
-		logger.removeLog(agent.getLog());
+//		logger.removeLog(agent.getLog());
 	}
 	
 	public List<KCAAgent> getSelected() {

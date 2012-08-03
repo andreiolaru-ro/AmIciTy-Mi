@@ -5,8 +5,9 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Set;
 
+import scenario.KCAScenario;
+
 import KCAAgent.KCAAgent;
-import XMLParsing.KCAScenario;
 import base.Environment;
 
 public class Log

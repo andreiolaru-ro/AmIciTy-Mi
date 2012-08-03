@@ -1,11 +1,12 @@
-package scenario;
+package oldScenario;
 
+
+import oldScenario.Schema.SchemaNode;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import scenario.Schema.SchemaNode;
 
 
 class Doc extends DefaultHandler {

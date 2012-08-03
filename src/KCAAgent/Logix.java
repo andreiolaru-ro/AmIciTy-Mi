@@ -6,13 +6,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import scenario.AbstractScenario;
 import agent.AbstractMeasure.NumericMeasure;
 import agent.AgentID;
 import agent.MeasureName;
 
 
 
-import scenario.Scenario;
 
 public class Logix
 {
@@ -358,7 +358,7 @@ public class Logix
 	
 	static boolean goodToForget(Fact f)
 	{
-		if(f.getPersistence() < Logix.zeroPersistence && Scenario.rand().nextDouble() < 0.1)
+		if(f.getPersistence() < Logix.zeroPersistence && AbstractScenario.rand().nextDouble() < 0.1)
 			return true;
 		return false;
 	}

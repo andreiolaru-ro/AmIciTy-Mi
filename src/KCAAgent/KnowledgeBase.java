@@ -6,7 +6,6 @@ import java.util.Iterator;
 import java.util.Map;
 
 import logging.Log;
-
 import agent.AgentID;
 import base.QuickSet;
 import base.QuickSet.QuickForgetConfirmer;

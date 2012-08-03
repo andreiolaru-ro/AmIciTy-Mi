@@ -14,21 +14,18 @@ import java.util.TreeSet;
 import java.util.Vector;
 import java.util.concurrent.PriorityBlockingQueue;
 
-import scenario.Scenario;
-
 import logging.Log;
-
+import scenario.AbstractScenario;
 import KCAAgent.Goal.GoalList;
 import KCAAgent.Logix.Domain;
 import agent.AbstractAgent;
-import agent.AgentID;
 import agent.AbstractMeasure.FloatMeasure;
 import agent.AbstractMeasure.NumericMeasure;
-
+import agent.AgentID;
 import agent.Location;
 import agent.Measure;
-import agent.Measures;
 import agent.MeasureName;
+import agent.Measures;
 import base.Environment;
 import base.Message;
 import base.Message.Type;
@@ -734,12 +731,12 @@ public class KCAAgent extends AbstractAgent
 					});
 			List<AgentID> shuffled = new LinkedList<AgentID>(
 					neighbours.keySet());
-			Collections.shuffle(shuffled, Scenario.rand());
+			Collections.shuffle(shuffled, AbstractScenario.rand());
 			sortedN.addAll(shuffled);
 			Intention intention = new Intention(primaryGoal);
 			for (AgentID a : neighbours.keySet())
 			{
-				if ((Scenario.rand().nextFloat() < f.getPressure())
+				if ((AbstractScenario.rand().nextFloat() < f.getPressure())
 						&& !kb.doesAgentKnowFact(a, f.recurse()))
 					intention.plan.add(new Action(f, a));
 			}

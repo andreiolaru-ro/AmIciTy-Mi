@@ -56,10 +56,10 @@ public class Fact
 	
 	//public Fact(AgentID agent, DataContent data, int fstep)
 	@SuppressWarnings("hiding")
-	public Fact(AgentID agent, DataContent data, int step)
+	public Fact(AgentID agent, DataContent dataContent, int step)
 	{
 		this.agent = agent;
-		this.abstractContent = data;
+		this.abstractContent = dataContent;
 		//this.firstStep = fstep;
 		this.firstStep = step;
 	}
