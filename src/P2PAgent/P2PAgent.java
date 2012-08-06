@@ -21,7 +21,7 @@ import base.Message;
 import base.Message.Type;
 
 /**
- * class which will simulate the basic behavior of an agent on a p2p network
+ * class which will simulate the basic behaviors of an agent on a p2p network
  * @author Guillaume Masson
  *
  */
@@ -47,7 +47,6 @@ public class P2PAgent extends AbstractAgent
 	/** Map to do the link between an id and an agent*/
 	private static HashMap<AgentID,P2PAgent>	directory;
 
-	@SuppressWarnings("hiding")
 	public P2PAgent(Environment parent, AgentID id,Location loc, double probability)
 	{
 		super();
@@ -213,7 +212,7 @@ public class P2PAgent extends AbstractAgent
 					//we calculate the probability, to know if we have to send the request to our contacts
 					if(calculateProba<=this.probability.getValue().doubleValue())
 					{
-						System.out.println(this.id+"ajoute requte");
+						System.out.println(this.id+"ajoute requï¿½te");
 						//we will send the request for the item
 						itemsToRequest.add(requestedItem);
 						itemToRemove.add(requestedItem);
@@ -259,7 +258,7 @@ public class P2PAgent extends AbstractAgent
 				{
 					//An other agent asks our agent if he has these items or if he knows where to find them
 					case REQUEST:
-						System.out.println("requte de "+msg.getFrom());
+						System.out.println("requï¿½te de "+msg.getFrom());
 						Set<Item> queriesItems=null;
 						if(pendingQueries.containsKey(msg.getFrom()))
 						{
