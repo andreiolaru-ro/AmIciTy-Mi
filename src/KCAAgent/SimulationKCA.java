@@ -1,4 +1,4 @@
-package base;
+package KCAAgent;
 
 import graphics.AbstractGraphViewer;
 import graphics.ControllableView;
@@ -21,24 +21,25 @@ import java.util.Collection;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JSlider;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 
+import base.Command;
+import base.Environment;
+import base.Message;
+import base.Simulation;
+
 import logging.Log;
 import scenario.AbstractScenario;
 import scenario.KCAScenario;
-import KCAAgent.DataContent;
-import KCAAgent.Fact;
 import KCAAgent.Goal.GoalType;
 import KCAAgent.Logix.Domain;
-import KCAAgent.MessageKCA;
 import agent.AgentID;
 
 
-public class SimulationKCA extends JFrame implements Runnable, UpdateListener
+public class SimulationKCA extends Simulation<EnvironmentKCA>
 {
 	/**
 	 * 
@@ -75,8 +76,6 @@ public class SimulationKCA extends JFrame implements Runnable, UpdateListener
 	KCAScenario				scenario	= new KCAScenario("test/test_scenario.xml");
 //	Scenario				scenario	= new Scenario("test/test1.xml");
 	
-	private Environment				cm;
-	
 	private DataContent[]			data		= scenario.getData();
 	
 	private static StepNumber		sn			= new StepNumber();
@@ -86,14 +85,9 @@ public class SimulationKCA extends JFrame implements Runnable, UpdateListener
 	
 	private int						nextcommand	= 0;
 	
-	private Log						log;
+
 	
-	/**
-	 *  To save the action of the start and stop button
-	 */
-	private boolean					active		= false; 
-	
-	private boolean					oneStep		= false;
+
 	
 	private Command[]				commands	= scenario.getCommands();
 	private static SimulationKCA kca;
@@ -160,6 +154,7 @@ public class SimulationKCA extends JFrame implements Runnable, UpdateListener
 		init2();
 	}
 	
+	@Override
 	public void createMainWindow(int x, int y, int w, int h)
 	{
 		this.setLayout(new BorderLayout());
@@ -246,7 +241,7 @@ public class SimulationKCA extends JFrame implements Runnable, UpdateListener
 	
 	private void init1()
 	{
-		cm = new Environment(this, scenario);
+		cm = new EnvironmentKCA(this, scenario);
 		cm.getLogger().setLevel(LEVEL);
 		log = new Log(null);
 		cm.getLogger().addLog(log);
@@ -367,30 +362,6 @@ public class SimulationKCA extends JFrame implements Runnable, UpdateListener
 			}
 		}
 		active = false;
-	}
-	
-	public void start()
-	{
-		if(!active)
-		{
-			active = true;
-			new Thread(this).start();
-		}
-	}
-	
-	public void stop()
-	{
-		active = false;
-	}
-	
-	public void step()
-	{
-		if(!active)
-		{
-			oneStep = true;
-			active = true;
-			new Thread(this).start();
-		}
 	}
 	
 	@Override

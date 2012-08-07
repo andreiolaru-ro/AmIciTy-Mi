@@ -2,13 +2,13 @@ package graphics;
 
 import java.awt.Color;
 
+import KCAAgent.EnvironmentKCA;
 import KCAAgent.KCAAgent;
-import base.Environment;
 
 public abstract class AbstractMaxGraphViewer extends AbstractGraphViewer
 {
 	@SuppressWarnings("hiding")
-	protected AbstractMaxGraphViewer(Environment cm, Object data, Color color)
+	protected AbstractMaxGraphViewer(EnvironmentKCA cm, Object data, Color color)
 	{
 		super(cm, data, color);
 	}

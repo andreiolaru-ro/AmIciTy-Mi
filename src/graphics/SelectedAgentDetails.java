@@ -1,10 +1,10 @@
 package graphics;
 
-import base.Environment;
+import KCAAgent.EnvironmentKCA;
 
 public class SelectedAgentDetails extends AgentDetails {
 	@SuppressWarnings("hiding")
-	public SelectedAgentDetails(Environment cm) {
+	public SelectedAgentDetails(EnvironmentKCA cm) {
 		super(cm);
 	}
 

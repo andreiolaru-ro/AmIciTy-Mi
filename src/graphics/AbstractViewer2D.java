@@ -7,14 +7,14 @@ import java.awt.Graphics2D;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferStrategy;
 
-import base.Environment;
+import KCAAgent.EnvironmentKCA;
 
 public abstract class AbstractViewer2D extends AbstractViewer {
 	private Canvas canvas;
 	private BufferStrategy strategy;
 	
 	@SuppressWarnings("hiding")
-	protected AbstractViewer2D(Environment cm, Object data) {
+	protected AbstractViewer2D(EnvironmentKCA cm, Object data) {
 		super(cm, data);
 		canvas = new Canvas() {
 			/**

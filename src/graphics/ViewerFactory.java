@@ -7,15 +7,15 @@ import java.util.Collection;
 
 import logging.LogViewer;
 import KCAAgent.DataContent;
+import KCAAgent.EnvironmentKCA;
 import KCAAgent.Fact;
 import KCAAgent.Goal;
+import KCAAgent.SimulationKCA;
 import KCAAgent.Goal.GoalType;
 import KCAAgent.KCAAgent;
 import KCAAgent.Logix.Domain;
 import KCAAgent.Specialty;
 import agent.MeasureName;
-import base.Environment;
-import base.SimulationKCA;
 
 public class ViewerFactory
 {
@@ -269,7 +269,7 @@ public class ViewerFactory
 		}
 	}
 	
-	public static ControllableView[] createViewers(Environment cm, WindowParameters params[])
+	public static ControllableView[] createViewers(EnvironmentKCA cm, WindowParameters params[])
 	{
 		ControllableView[] viewers = new ControllableView[params.length];
 		WindowParameters control = null;
@@ -289,7 +289,7 @@ public class ViewerFactory
 		return viewers;
 	}
 	
-	public static ControllableView createViewer(Environment cm, WindowParameters params)
+	public static ControllableView createViewer(EnvironmentKCA cm, WindowParameters params)
 	{
 		ControllableView viewer = createViewerSub(cm, params.type, params.data, params.specific);
 		viewer.setLocation(params.x, params.y);
@@ -303,7 +303,7 @@ public class ViewerFactory
 		return viewer;
 	}
 	
-	private static ControllableView createViewerSub(Environment cm, Type type, Object data, Object specific)
+	private static ControllableView createViewerSub(EnvironmentKCA cm, Type type, Object data, Object specific)
 	{
 		switch(type)
 		{

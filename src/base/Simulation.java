@@ -3,10 +3,9 @@ package base;
 import graphics.UpdateListener;
 
 import javax.swing.JFrame;
-
 import logging.Log;
 
-public abstract class Simulation extends JFrame implements Runnable, UpdateListener
+public abstract class Simulation<ENVIRONMENT extends Environment<?, ?>> extends JFrame implements Runnable, UpdateListener
 {
 	/**
 	 * 
@@ -16,11 +15,14 @@ public abstract class Simulation extends JFrame implements Runnable, UpdateListe
 	protected final static Log.Level	LEVEL		= Log.Level.INFO;	// initial level of logging, and
 	protected final static int		LEVELSWITCH	= -1;// after this number of steps. negative value: never change
 	protected final static Log.Level	LEVELTO		= Log.Level.INFO;								// switch to this level
-	protected EnvironmentP2P env;
+	protected ENVIRONMENT cm;
 	protected Log log;
+	
+	/**
+	 *  To save the action of the start and stop button
+	 */
 	protected boolean					active		= false; 
 	protected boolean					oneStep		= false;
-	
 	
 	public abstract void createMainWindow(int x, int y, int w, int h);
 

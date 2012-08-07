@@ -2,7 +2,6 @@ package KCAAgent;
 
 import KCAAgent.MessageKCA.Type;
 import agent.AgentID;
-import base.Environment;
 import base.Message;
 
 public class MessageKCA<T> extends Message<T> implements Comparable<MessageKCA<T>>
@@ -21,8 +20,8 @@ public class MessageKCA<T> extends Message<T> implements Comparable<MessageKCA<T
 	public MessageKCA(AgentID from, Type type, T content)
 	{
 		super();
-		this.step = Environment.getStep();
-		this.sequence = Environment.getSequence();
+		this.step = EnvironmentKCA.getStep();
+		this.sequence = EnvironmentKCA.getSequence();
 		this.from = from;
 		this.type=type;
 		this.content = content;

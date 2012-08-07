@@ -40,7 +40,7 @@ public class KCAAgent extends AbstractAgent
 	// agent
 
 	// internal workings
-	private KnowledgeBase			kb;
+	KnowledgeBase			kb;
 	private GoalList				goals					= new GoalList();
 	// these
 	// are
@@ -86,7 +86,7 @@ public class KCAAgent extends AbstractAgent
 
 	// communication
 	// up
-	private Environment				parent;
+	private EnvironmentKCA				parent;
 	@SuppressWarnings("unused")
 	private Vector<Fact>			externalRequests		= new Vector<Fact>();					// data
 																									// id's
@@ -108,19 +108,19 @@ public class KCAAgent extends AbstractAgent
 	public Location location;
 
 	@SuppressWarnings("hiding")
-	public KCAAgent(Environment parent, AgentID id, Location loc, int capacity,
+	public KCAAgent(EnvironmentKCA parent, AgentID id, Location loc, int capacity,
 			int nsteps)
 	{
 		this(parent, id, loc, capacity, null, nsteps);
 	}
 
-	public void setParent(Environment env)
+	public void setParent(EnvironmentKCA env)
 	{
 		this.parent = env;
 	}
 
 	@SuppressWarnings({ "hiding", "unused" })
-	KCAAgent(Environment parent, AgentID id, Location loc, double capacity, Specialty spec, int nsteps)
+	KCAAgent(EnvironmentKCA parent, AgentID id, Location loc, double capacity, Specialty spec, int nsteps)
 	{
 		super();
 		neighbours = new HashMap<AgentID, KCAAgent>();
@@ -752,6 +752,7 @@ public class KCAAgent extends AbstractAgent
 		}
 	}
 
+	@SuppressWarnings("boxing")
 	protected void execute()
 	{
 		log.li("intentions [~]: ~", intentions.size(), intentions);

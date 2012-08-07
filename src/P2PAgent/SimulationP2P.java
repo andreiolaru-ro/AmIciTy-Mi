@@ -1,7 +1,9 @@
-package base;
+package P2PAgent;
+
+import base.Simulation;
 
 
-public class SimulationP2P extends Simulation
+public class SimulationP2P extends Simulation<EnvironmentP2P>
 {
 	/**
 	 * 
