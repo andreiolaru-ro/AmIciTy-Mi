@@ -34,6 +34,7 @@ import KCAAgent.DataContent;
 import KCAAgent.Fact;
 import KCAAgent.Goal.GoalType;
 import KCAAgent.Logix.Domain;
+import KCAAgent.MessageKCA;
 import agent.AgentID;
 
 
@@ -269,13 +270,13 @@ public class SimulationKCA extends JFrame implements Runnable, UpdateListener
 		if(command.getAction() == Command.Action.INJECT)
 		{
 			log.le("injecting ~ at ~", command.getFact(), command.getLocation());
-			AgentID receiver = cm.inject(command.getLocation(), new Message<Collection<Fact>>(null, Message.Type.INFORM, command.getFact().toCollection()));
+			AgentID receiver = cm.inject(command.getLocation(), new MessageKCA<Collection<Fact>>(null, MessageKCA.Type.INFORM, command.getFact().toCollection()));
 			log.le("received by ~", receiver);
 		}
 		else if(command.getAction() == Command.Action.REQUEST)
 		{
 			log.le("requesting ~ from ~", command.getFact(), command.getLocation());
-			cm.inject(command.getLocation(), new Message<Collection<Fact>>(null, Message.Type.REQUEST, command.getFact().toCollection()));
+			cm.inject(command.getLocation(), new MessageKCA<Collection<Fact>>(null, MessageKCA.Type.REQUEST, command.getFact().toCollection()));
 		}
 		else if(command.getAction() == Command.Action.SNAPSHOT)
 		{

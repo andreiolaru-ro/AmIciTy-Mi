@@ -18,6 +18,7 @@ import logging.Log;
 import scenario.AbstractScenario;
 import KCAAgent.Goal.GoalList;
 import KCAAgent.Logix.Domain;
+import KCAAgent.MessageKCA.Type;
 import agent.AbstractAgent;
 import agent.AbstractMeasure.FloatMeasure;
 import agent.AbstractMeasure.NumericMeasure;
@@ -28,7 +29,6 @@ import agent.MeasureName;
 import agent.Measures;
 import base.Environment;
 import base.Message;
-import base.Message.Type;
 
 public class KCAAgent extends AbstractAgent 
 {
@@ -94,8 +94,8 @@ public class KCAAgent extends AbstractAgent
 																									// from
 																									// outside
 	// peer
-	private Queue<Message<Collection<Fact>>>			inbox					= new PriorityBlockingQueue<Message<Collection<Fact>>>();
-	private Queue<Message<Collection<Fact>>>			atemporalInbox			= new PriorityBlockingQueue<Message<Collection<Fact>>>();
+	private Queue<MessageKCA<Collection<Fact>>>			inbox					= new PriorityBlockingQueue<MessageKCA<Collection<Fact>>>();
+	private Queue<MessageKCA<Collection<Fact>>>			atemporalInbox			= new PriorityBlockingQueue<MessageKCA<Collection<Fact>>>();
 
 	private NumericMeasure				agentBalance;
 	private NumericMeasure				agentUselessFacts;
@@ -185,6 +185,7 @@ public class KCAAgent extends AbstractAgent
 		return location;
 	}
 
+	@SuppressWarnings("hiding")
 	public void setLocation(Location location)
 	{
 		this.location = location;
@@ -222,9 +223,10 @@ public class KCAAgent extends AbstractAgent
 			log.li("received ~", message);
 		else
 			log.lf("received ~", message);
-		atemporalInbox.offer((Message<Collection<Fact>>) message);
+		atemporalInbox.offer((MessageKCA<Collection<Fact>>) message);
 	}
 
+	@SuppressWarnings("boxing")
 	@Override
 	public void step() throws Exception
 	{
@@ -234,9 +236,9 @@ public class KCAAgent extends AbstractAgent
 		agentPrint();
 
 		// fill the inbox for this time step
-		for (Iterator<Message<Collection<Fact>>> it = atemporalInbox.iterator(); it.hasNext();)
+		for (Iterator<MessageKCA<Collection<Fact>>> it = atemporalInbox.iterator(); it.hasNext();)
 		{
-			Message<Collection<Fact>> msg = it.next();
+			MessageKCA<Collection<Fact>> msg = it.next();
 			if (!msg.isFuture())
 			{
 				inbox.offer(msg);
@@ -425,10 +427,10 @@ public class KCAAgent extends AbstractAgent
 		// check received facts, limited by the allowed amount of processing
 		// (according to agent pressure)
 		int nHandled = 0;
-		for (Iterator<Message<Collection<Fact>>> it = inbox.iterator(); it.hasNext()
+		for (Iterator<MessageKCA<Collection<Fact>>> it = inbox.iterator(); it.hasNext()
 				&& nHandled < amount.intValue(); nHandled++)
 		{
-			Message<Collection<Fact>> m = it.next();
+			MessageKCA<Collection<Fact>> m = it.next();
 			switch (m.getType())
 			{
 			case INFORM:
@@ -545,6 +547,7 @@ public class KCAAgent extends AbstractAgent
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+					break;
 				// case GET:
 				// if(kb.doesAgentHaveData(id, i.goal.relatedData))
 				// {
@@ -594,6 +597,7 @@ public class KCAAgent extends AbstractAgent
 		log.li("~", kb.printFacts());
 	}
 
+	@SuppressWarnings("null")
 	protected void plan()
 	{
 		Goal primaryGoal = null, chosenGoal = null;
@@ -780,12 +784,11 @@ public class KCAAgent extends AbstractAgent
 		// Fact(id, action.relatedData).toCollection()));
 		// break;
 		case INFORM:
-			sendMessage(action.targetAgent, new Message<Collection<Fact>>(id, Type.INFORM,
-					action.relatedFact.toCollection()));
+			sendMessage(action.targetAgent, new MessageKCA<Collection<Fact>>(id, Type.INFORM, action.relatedFact.toCollection()));
 			break;
 
 		}
-
+		
 		if (intention.plan.isEmpty())
 			intention.waitStep();
 	}
@@ -813,16 +816,16 @@ public class KCAAgent extends AbstractAgent
 				maxSim = sim;
 			}
 		}
-		return ((double) (maxI - ((double) firstStep) + 1.0f))
-				/ ((double) ((double) currentSpecialtyIndex
-						- (double) firstStep + 1.0f));
+		return (maxI - firstStep + 1.0f)
+				/ ((double) currentSpecialtyIndex
+						- (double) firstStep + 1.0f);
 	}
 
 	public double calculateAgentBalance() throws Exception
 	{
 		// FIXME not flexible Domain implementation
 		Collection<Fact> facts = getFacts(false);
-		double n = (double) facts.size();
+		double n = facts.size();
 		if (n == 0)
 		{
 			agentBalance.setValue(new Double(0.0));
@@ -884,7 +887,7 @@ public class KCAAgent extends AbstractAgent
 		return intentions;
 	}
 
-	public Queue<Message<Collection<Fact>>> getInbox() // for Drawer
+	public Queue<MessageKCA<Collection<Fact>>> getInbox() // for Drawer
 	{
 		return inbox;
 	}
