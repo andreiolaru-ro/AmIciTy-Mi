@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+	xmlns:tns="http://www.example.org/parameterSchema"
+	elementFormDefault="qualified"
+	targetNamespace="http://www.example.org/parameterSchema">
+
+	<group name="parameters">
+		<sequence>
+			<element name="first" type="decimal" minOccurs="0" maxOccurs="1" />
+			<element name="last" type="decimal" minOccurs="0" maxOccurs="1" />
+			<element name="count" type="nonNegativeInteger" minOccurs="0"
+				maxOccurs="1" />
+			<element name="mean" type="decimal" minOccurs="0" maxOccurs="1" />
+			<element name="dev" type="decimal" minOccurs="0" maxOccurs="1" />
+			<element name="min" type="decimal" minOccurs="0" maxOccurs="1" />
+			<element name="max" type="decimal" minOccurs="0" maxOccurs="1" />
+			<element name="list" type="string" minOccurs="0" maxOccurs="1" />
+			<element name="select" type="nonNegativeInteger" minOccurs="0"
+				maxOccurs="1" />
+			<element name="step" type="decimal" minOccurs="0" maxOccurs="1" />
+			<element name="foreach" type="string" minOccurs="0"
+				maxOccurs="unbounded" />
+		</sequence>
+	</group>
+
+
+	
+	<complexType name="eventStringValue">
+		<choice>
+			<group ref="tns:parameters" />
+			<element name="value" type="string" />
+		</choice>
+	</complexType>
+
+	<complexType name="eventIntegerValue">
+		<choice>
+			<group ref="tns:parameters" />
+			<element name="value" type="integer" />
+		</choice>
+	</complexType>
+
+	<complexType name="eventDecimalValue">
+		<choice>
+			<group ref="tns:parameters" />
+			<element name="value" type="decimal" />
+		</choice>
+	</complexType>
+
+	<complexType name="eventBoundedValue">
+		<choice>
+			<group ref="tns:parameters" />
+			<element name="value">
+				<simpleType>
+					<restriction base="decimal">
+						<minInclusive value="0" />
+						<maxInclusive value="1" />
+					</restriction>
+				</simpleType>
+			</element>
+		</choice>
+	</complexType>
+
+</schema>

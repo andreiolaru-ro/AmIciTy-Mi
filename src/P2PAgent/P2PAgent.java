@@ -41,8 +41,6 @@ public class P2PAgent extends AbstractAgent
 	private Measures					measures;
 	/**probability that our agent will send a request about a file that it doesn't want*/
 	private NumericMeasure	probability;
-	
-	final static int					maxNumberOfContacts	= 10;
 	/**inbox for all the messages(request, data...) that our agent received*/
 	private List<MessageP2P<?>>			waitingMessage;
 	/** Map to do the link between an id and an agent*/
@@ -374,23 +372,11 @@ public class P2PAgent extends AbstractAgent
 		return itemsWanted;
 	}
 	
-	/**permit to set the items wanted by an agent*/
-	public void setItemsWanted(Set<Item> itemsWanted)
-	{
-		this.itemsWanted = itemsWanted;
-	}
-	
 	@SuppressWarnings("hiding")
 	/**Permit to set the environment of an agent*/
 	public void setParent(EnvironmentP2P parent)
 	{
 		this.parent=parent;
-	}
-	
-	/**Permit to set the items of an agent*/
-	public void setItems(Set<Item> items)
-	{
-		this.items = items;
 	}
 	
 	/**Permit to get the contact of an agent*/
@@ -403,6 +389,11 @@ public class P2PAgent extends AbstractAgent
 	public void setContacts(Set<AgentID> contacts)
 	{
 		this.contacts = contacts;
+	}
+	
+	public Set<Item> getItems()
+	{
+		return items;
 	}
 
 

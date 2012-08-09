@@ -1,30 +1,21 @@
 package P2PAgent;
 
+import agent.AgentID;
 import base.Command;
 
 public class CommandP2P extends Command
 {
-	private Item item=null;
-	private Item itemWanted=null;
 	
-	public CommandP2P(CommandP2P.Action action, Item item, Item itemWanted, int time)
+	private Item item=null;
+	private AgentID agentID=null;
+	
+	public CommandP2P(CommandP2P.Action action,AgentID agentID, Item item, int time)
 	{
 		this.action=action;
 		this.time=time;
 		this.setItem(item);
-		this.setItemWanted(itemWanted);
+		this.setAgentID(agentID);
 	}
-	
-	public CommandP2P(CommandP2P.Action action, Item item, Item itemWanted)
-	{
-		this(action, item, itemWanted, 0);
-	}
-	
-	public CommandP2P(Command.Action action, int ms)
-	{
-		this(action, null, null, ms);
-	}
-
 	public Item getItem()
 	{
 		return item;
@@ -34,14 +25,15 @@ public class CommandP2P extends Command
 	{
 		this.item = item;
 	}
-
-	public Item getItemWanted()
+	public AgentID getAgentID()
 	{
-		return itemWanted;
+		return agentID;
 	}
-
-	public void setItemWanted(Item itemWanted)
+	public void setAgentID(AgentID agentID)
 	{
-		this.itemWanted = itemWanted;
+		this.agentID = agentID;
 	}
+	
+	
+
 }

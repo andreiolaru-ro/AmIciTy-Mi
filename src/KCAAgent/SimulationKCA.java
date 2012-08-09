@@ -26,6 +26,7 @@ import javax.swing.JSlider;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 
+import base.Command;
 import base.Environment;
 import base.Message;
 import base.Simulation;
@@ -65,9 +66,7 @@ public class SimulationKCA extends Simulation<EnvironmentKCA, CommandKCA>
 		}
 	}
 																								
-//	 private Scenario scenario = new Scenario("test/testSmall2.xml");
-	KCAScenario				scenario	= new KCAScenario("test/test_scenario.xml");
-//	Scenario				scenario	= new Scenario("test/test1.xml");
+	KCAScenario				scenario	= new KCAScenario("scenarios/kcaScenario.xml");
 	
 	private DataContent[]			data		= scenario.getData();
 	

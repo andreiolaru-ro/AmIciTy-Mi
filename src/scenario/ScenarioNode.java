@@ -112,7 +112,7 @@ public class ScenarioNode extends XMLNode {
 				for (int i = 0; i < select.intValue(); i++) {
 					if (mean != null && stdev != null) {
 						while (true) {
-							double val = mean.doubleValue() + KCAScenario.rand().nextGaussian()
+							double val = mean.doubleValue() + AbstractScenario.rand().nextGaussian()
 									* stdev.doubleValue();
 							if (max.doubleValue() <= val && val <= min.doubleValue()) {
 								res.add(new Double(val).toString());
@@ -123,7 +123,7 @@ public class ScenarioNode extends XMLNode {
 						assert mean == null && stdev == null;
 						res.add((new Double(min.doubleValue()
 								+ (max.doubleValue() - min.doubleValue())
-								* KCAScenario.rand().nextDouble())).toString());
+								* AbstractScenario.rand().nextDouble())).toString());
 					}
 				}
 			} else {
@@ -173,7 +173,7 @@ public class ScenarioNode extends XMLNode {
 				for (int i = 0; i < count.intValue(); i++) {
 					if (stdev != null) {
 						while (true) {
-							double v = val + KCAScenario.rand().nextDouble()
+							double v = val + AbstractScenario.rand().nextDouble()
 									* stdev.doubleValue();
 							boolean ok1 = i == 0 && v >= min.doubleValue()
 									|| v >= val - stdev.doubleValue();
@@ -191,7 +191,7 @@ public class ScenarioNode extends XMLNode {
 				}
 				if (select != null) {
 					for (int i = 0; i < count.intValue() - select.intValue(); i++) {
-						res.remove(KCAScenario.rand().nextInt(res.size()));
+						res.remove(AbstractScenario.rand().nextInt(res.size()));
 					}
 				}
 			}

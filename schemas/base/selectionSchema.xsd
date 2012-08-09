@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.example.org/functionSchema"
+	elementFormDefault="qualified" targetNamespace="http://www.example.org/functionSchema">
+
+
+	<complexType name="coordinates">
+		<all>
+			<element name="x" type="decimal" />
+			<element name="y" type="decimal" />
+		</all>
+	</complexType>
+
+	<complexType name="dimensionName">
+		<sequence>
+			<element name="function" type="string" />
+			<element name="dependsOn" minOccurs="0" maxOccurs="2">
+				<simpleType>
+					<restriction base="string">
+						<enumeration value="x" />
+						<enumeration value="y" />
+						<enumeration value="t" />
+					</restriction>
+				</simpleType>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="areaFunction">
+		<choice>
+			<element name="x" type="tns:dimensionName" />
+			<element name="y" type="tns:dimensionName" />
+		</choice>
+	</complexType>
+
+
+
+	<group name="complexSelection">
+		<sequence>
+			<element name="firstAreaFunction" type="tns:areaFunction" />
+			<element name="secondAreaFunction" type="tns:areaFunction" />
+			<element name="inside" type="boolean" />
+		</sequence>
+	</group>
+
+	<complexType name="selection">
+		<sequence>
+			<element name="centerCoordinates" type="tns:coordinates" />
+			<choice>
+				<group ref="tns:complexSelection" />
+				<element name="areaFunction" type="tns:areaFunction" />
+			</choice>
+		</sequence>
+	</complexType>
+
+	<complexType name="selectionAction">
+		<sequence>
+			<element name="selection" type="tns:selection" />
+			<element name="action">
+				<simpleType>
+					<restriction base="string">
+						<enumeration value="pause" />
+						<enumeration value="unpause" />
+					</restriction>
+				</simpleType>
+			</element>
+		</sequence>
+	</complexType>
+
+</schema>

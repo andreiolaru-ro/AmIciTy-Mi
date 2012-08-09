@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.example.org/mapSchema"
+	xmlns:tns="http://www.example.org/mapSchema" elementFormDefault="qualified"
+	xmlns:pr="http://www.example.org/parameterSchema">
+
+	<import schemaLocation="parameterSchema.xsd" namespace="http://www.example.org/parameterSchema" />
+
+	<complexType name="map">
+		<sequence>
+			<element name="characteristic">
+				<complexType>
+					<sequence>
+						<element name="coordinates">
+							<complexType>
+								<sequence>
+									<element name="x" type="decimal" />
+									<element name="y" type="decimal" />
+								</sequence>
+							</complexType>
+						</element>
+						<element name="size">
+							<complexType>
+								<sequence>
+									<element name="width" type="decimal" />
+									<element name="height" type="decimal" />
+								</sequence>
+							</complexType>
+						</element>
+					</sequence>
+				</complexType>
+			</element>
+			<element name="agent" minOccurs="1" maxOccurs="unbounded">
+				<complexType>
+					<sequence>
+						<element name="location">
+							<complexType>
+								<sequence>
+									<element name="x" type="pr:eventIntegerValue" />
+									<element name="y" type="pr:eventIntegerValue" />
+								</sequence>
+							</complexType>
+						</element>
+					</sequence>
+				</complexType>
+			</element>
+		</sequence>
+	</complexType>
+</schema>

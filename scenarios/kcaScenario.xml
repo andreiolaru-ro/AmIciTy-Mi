@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scen:scenario seed="-56552949266271195"
+	xmlns:pr="http://www.example.org/parameterSchema" xmlns:scen="http://www.example.org/scenarioSchema"
+	xmlns:ma="http://www.example.org/mapSchema"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.example.org/scenarioSchema ../schemas/agent/kcaSchema.xsd ">
+
+	<scen:map>
+		<ma:characteristic>
+			<ma:coordinates>
+				<ma:x>0</ma:x>
+				<ma:y>0</ma:y>
+			</ma:coordinates>
+			<ma:size>
+				<ma:width>31</ma:width>
+				<ma:height>31</ma:height>
+			</ma:size>
+		</ma:characteristic>
+		<ma:agent>
+			<ma:location>
+				<ma:x>
+					<pr:first>0</pr:first>
+					<pr:last>10</pr:last>
+					<pr:count>10</pr:count>
+				</ma:x>
+				<ma:y>
+					<pr:first>0</pr:first>
+					<pr:last>10</pr:last>
+					<pr:count>10</pr:count>
+				</ma:y>
+			</ma:location>
+		</ma:agent>
+		<scen:agent>
+			<scen:location>
+				<scen:x>
+					<pr:value>20</pr:value>
+				</scen:x>
+				<scen:y>
+					<pr:value>20</pr:value>
+				</scen:y>
+			</scen:location>
+		</scen:agent>
+	</scen:map>
+
+	<scen:timeline duration="1000">
+		<scen:event>
+			<scen:type>inject</scen:type>
+			<scen:pressure>
+				<pr:value>0</pr:value>
+			</scen:pressure>
+			<scen:persistence>
+				<pr:value>0.2</pr:value>
+			</scen:persistence>
+			<scen:domain>
+				<scen:a>
+					<pr:min>0</pr:min>
+					<pr:max>0.1</pr:max>
+					<pr:select>1</pr:select>
+					<pr:foreach> location/x </pr:foreach>
+					<pr:foreach> location/y </pr:foreach>
+				</scen:a>
+				<scen:b>
+					<pr:min>0.7</pr:min>
+					<pr:max>1</pr:max>
+					<pr:select>1</pr:select>
+					<pr:foreach> location/x </pr:foreach>
+					<pr:foreach> location/y </pr:foreach>
+					<pr:foreach> domain/a </pr:foreach>
+				</scen:b>
+				<scen:c>
+					<pr:min>0</pr:min>
+					<pr:max>0.3</pr:max>
+					<pr:select>3</pr:select>
+					<pr:foreach> location/x </pr:foreach>
+					<pr:foreach> location/y </pr:foreach>
+				</scen:c>
+			</scen:domain>
+			<scen:location>
+				<scen:x>
+					<pr:min>7</pr:min>
+					<pr:max>23</pr:max>
+					<pr:select>1</pr:select>
+				</scen:x>
+				<scen:y>
+					<pr:min>7</pr:min>
+					<pr:max>23</pr:max>
+					<pr:select>2</pr:select>
+					<pr:foreach> location/x </pr:foreach>
+				</scen:y>
+			</scen:location>
+			<scen:time>
+				<pr:min>1</pr:min>
+				<pr:max>90</pr:max>
+				<pr:select>3</pr:select>
+			</scen:time>
+		</scen:event>
+	</scen:timeline>
+</scen:scenario>

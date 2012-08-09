@@ -1,6 +1,5 @@
 package base;
 
-import KCAAgent.EnvironmentKCA;
 import agent.AgentID;
 
 public abstract class Message<T>

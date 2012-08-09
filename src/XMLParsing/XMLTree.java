@@ -47,12 +47,12 @@ public class XMLTree
 		{
 			String	search	= null;
 			int		cIndex	= 0;
-			
+
 			public NodeIterator(String searchName)
 			{
 				search = searchName;
 			}
-			
+
 			@Override
 			public boolean hasNext()
 			{
@@ -64,7 +64,7 @@ public class XMLTree
 				}
 				return false;
 			}
-			
+
 			@Override
 			public XMLNode next()
 			{
@@ -76,14 +76,14 @@ public class XMLTree
 				}
 				return null;
 			}
-			
+
 			@Override
 			public void remove()
 			{
 				throw new UnsupportedOperationException();
 			}
 		}
-		
+
 		/**
 		 * 
 		 * @author Andrei Olaru
@@ -93,7 +93,7 @@ public class XMLTree
 		{
 			String	name	= null;
 			String	value	= null;
-			
+
 			public XMLAttribute(String attrName, String attrValue)
 			{
 				super();
@@ -101,41 +101,41 @@ public class XMLTree
 				this.value = attrValue;
 			}
 		}
-		
+
 		protected String			name		= null;
 		protected String			namespace	= null;
 		protected String			fullName	= null;
-		
+
 		protected Set<XMLAttribute>	attributes	= new HashSet<XMLAttribute>();
-		
+
 		protected String			valueString	= null;
 		protected Integer			valueInt	= null;
 		protected Double			valueDouble	= null;
 		protected List<XMLNode>		nodes		= new LinkedList<XMLNode>();
-		
+
 		public XMLNode(String fullNodeName)
 		{
 			parseName(fullNodeName);
 		}
-		
+
 		public XMLNode(XMLNode node)
 		{
-			// need to fix : getters should be a better thing
+			// FIXME : getters should be a better thing
 			name = new String(node.name);
 			namespace = new String(node.namespace);
 			fullName = new String(node.fullName);
 			attributes.addAll(node.attributes);
-			
+
 			if(node.valueString != null)
 				valueString = new String();
 			if(node.valueInt != null)
 				valueInt = new Integer(node.valueInt.intValue());
 			if(node.valueDouble != null)
 				valueDouble = new Double(node.valueDouble.doubleValue());
-			
+
 			nodes.addAll(node.nodes);
 		}
-		
+
 		protected void parseName(String fullNodeName)
 		{
 			int columnIndex = fullNodeName.lastIndexOf(':');
@@ -151,42 +151,42 @@ public class XMLTree
 			}
 			this.fullName = fullNodeName;
 		}
-		
+
 		public XMLNode setValue(String string)
 		{
 			valueString = string;
 			return this;
 		}
-		
+
 		public XMLNode setValue(int integer)
 		{
 			valueInt = new Integer(integer);
 			return this;
 		}
-		
+
 		public XMLNode setValue(double dou)
 		{
 			valueDouble = new Double(dou);
 			return this;
 		}
-		
+
 		public XMLNode addNode(XMLNode node)
 		{
 			nodes.add(node);
 			return this;
 		}
-		
+
 		public XMLNode addAttribute(XMLAttribute attr)
 		{
 			attributes.add(attr);
 			return this;
 		}
-		
+
 		public String getName()
 		{
 			return name;
 		}
-		
+
 		public Object getValue()
 		{
 			if(valueString != null)
@@ -197,12 +197,12 @@ public class XMLTree
 				return valueDouble;
 			return null;
 		}
-		
+
 		public List<XMLNode> getNodes()
 		{
 			return nodes;
 		}
-		
+
 		/**
 		 * @param childName
 		 *            the name (a {@link String}) of the searched node.
@@ -212,7 +212,7 @@ public class XMLTree
 		{
 			return getNode(childName, 0);
 		}
-		
+
 		/**
 		 * @param childName
 		 *            the name (a {@link String}) of the searched node.
@@ -226,25 +226,25 @@ public class XMLTree
 		{
 			if(index < 0)
 				throw new IllegalArgumentException("Index should be non-negative.");
-			
+
 			int count = -1;
 			for(XMLNode child : nodes)
 			{
 				if(child.getName().equals(childName))
 					count++;
-				
+
 				if(index == count)
 					return child;
 			}
 			// child not found
 			return null;
 		}
-		
+
 		public Set<XMLAttribute> getAttributes()
 		{
 			return attributes;
 		}
-		
+
 		public String getAttributeValue(String attributeName)
 		{
 			for(XMLAttribute attr : attributes)
@@ -252,7 +252,7 @@ public class XMLTree
 					return attr.value;
 			return null;
 		}
-		
+
 		/**
 		 * @return a {@link NodeIterator} for all child nodes
 		 */
@@ -260,7 +260,7 @@ public class XMLTree
 		{
 			return nodes.iterator();
 		}
-		
+
 		/**
 		 * @param search
 		 *            the name of the nodes to iterate over.
@@ -270,7 +270,7 @@ public class XMLTree
 		{
 			return new NodeIterator(search);
 		}
-		
+
 		/**
 		 * @return a {@link String} representation of the node's name, value and attributes (one line).
 		 */
@@ -289,7 +289,7 @@ public class XMLTree
 				ret += " [" + attr.name + ":" + attr.value + "]";
 			return ret;
 		}
-		
+
 		/**
 		 * @return a {@link String} representation of this node's name value, attributes and children (recursive). Each
 		 *         node has one line.
@@ -299,7 +299,7 @@ public class XMLTree
 			System.out.println();
 			return this.toStringDepth("");
 		}
-		
+
 		/**
 		 * @param indent
 		 *            to apply to the output.
@@ -316,15 +316,15 @@ public class XMLTree
 			return ret;
 		}
 	}
-	
+
 	XMLNode			root	= null;
-	
+
 	/**
 	 * Keeps information for finding the current position in the tree (and allowing going up and down in the tree).
 	 * stack.peek() is the current node.
 	 */
 	Stack<XMLNode>	stack	= new Stack<XMLNode>();
-	
+
 	/**
 	 * Creates a new {@link XMLTree}. The current node becomes the root.
 	 * 
@@ -336,12 +336,12 @@ public class XMLTree
 		this.root = rootNode;
 		stack.push(rootNode);
 	}
-	
+
 	public XMLNode getRoot()
 	{
 		return root;
 	}
-	
+
 	/**
 	 * @return the current node (see {@link XMLTree}).
 	 */
@@ -351,7 +351,7 @@ public class XMLTree
 			return null;
 		return stack.peek();
 	}
-	
+
 	/**
 	 * Inserts a new node in the tree, as a child of the current node. The new node becomes current node.
 	 * 
@@ -365,7 +365,7 @@ public class XMLTree
 		stack.push(node);
 		return this;
 	}
-	
+
 	/**
 	 * Inserts a new attribute in the current node.
 	 * 
@@ -378,7 +378,7 @@ public class XMLTree
 		stack.peek().addAttribute(attr);
 		return this;
 	}
-	
+
 	/**
 	 * Alias of moveToChild()
 	 */
@@ -386,7 +386,7 @@ public class XMLTree
 	{
 		return moveToChild(node);
 	}
-	
+
 	/**
 	 * The specified child of the current node becomes current node.
 	 * 
@@ -405,7 +405,7 @@ public class XMLTree
 		}
 		throw new IllegalArgumentException();
 	}
-	
+
 	/**
 	 * Alias of finishNode().
 	 */
@@ -413,7 +413,7 @@ public class XMLTree
 	{
 		return finishNode();
 	}
-	
+
 	/**
 	 * Goes up one level in the tree: the parent of the current node becomes current node.
 	 * 
@@ -424,7 +424,7 @@ public class XMLTree
 		stack.pop();
 		return this;
 	}
-	
+
 	/**
 	 * The root of the {@link XMLTree} becomes current node.
 	 * 
@@ -436,7 +436,7 @@ public class XMLTree
 		stack.push(root);
 		return this;
 	}
-	
+
 	/**
 	 * The function does not affect the current node.
 	 * 

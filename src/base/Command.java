@@ -4,10 +4,10 @@ package base;
 public class Command
 {
 	public static enum Action {
-		INJECT, REQUEST, SNAPSHOT
+		INJECT, REQUEST, SNAPSHOT, INJECT_ITEM_WANTED, INJECT_ITEM;
 	}
 	
-	protected Command.Action	action	= null;
+	protected Command.Action action	= null;
 	protected int time;
 	
 	@SuppressWarnings("hiding")

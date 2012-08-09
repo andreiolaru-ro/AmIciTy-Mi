@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.example.org/scenarioSchema"
+	xmlns:tns="http://www.example.org/scenarioSchema" elementFormDefault="qualified"
+	xmlns:pr="http://www.example.org/parameterSchema" xmlns:fun="http://www.example.org/functionSchema">
+
+	<import schemaLocation="parameterSchema.xsd" namespace="http://www.example.org/parameterSchema" />
+	<import schemaLocation="functionSchema.xsd" namespace="http://www.example.org/functionSchema" />
+
+	<complexType name="item">
+		<all>
+			<element name="time" type="pr:eventIntegerValue" />
+			<element name="idAgent" type="pr:eventIntegerValue" />
+			<element name="idItem" type="pr:eventIntegerValue" />
+		</all>
+	</complexType>
+
+	<element name="scenario">
+		<complexType>
+			<all>
+				<element name="agent">
+					<complexType>
+						<all>
+							<element name="numberAgents" type="nonNegativeInteger" />
+							<element name="numberContactsMin" type="nonNegativeInteger" />
+							<element name="numberContactsMax" type="nonNegativeInteger" />
+						</all>
+					</complexType>
+				</element>
+				<element name="timeline">
+					<complexType>
+						<sequence>
+							<element name="items">
+								<complexType>
+									<sequence minOccurs="0" maxOccurs="unbounded">
+										<element name="wanted" type="tns:item" minOccurs="0"
+											maxOccurs="1" />
+										<element name="possessed" type="tns:item" minOccurs="0"
+											maxOccurs="1" />
+									</sequence>
+									<attribute name="number" type="nonNegativeInteger" />
+								</complexType>
+							</element>
+						</sequence>
+						<attribute name="duration" type="nonNegativeInteger" />
+					</complexType>
+				</element>
+			</all>
+			<attribute name="seed" type="integer" use="optional" />
+		</complexType>
+	</element>
+</schema>

@@ -7,26 +7,85 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.SortedSet;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 import javax.xml.transform.TransformerFactoryConfigurationError;
 
+import base.Command;
+
+import agent.AbstractAgent;
+import agent.AgentID;
+
+import XMLParsing.XMLParser;
 import XMLParsing.XMLTree;
 import XMLParsing.XMLTree.XMLNode;
 
-public class AbstractScenario {
+public class AbstractScenario<T extends AbstractAgent, C extends Command> {
 
 	private static final String	SEED_FILE		= "test/seed";
+	/**
+	 * Split character use in the tag "foreach" of the xml scneario to define a
+	 * path.
+	 */
 	private static final String	SPLIT_CHARACTER	= "/";
 
 	protected static Random		rand;
 	protected static long		seed;
 
-	protected String				fileName;
-	protected int					nsteps;
+	protected String			fileName;
+	protected int				nsteps;
+	protected C[]			commands;
+	protected Map<AgentID, T>	agents			= new HashMap<AgentID,T>();
+
+	protected XMLTree			scenario;
+
+	protected SortedSet<Command>			commandset			= new TreeSet<Command>(
+			new Comparator<Command>() {
+				@Override
+				public int compare(
+						Command c1,
+						Command c2) {
+					if (c1.getTime() != c2
+							.getTime()) {
+						return c1.getTime()
+								- c2.getTime();
+					}
+					return c1.hashCode()
+							- c2.hashCode();
+				}
+			});
+
+	public AbstractScenario(String schemaFileName, String scenarioFileName) {
+
+		scenario = getScenarioTree(schemaFileName, scenarioFileName);
+
+		/*************************************** seed random ***************************************/
+		// attributes are always String with XMLParser
+		String stringSeed = scenario.getRoot().getAttributeValue("seed");
+
+		// seed specified in the xml
+		if (stringSeed != null) {
+			seed = Long.parseLong(stringSeed);
+			AbstractScenario.initRandom(seed);
+		}
+		// or not : read seed value in test/seed
+		else {
+			AbstractScenario.initRandom();
+		}
+
+		/****************************** duration : number of steps ********************************/
+		// attributes are always String
+		String steps = scenario.getRoot().getNodeIterator("timeline").next()
+				.getAttributeValue("duration");
+		nsteps = Integer.parseInt(steps);
+	}
 
 	/**
 	 * Association between every nodes and theirs paths, relatively to a father
@@ -38,11 +97,10 @@ public class AbstractScenario {
 	 * @param path
 	 * @return
 	 */
-	protected Map<String, ScenarioNode> getEventSpecificationsPath(XMLNode event, String path) {
+	protected Map<String, ScenarioNode> getParametersPath(XMLNode event, String path) {
 
 		Map<String, ScenarioNode> specifications = new TreeMap<String, ScenarioNode>();
 		// iterate on child
-		System.out.println(event);
 		for (XMLNode child : event.getNodes()) {
 
 			// cast for the visibility of getParameters()
@@ -65,46 +123,44 @@ public class AbstractScenario {
 			// recursive : check if kcaChild contains or not a value or set of
 			// parameters
 			else if (kcaChild.getNodes().size() > 0)
-				specifications.putAll(getEventSpecificationsPath(kcaChild, newPath));
+				specifications.putAll(getParametersPath(kcaChild, newPath));
 		}
 		return specifications;
 	}
 
 	/**
-	 * @param specifications
+	 * @param parameters
 	 *            map associating a path with a node. This path is of type
 	 *            Specification, which is an enum.
 	 * @return a list of events. Each event is a map associating a Specification
 	 *         with its value generated.
 	 */
-	protected List<Map<String, String>> generateValues(Map<String, ScenarioNode> specifications) {
-		// TODO Auto-generated method stub
+	protected List<Map<String, String>> generateValues(Map<String, ScenarioNode> parameters) {
 
 		// initialization of the map
 		List<Map<String, String>> events = new ArrayList<Map<String, String>>();
 		events.add(new TreeMap<String, String>());
 
-		for (String path : specifications.keySet()) {
-			events = generateValues(path, specifications, events);
+		for (String path : parameters.keySet()) {
+			events = generateValues(path, parameters, events);
 		}
 
-		for (Map<String, String> event : events)
-			System.out.println(event);
+		// for (Map<String, String> event : events)
+		// System.out.println(event);
 
 		return events;
 	}
 
 	/**
-	 * Generate values for one specification. If this Specification depends of
-	 * another Specification, this last will be generated recursively.
+	 * Generate values for one parameter. If this parameter depends of another
+	 * parameter, this last will be generated recursively.
 	 * 
 	 * @param path
-	 * @param specifications
+	 * @param parameters
 	 * @param events
 	 */
 	protected List<Map<String, String>> generateValues(String path,
-			Map<String, ScenarioNode> specifications, List<Map<String, String>> events) {
-		// TODO Auto-generated method stub
+			Map<String, ScenarioNode> parameters, List<Map<String, String>> events) {
 
 		List<Map<String, String>> eventsUpdate = events;
 		// no need to generate : already done with recursion
@@ -115,19 +171,19 @@ public class AbstractScenario {
 			List<String> values = new ArrayList<String>();
 
 			// get the number of values to generate
-			for (String foreach : specifications.get(path).getParameters().getForeach()) {
+			for (String foreach : parameters.get(path).getParameters().getForeach()) {
 				// if set of value if not generated, we should generate them
 				if (!events.get(0).containsKey(foreach)) {
 					// recursive
-					eventsUpdate = generateValues(foreach, specifications, eventsUpdate);
+					eventsUpdate = generateValues(foreach, parameters, eventsUpdate);
 				}
-				Integer select = specifications.get(foreach).getParameters().getSelect();
+				Integer select = parameters.get(foreach).getParameters().getSelect();
 				if (select != null)
 					countNumberValues *= select.intValue();
 			}
 			// it generates values
 			for (int i = 0; i < countNumberValues; i++) {
-				values.addAll(specifications.get(path).getParameters().getValues());
+				values.addAll(parameters.get(path).getParameters().getValues());
 			}
 
 			// events with these new values generated
@@ -136,7 +192,7 @@ public class AbstractScenario {
 			// number of times each tuple is duplicated
 			int numberSameTuples = eventsUpdate.size() / countNumberValues;
 
-			// number of different values for each tuple
+			// number of different values generated for each tuple
 			int numberValuesProduced = values.size() / countNumberValues;
 
 			for (int i = 0; i < countNumberValues; i++) {
@@ -158,21 +214,27 @@ public class AbstractScenario {
 	 * @param tree
 	 *            tree for transformation
 	 * @return a new tree with each {@link XMLNode} transformed in
-	 *         {@link KCANode}
+	 *         {@link ScenarioNode}
 	 */
-	protected XMLTree getScenarioTree(XMLTree tree) {
-		XMLNode newRoot = getScenarioNodes(tree.getRoot());
+	protected XMLTree getScenarioTree(String schemaFileName, String scenarioFileName) {
+
+		// parse scenario
+		XMLTree scenarioXMLNode = XMLParser.validateParse(schemaFileName, scenarioFileName);
+		// it transforms each XMLNodes in scenarioNode
+		// useful to call getParameters() function
+		// getParameters() permit to generate random values
+		XMLNode newRoot = getScenarioNodes(scenarioXMLNode.getRoot());
 		return new XMLTree(newRoot);
 	}
 
 	/**
 	 * Recursive function to transform an {@link XMLNode} and its children in
-	 * {@link KCANode}.
+	 * {@link ScenarioNode}.
 	 * 
 	 * @param node
-	 *            {@link XMLNode} to transform in {@link KCANode}
-	 * @return a {@link KCANode}, with all child nodes transformed in
-	 *         {@link KCANode} too.
+	 *            {@link XMLNode} to transform in {@link ScenarioNode}
+	 * @return a {@link ScenarioNode}, with all child nodes transformed in
+	 *         {@link ScenarioNode} too.
 	 */
 	protected ScenarioNode getScenarioNodes(XMLNode node) {
 		ScenarioNode newNode = new ScenarioNode(node);
@@ -243,10 +305,8 @@ public class AbstractScenario {
 			// DOMSource source = new DOMSource(doc);
 			// transformer.transform(source, result);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (TransformerFactoryConfigurationError e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -258,9 +318,18 @@ public class AbstractScenario {
 	public static Random rand() {
 		return rand;
 	}
-	
+
 	public int getNsteps() {
 		return nsteps;
 	}
 
+	public Map<AgentID, T> getAgents() {
+		assert agents != null;
+		return agents;
+	}
+
+	public C[] getCommands() {
+		assert commands != null;
+		return commands;
+	}
 }
