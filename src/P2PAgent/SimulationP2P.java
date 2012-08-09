@@ -26,6 +26,7 @@ public class SimulationP2P extends Simulation<EnvironmentP2P, CommandP2P>
 	{
 		commands = scenario.getCommands();
 		init1();
+		cm.check();
 		start();
 	}
 	
@@ -36,7 +37,7 @@ public class SimulationP2P extends Simulation<EnvironmentP2P, CommandP2P>
 		cm.getLogger().setLevel(LEVEL);
 		log = new Log(null);
 		cm.getLogger().addLog(log);
-		
+		nextcommand=0;
 		//to initialize the variable item and itemWanted in P2PAgent
 		int step= Environment.getStep();
 		//System.out.println((step));
@@ -44,6 +45,7 @@ public class SimulationP2P extends Simulation<EnvironmentP2P, CommandP2P>
 		{
 			doCommand(commands[nextcommand++]);
 		}
+		nextcommand=0;
 	}
 
 
@@ -65,10 +67,10 @@ public class SimulationP2P extends Simulation<EnvironmentP2P, CommandP2P>
 		active=true;//don't forget to change it after
 		
 		int step = Environment.getStep();
+
 		while(step < scenario.getNsteps() && active)
 		{
-			
-			
+			step = Environment.getStep();
 			if(step == LEVELSWITCH)
 				cm.getLogger().setLevel(LEVELTO);
 			
@@ -90,7 +92,7 @@ public class SimulationP2P extends Simulation<EnvironmentP2P, CommandP2P>
 			} catch (Exception e1)
 			{
 				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				//e1.printStackTrace();
 			}
 			if(oneStep)
 			{
@@ -99,6 +101,7 @@ public class SimulationP2P extends Simulation<EnvironmentP2P, CommandP2P>
 			}
 		}
 		active = false;
+		cm.check();
 	}
 
 
@@ -115,7 +118,6 @@ public class SimulationP2P extends Simulation<EnvironmentP2P, CommandP2P>
 		// TODO Auto-generated method stub
 		
 	}
-
 
 	@Override
 	protected void doCommand(CommandP2P command)

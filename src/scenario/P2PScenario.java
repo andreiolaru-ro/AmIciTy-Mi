@@ -5,11 +5,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
-import com.sun.org.apache.xml.internal.utils.StringToIntTable;
-
-import KCAAgent.CommandKCA;
 import P2PAgent.CommandP2P;
 import P2PAgent.Item;
 import P2PAgent.P2PAgent;
@@ -42,6 +40,8 @@ public class P2PScenario extends AbstractScenario<P2PAgent, CommandP2P> {
 			agents.put(id, new P2PAgent(null, id));
 		}
 
+		
+		
 		// create neighbors for each agents
 		for (AgentID currentAgentId : agents.keySet()) {
 			
@@ -69,62 +69,62 @@ public class P2PScenario extends AbstractScenario<P2PAgent, CommandP2P> {
 		// useful for the foreach implementation
 		 Map<String, ScenarioNode> parameters;
 		 
+			// create items possessed for an agent
+		 Iterator<XMLNode> possessedItems = scenario.getRoot().getFirstNode("timeline").getFirstNode("items")
+				 .getNodeIterator("possessed");
+		 TreeMap<Integer, Item> prev= new TreeMap<Integer, Item>();//cheat/////////////////////////////////////////////
+		 while (possessedItems.hasNext()) {
+			 XMLNode item = possessedItems.next();
+			 parameters = getParametersPath(item, "");
+			 List<Map<String, String>> values = generateValues(parameters);
+			 System.out.println("possessed");
+			 int intItem;
+			for(Map<String, String> value : values)
+			{
+				intItem=new Double(Double.parseDouble(value.get("idItem"))).intValue();
+				if(!prev.containsKey(intItem))
+				{
+					prev.put(new Integer(intItem), new Item(intItem));
+				}
+				commandset.add(new CommandP2P(CommandP2P.Action.INJECT_ITEM, new AgentID(""+new Double(Double.parseDouble(value.get("idAgent"))).intValue())
+																										, prev.get(intItem) 
+																										,new Double(Double.parseDouble(value.get("time"))).intValue())); 
+			}
+		 }	 
+		 
+		 
 		// create items wanted for an agent
 		 Iterator<XMLNode> wantedItems = scenario.getRoot().getFirstNode("timeline").getFirstNode("items")
 				 .getNodeIterator("wanted");
+
 		 while (wantedItems.hasNext()) {
 
 			 XMLNode item = wantedItems.next();
 			 parameters = getParametersPath(item, "");
 			 List<Map<String, String>> values = generateValues(parameters);
 			 System.out.println("wanted");
-			int intAgentID;
 			int intItem;
-			int intTime;
 			for(Map<String, String> value : values)
 			{
-				intAgentID=convertStringToInt(value.get("idAgent"));
-				intItem=convertStringToInt(value.get("idItem"));
-				intTime= convertStringToInt(value.get("time"));
-				commandset.add(new CommandP2P(CommandP2P.Action.INJECT_ITEM_WANTED, new AgentID(""+intAgentID), new Item(intItem), intTime)); 
+				intItem=new Double(Double.parseDouble(value.get("idItem"))).intValue();
+				if(!prev.containsKey(intItem))
+				{
+					prev.put(new Integer(intItem), new Item(intItem));
+				}
+				commandset.add(new CommandP2P(CommandP2P.Action.INJECT_ITEM_WANTED, new AgentID(""+new Double(Double.parseDouble(value.get("idAgent"))).intValue())
+				, prev.get(intItem) 
+				,new Double(Double.parseDouble(value.get("time"))).intValue())); 
 			}
 		 }
+		 System.out.println(prev);
 		 
-		 
-		// create items possessed for an agent
-		 Iterator<XMLNode> possessedItems = scenario.getRoot().getFirstNode("timeline").getFirstNode("items")
-				 .getNodeIterator("possessed");
-		 
-		 while (possessedItems.hasNext()) {
-			 XMLNode item = possessedItems.next();
-			 parameters = getParametersPath(item, "");
-			 List<Map<String, String>> values = generateValues(parameters);
-			 System.out.println("possessed");
-			 int intAgentID;
-			 int intItem;
-			 int intTime;
-			for(Map<String, String> value : values)
-			{
-				intAgentID=convertStringToInt(value.get("idAgent"));
-				intItem=convertStringToInt(value.get("idItem"));
-				intTime= convertStringToInt(value.get("time"));
-				commandset.add(new CommandP2P(CommandP2P.Action.INJECT_ITEM, new AgentID(""+intAgentID), new Item(intItem), intTime));
-			}
-		 }	 
+
 		 commands = commandset.toArray(new CommandP2P[commandset.size()]);
 	}
 	
 	public Map<AgentID, Set<AgentID>> getContacts()
 	{
 		return contacts;
-	}
-	
-	/**function to convert string to int, used instead of Integer.parseInt(String) directly because Integer.parseInt(String) doesn't accept double value*/
-	@SuppressWarnings("static-method")
-	private int convertStringToInt(String string)
-	{
-		double double1 = Double.parseDouble(string);
-		return (int) double1;
 	}
 
 	public static void main(String[] args) {

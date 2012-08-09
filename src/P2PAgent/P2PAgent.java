@@ -82,7 +82,7 @@ public class P2PAgent extends AbstractAgent
 		statPrint.append(" and it knows ").append(this.itemsLocation.size()).append("items");
 		statPrint.append(" and it wants ").append(this.itemsWanted.size()).append("items");
 		
-		//log.li("~", statPrint);
+		log.li("~", statPrint);
 	}
 
 	/*protected void addPartner(AgentID agent, int step)
@@ -116,10 +116,10 @@ public class P2PAgent extends AbstractAgent
 	 */
 	protected void sendMessage(AgentID to, Message<?> msg)
 	{
-		if(P2PAgent.directory.containsKey(to))
+		if((P2PAgent.directory.containsKey(to)) && (to!=msg.getFrom()))
 		{
 			P2PAgent.getAgentById(to).receiveMessage(msg);
-			//log.lf("sending to ~ :", to, msg);
+			log.lf("sending to ~ :", to, msg);
 		}
 		
 	}
@@ -131,7 +131,7 @@ public class P2PAgent extends AbstractAgent
 	 */
 	public void receiveMessage(Message<?> msg)
 	{
-		//log.lf("received ~", msg);
+		log.lf("received ~", msg);
 		this.waitingMessage.add((MessageP2P<?>) msg);
 		System.out.println(this.id+" reçois "+msg);
 	}
@@ -158,7 +158,7 @@ public class P2PAgent extends AbstractAgent
 		{
 			for(AgentID contact: this.contacts)
 			{
-				System.out.println(this.id+" veut "+ this.itemsWanted);
+				//System.out.println(this.id+" veut "+ this.itemsWanted);
 				this.sendMessage(contact, new MessageP2P<Set<Item>>(this.id,Type.REQUEST_ITEM, this.itemsWanted));
 			}
 		}
@@ -191,10 +191,10 @@ public class P2PAgent extends AbstractAgent
 						if(P2PAgent.getAgentById(p2pAgent).getItemsWanted().contains(requestedItem))
 						{
 							itemsToSend.add(requestedItem);
-							System.out.println(this.id+ "envoie "+requestedItem);
+							//System.out.println(this.id+ "envoie "+requestedItem);
 							itemToRemove.add(requestedItem);
 						}
-						//here if the contact doesn't want the item, but just the location, he will send it
+						//here if the contact doesn't want the item, but just the location, he will send it or if we don't have it we send it to an other contact with an certain probability
 						else
 						{
 							if(!locationOfItemsRequested.containsKey(this.id))
@@ -211,13 +211,17 @@ public class P2PAgent extends AbstractAgent
 				{
 					Iterator<AgentID> possessors=this.itemsLocation.get(requestedItem).iterator();
 					AgentID possessor= possessors.next();//we take the last agent of the list	
-					System.out.println("possesseur"+possessor);
-					if(!locationOfItemsRequested.containsKey(possessor))
+					//System.out.println("possesseur"+possessor);
+					if(!locationOfItemsRequested.containsKey(possessor)&&(possessor!=p2pAgent))
 					{
 						Set<Item> itemPossessed=new HashSet<Item>();
 						locationOfItemsRequested.put(possessor, itemPossessed);
 					}
-					locationOfItemsRequested.get(possessor).add(requestedItem);
+					//to be sure that we don't answer to an old request, we check if the agent who ask the location is not the same agent who want it
+					if(possessor!=p2pAgent)
+					{
+						locationOfItemsRequested.get(possessor).add(requestedItem);
+					}
 					itemToRemove.add(requestedItem);
 				}
 				//else our agent interrogate his contacts with a certain probability
@@ -228,7 +232,7 @@ public class P2PAgent extends AbstractAgent
 					//we calculate the probability, to know if we have to send the request to our contacts
 					if(calculateProba<=this.probability.getValue().doubleValue())
 					{
-						System.out.println(this.id+" ajoute requete "+requestedItem);
+						//System.out.println(this.id+" ajoute requete "+requestedItem);
 						
 						//we will send the location for the item
 						locationToRequest.add(requestedItem);
@@ -274,7 +278,7 @@ public class P2PAgent extends AbstractAgent
 				{
 					//An other agent asks our agent if he has these items
 					case REQUEST_ITEM:
-						System.out.println("pour"+this.id+"requete de "+msg.getFrom()+""+msg.getContents());
+						//System.out.println("pour"+this.id+"requete de "+msg.getFrom()+""+msg.getContents());
 						Set<Item> queriesItems=null;
 						if(this.pendingQueries.containsKey(msg.getFrom()))
 						{
@@ -324,11 +328,15 @@ public class P2PAgent extends AbstractAgent
 					
 					//response to a request
 					case SEND_ITEM:
-						System.out.println("l'agent "+this.id+" download"+msg.getContents());
-						this.items.addAll((Set<Item>)msg.getContents());
+						
+						if(this.items.addAll((Set<Item>)msg.getContents()))
+						{
+							System.out.println("l'agent "+this.id+" download"+msg.getContents());
+						}
 						this.itemsWanted.removeAll((Set<Item>) msg.getContents());
 					break;
 					
+					// ask for the location of an item
 					case ASK_LOCATION:
 						if(!this.pendingQueries.containsKey(msg.getFrom()))
 						{
@@ -341,7 +349,6 @@ public class P2PAgent extends AbstractAgent
 
 				}
 			}
-		
 		//we erase the inbox at the end
 			waitingMessage.clear();
 		}
@@ -407,6 +414,7 @@ public class P2PAgent extends AbstractAgent
 			
 			agent1.contacts.add(agent3.id);
 			agent3.contacts.add(agent4.id);
+			agent4.contacts.add(agent2.id);
 			agent2.contacts.add(agent3.id);
 			
 			Item item1=new Item(1);
@@ -418,7 +426,7 @@ public class P2PAgent extends AbstractAgent
 			agent1.items.add(item4);
 			agent3.items.add(item2);
 			agent3.items.add(item1);
-			agent4.items.add(item3);
+			agent2.items.add(item3);
 			
 			agent1.itemsWanted.add(item2);
 			agent1.itemsWanted.add(item3);

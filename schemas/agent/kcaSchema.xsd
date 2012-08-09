@@ -10,7 +10,7 @@
 	<element name="scenario">
 		<complexType>
 			<all>
-				<element name="map" type=""/>
+				<element name="map" type="ma:map"/>
 				<element name="timeline">
 					<complexType>
 						<sequence>
