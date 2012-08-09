@@ -12,7 +12,7 @@ import agent.AgentID;
 
 import logging.Logger;
 
-public abstract class Environment<SIMULATION extends Simulation<?>, AGENT extends AbstractAgent>
+public abstract class Environment<SIMULATION extends Simulation<?,?>, AGENT extends AbstractAgent>
 {
 	protected SIMULATION parent;
 	protected Logger logger;

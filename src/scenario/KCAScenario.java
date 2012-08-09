@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import KCAAgent.CommandKCA;
 import KCAAgent.DataContent;
 import KCAAgent.Fact;
 import KCAAgent.KCAAgent;
@@ -19,7 +20,6 @@ import XMLParsing.XMLTree;
 import XMLParsing.XMLTree.XMLNode;
 import agent.AgentID;
 import agent.Location;
-import base.Command;
 
 public class KCAScenario extends AbstractScenario {
 	
@@ -35,14 +35,14 @@ public class KCAScenario extends AbstractScenario {
 	private Map<String, DataContent>	datamap				= new HashMap<String, DataContent>();
 	private DataContent[]				data;
 
-	private Command[]					commands;
+	private CommandKCA[]					commands;
 
-	private SortedSet<Command>			commandset			= new TreeSet<Command>(
-			new Comparator<Command>() {
+	private SortedSet<CommandKCA>			commandset			= new TreeSet<CommandKCA>(
+			new Comparator<CommandKCA>() {
 				@Override
 				public int compare(
-						Command c1,
-						Command c2) {
+						CommandKCA c1,
+						CommandKCA c2) {
 					if (c1.getTime() != c2
 							.getTime()) {
 						return c1.getTime()
@@ -166,7 +166,7 @@ public class KCAScenario extends AbstractScenario {
 					datamap.put(dname, new DataContent(datamap.keySet().size()));
 				
 				try {
-					commandset.add(new Command(Command.Action.INJECT, new Location(new Double(Math
+					commandset.add(new CommandKCA(CommandKCA.Action.INJECT, new Location(new Double(Math
 							.round(Double.parseDouble(value.get("location/x"))))
 					.doubleValue(), new Double(Math.round(Double.parseDouble(value
 							.get("location/y")))).doubleValue()), new Fact(null, datamap
@@ -191,7 +191,7 @@ public class KCAScenario extends AbstractScenario {
 		}
 
 		data = datamap.values().toArray(new DataContent[datamap.values().size()]);
-		commands = commandset.toArray(new Command[commandset.size()]);
+		commands = commandset.toArray(new CommandKCA[commandset.size()]);
 
 		// FIXME this is useless, generated data has consecutive ids
 		Arrays.sort(data, new DataContent.DataContentComparator());
@@ -220,7 +220,7 @@ public class KCAScenario extends AbstractScenario {
 		return agents;
 	}
 
-	public Command[] getCommands() {
+	public CommandKCA[] getCommands() {
 		assert commands != null;
 		return commands;
 	}

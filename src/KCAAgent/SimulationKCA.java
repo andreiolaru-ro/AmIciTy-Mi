@@ -26,7 +26,6 @@ import javax.swing.JSlider;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 
-import base.Command;
 import base.Environment;
 import base.Message;
 import base.Simulation;
@@ -39,7 +38,7 @@ import KCAAgent.Logix.Domain;
 import agent.AgentID;
 
 
-public class SimulationKCA extends Simulation<EnvironmentKCA>
+public class SimulationKCA extends Simulation<EnvironmentKCA, CommandKCA>
 {
 	/**
 	 * 
@@ -65,12 +64,6 @@ public class SimulationKCA extends Simulation<EnvironmentKCA>
 			setText("   step " + Environment.getStep() + "   ");
 		}
 	}
-	
-	private final static int		PRINTSTEP	= 1;											// number of steps at which to print **STEP n** in console
-	// private final static int STEPWAIT = 5; // sleep after each step
-	private final static Log.Level	LEVEL		= Log.Level.INFO;								// initial level of logging, and
-	private final static int		LEVELSWITCH	= -1;											// after this number of steps. negative value: never change
-	private final static Log.Level	LEVELTO		= Log.Level.INFO;								// switch to this level
 																								
 //	 private Scenario scenario = new Scenario("test/testSmall2.xml");
 	KCAScenario				scenario	= new KCAScenario("test/test_scenario.xml");
@@ -83,13 +76,6 @@ public class SimulationKCA extends Simulation<EnvironmentKCA>
 	
 	private ControllableView[]		viewers		= null;
 	
-	private int						nextcommand	= 0;
-	
-
-	
-
-	
-	private Command[]				commands	= scenario.getCommands();
 	private static SimulationKCA kca;
 	
 	// private Command[] absCommands = scenario.getAbsCommands();
@@ -102,6 +88,8 @@ public class SimulationKCA extends Simulation<EnvironmentKCA>
 
 	public SimulationKCA()
 	{
+		commands = scenario.getCommands();
+		
 		init1();
 		
 		WindowLayout layout = new WindowLayout(0, 0, 1280, 1000, 15, 1, 5, true, true); // (1366), windows 7
@@ -260,20 +248,21 @@ public class SimulationKCA extends Simulation<EnvironmentKCA>
 		cm.doUpdate();
 	}
 	
-	void doCommand(Command command)
+	@Override
+	protected void doCommand(CommandKCA command)
 	{
-		if(command.getAction() == Command.Action.INJECT)
+		if(command.getAction() == CommandKCA.Action.INJECT)
 		{
 			log.le("injecting ~ at ~", command.getFact(), command.getLocation());
 			AgentID receiver = cm.inject(command.getLocation(), new MessageKCA<Collection<Fact>>(null, MessageKCA.Type.INFORM, command.getFact().toCollection()));
 			log.le("received by ~", receiver);
 		}
-		else if(command.getAction() == Command.Action.REQUEST)
+		else if(command.getAction() == CommandKCA.Action.REQUEST)
 		{
 			log.le("requesting ~ from ~", command.getFact(), command.getLocation());
 			cm.inject(command.getLocation(), new MessageKCA<Collection<Fact>>(null, MessageKCA.Type.REQUEST, command.getFact().toCollection()));
 		}
-		else if(command.getAction() == Command.Action.SNAPSHOT)
+		else if(command.getAction() == CommandKCA.Action.SNAPSHOT)
 		{
 			// doSnapshot("data_" + command.fact.getData().getId() + "_" + step + ".txt", command.fact.getData().getId());
 			// log.li("Snapshot on ~", command.fact.getData().getId());

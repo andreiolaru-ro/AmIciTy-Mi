@@ -3,9 +3,10 @@ package base;
 import graphics.UpdateListener;
 
 import javax.swing.JFrame;
+
 import logging.Log;
 
-public abstract class Simulation<ENVIRONMENT extends Environment<?, ?>> extends JFrame implements Runnable, UpdateListener
+public abstract class Simulation<ENVIRONMENT extends Environment<?, ?>, COMMAND extends Command> extends JFrame implements Runnable, UpdateListener
 {
 	/**
 	 * 
@@ -17,7 +18,8 @@ public abstract class Simulation<ENVIRONMENT extends Environment<?, ?>> extends 
 	protected final static Log.Level	LEVELTO		= Log.Level.INFO;								// switch to this level
 	protected ENVIRONMENT cm;
 	protected Log log;
-	
+	protected int	nextcommand	= 0;
+	protected COMMAND[]	commands;
 	/**
 	 *  To save the action of the start and stop button
 	 */
@@ -26,6 +28,8 @@ public abstract class Simulation<ENVIRONMENT extends Environment<?, ?>> extends 
 	
 	public abstract void createMainWindow(int x, int y, int w, int h);
 
+	protected abstract void doCommand(COMMAND command);
+	
 	public void start()
 	{
 		if(!active)

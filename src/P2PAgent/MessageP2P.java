@@ -1,6 +1,6 @@
 package P2PAgent;
-import KCAAgent.EnvironmentKCA;
 import agent.AgentID;
+import base.Environment;
 import base.Message;
 
 public class MessageP2P<T> extends Message<T>  implements Comparable<MessageP2P<T>>
@@ -19,8 +19,8 @@ public class MessageP2P<T> extends Message<T>  implements Comparable<MessageP2P<
 	public MessageP2P(AgentID from, Type type, T content)
 	{
 		super();
-		this.step = EnvironmentKCA.getStep();
-		this.sequence = EnvironmentKCA.getSequence();
+		this.step = Environment.getStep();
+		this.sequence = Environment.getSequence();
 		this.from = from;
 		this.type=type;
 		this.content = content;

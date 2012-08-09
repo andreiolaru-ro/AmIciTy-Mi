@@ -40,7 +40,8 @@ public class P2PAgent extends AbstractAgent
 	/**all the measures of our agent*/
 	private Measures					measures;
 	/**probability that our agent will send a request about a file that it doesn't want*/
-	private NumericMeasure				probability;
+	private NumericMeasure	probability;
+	
 	final static int					maxNumberOfContacts	= 10;
 	/**inbox for all the messages(request, data...) that our agent received*/
 	private List<MessageP2P<?>>			waitingMessage;
@@ -49,7 +50,7 @@ public class P2PAgent extends AbstractAgent
 	/**Environment where our agent evolve*/
 	private EnvironmentP2P parent;
 
-	public P2PAgent(EnvironmentP2P parent, AgentID id, double probability)
+	public P2PAgent(EnvironmentP2P parent, AgentID id)
 	{
 		super();
 		this.id = id;
@@ -59,7 +60,7 @@ public class P2PAgent extends AbstractAgent
 		this.itemsLocation = new HashMap<Item, Set<AgentID>>();
 		this.contacts = new HashSet<AgentID>();
 		this.measures=new Measures(this.id);
-		this.probability=(NumericMeasure) this.measures.createMeasure(new NumericMeasure(probability,MeasureName.PROBABILITY));
+		this.probability	= (NumericMeasure) this.measures.createMeasure(new NumericMeasure(0.5,MeasureName.PROBABILITY));
 		this.waitingMessage=new ArrayList<MessageP2P<?>>();
 		this.parent=parent;
 		this.log=new Log(this);
@@ -132,7 +133,7 @@ public class P2PAgent extends AbstractAgent
 	 */
 	public void receiveMessage(Message<?> msg)
 	{
-		log.lf("received ~", msg);
+		//log.lf("received ~", msg);
 		this.waitingMessage.add((MessageP2P<?>) msg);
 		System.out.println(this.id+" reçois "+msg);
 	}
@@ -163,9 +164,6 @@ public class P2PAgent extends AbstractAgent
 				this.sendMessage(contact, new MessageP2P<Set<Item>>(this.id,Type.REQUEST_ITEM, this.itemsWanted));
 			}
 		}
-
-
-
 	}
 	
 	/**
@@ -365,29 +363,56 @@ public class P2PAgent extends AbstractAgent
 		return this.measures.getMeasures();
 	}
 	
+	/**return an agent thanks to is id*/
 	private static P2PAgent getAgentById(AgentID id){
 	 return P2PAgent.directory.get(id);
 	}
 	
-	
+	/**permit to get the items wanted by an agent*/
 	public Set<Item> getItemsWanted()
 	{
 		return itemsWanted;
 	}
 	
+	/**permit to set the items wanted by an agent*/
+	public void setItemsWanted(Set<Item> itemsWanted)
+	{
+		this.itemsWanted = itemsWanted;
+	}
+	
 	@SuppressWarnings("hiding")
+	/**Permit to set the environment of an agent*/
 	public void setParent(EnvironmentP2P parent)
 	{
 		this.parent=parent;
 	}
+	
+	/**Permit to set the items of an agent*/
+	public void setItems(Set<Item> items)
+	{
+		this.items = items;
+	}
+	
+	/**Permit to get the contact of an agent*/
+	public Set<AgentID> getContacts()
+	{
+		return contacts;
+	}
+	
+	/**Permit to set the contact of an agent*/
+	public void setContacts(Set<AgentID> contacts)
+	{
+		this.contacts = contacts;
+	}
+
 
 	static class test{
 		public static void main(String[] args)
 		{
-			P2PAgent agent1= new P2PAgent(null, new AgentID(""+1), 0.5);
-			P2PAgent agent2= new P2PAgent(null, new AgentID(""+2), 0.5);
-			P2PAgent agent3= new P2PAgent(null, new AgentID(""+3), 0.5);
-			P2PAgent agent4= new P2PAgent(null, new AgentID(""+4), 0.5);
+			P2PAgent agent1= new P2PAgent(null, new AgentID(""+1));
+			P2PAgent agent2= new P2PAgent(null, new AgentID(""+2));
+			P2PAgent agent3= new P2PAgent(null, new AgentID(""+3));
+			P2PAgent agent4= new P2PAgent(null, new AgentID(""+4));
 			
 			agent1.contacts.add(agent3.id);
 			agent3.contacts.add(agent4.id);
