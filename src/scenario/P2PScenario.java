@@ -7,13 +7,15 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import P2PAgent.CommandP2P;
 import P2PAgent.P2PAgent;
 import XMLParsing.XMLTree.XMLNode;
 import agent.AgentID;
 
-public class P2PScenario extends AbstractScenario<P2PAgent> {
+public class P2PScenario extends AbstractScenario<P2PAgent, CommandP2P> {
 	private final static String				SCHEMA_FILE_NAME	= "schemas/agent/p2pSchema.xsd";
-	protected Map<AgentID, Set<AgentID>>	contact			= new HashMap<AgentID, Set<AgentID>>();
+	protected Map<AgentID, Set<AgentID>>	contacts			= new HashMap<AgentID, Set<AgentID>>();
+
 
 	public P2PScenario(String scenarioFileName) {
 
@@ -53,7 +55,7 @@ public class P2PScenario extends AbstractScenario<P2PAgent> {
 				}
 				contactsCurrentAgent.add(idContact);
 			}
-			contact.put(currentAgentId, contactsCurrentAgent) ;
+			contacts.put(currentAgentId, contactsCurrentAgent) ;
 		}
 		
 		
@@ -91,6 +93,12 @@ public class P2PScenario extends AbstractScenario<P2PAgent> {
 		
 		
 	}
+	
+	public Map<AgentID, Set<AgentID>> getContacts()
+	{
+		return contacts;
+	}
+
 
 	public static void main(String[] args) {
 		P2PScenario p2pScenario = new P2PScenario("scenarios/p2pScenario.xml");

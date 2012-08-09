@@ -11,21 +11,26 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 import javax.xml.transform.TransformerFactoryConfigurationError;
 
-import base.Command;
-
-import agent.AbstractAgent;
-import agent.AgentID;
-
-import KCAAgent.KCAAgent;
 import XMLParsing.XMLParser;
 import XMLParsing.XMLTree;
 import XMLParsing.XMLTree.XMLNode;
+import agent.AbstractAgent;
+import agent.AgentID;
+import agent.Location;
+import agent.LocationAgent;
+import base.Command;
+import expr.Expr;
+import expr.Parser;
+import expr.SyntaxException;
+import expr.Variable;
 
-public class AbstractScenario<T extends AbstractAgent> {
+public class AbstractScenario<T extends AbstractAgent, C extends Command> {
 
 	private static final String	SEED_FILE		= "test/seed";
 	/**
@@ -39,7 +44,7 @@ public class AbstractScenario<T extends AbstractAgent> {
 
 	protected String			fileName;
 	protected int				nsteps;
-	protected Command[]			commands;
+	protected C[]			commands;
 	protected Map<AgentID, T>	agents			= new HashMap<AgentID,T>();
 
 	protected XMLTree			scenario;
@@ -227,7 +232,43 @@ public class AbstractScenario<T extends AbstractAgent> {
 		return newNode;
 	}
 
-	// read random in test/seed
+	// FIXME : asbtract LocationScenario extends AbstractScenario ?
+	protected<T extends LocationAgent> Set<AgentID> getAgentInArea(String function, Location center, int step){
+		Set<AgentID> agentsInArea = new TreeSet<AgentID>();
+		Expr expr;
+
+		//FIXME : special character < in xml
+		function = "sqrt(x^2+y^2)<5" ;
+		
+		Variable variable_x = Variable.make("x");
+		Variable variable_y = Variable.make("y");
+		Variable variable_t = Variable.make("t");
+		
+
+		try {
+			expr = Parser.parse(function);
+
+			for(AgentID agentId : agents.keySet()){
+				T agent = (T) agents.get(agentId) ;
+
+				variable_x.setValue(agent.getLocation().getX() - center.getX());
+				variable_y.setValue(agent.getLocation().getY() - center.getY());
+				variable_t.setValue(step);
+				// IN
+				System.out.println(expr.value());
+				if(expr.value() != 0){
+					agentsInArea.add(agentId);
+				}
+			}
+		} catch (SyntaxException e) {
+			System.err.println(e.explain());
+		}
+		return agentsInArea ;
+	}
+
+	/**
+	 * Read seed in a file "test/seed"
+	 */
 	public static void initRandom() {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(SEED_FILE));
@@ -310,7 +351,7 @@ public class AbstractScenario<T extends AbstractAgent> {
 		return agents;
 	}
 
-	public Command[] getCommands() {
+	public C[] getCommands() {
 		assert commands != null;
 		return commands;
 	}

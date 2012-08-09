@@ -18,6 +18,7 @@ import logging.Log;
 import scenario.AbstractScenario;
 import KCAAgent.Goal.GoalList;
 import KCAAgent.Logix.Domain;
+import KCAAgent.MessageKCA.Type;
 import agent.AbstractAgent;
 import agent.AbstractMeasure.FloatMeasure;
 import agent.AbstractMeasure.NumericMeasure;
@@ -28,7 +29,6 @@ import agent.MeasureName;
 import agent.Measures;
 import base.Environment;
 import base.Message;
-import base.Message.Type;
 
 public class KCAAgent extends AbstractAgent {
 	private static double						balanceMinimum			= 0.4;
@@ -39,7 +39,7 @@ public class KCAAgent extends AbstractAgent {
 	// agent
 
 	// internal workings
-	private KnowledgeBase						kb;
+	KnowledgeBase								kb;
 	private GoalList							goals					= new GoalList();
 	// these
 	// are
@@ -66,35 +66,35 @@ public class KCAAgent extends AbstractAgent {
 	private Intention.IntentionList				intentions				= new Intention.IntentionList();
 
 	// behaviour
-	private Specialty							agent_specialty;																	// sorry
-																																	// for
+	private Specialty							agent_specialty;																		// sorry
+																																		// for
 	// the
 	// naming
 	// convention
 	public Specialty[]							specialtyHistory;
 	public int									currentSpecialtyIndex	= -1;
-	private FloatMeasure						agent_pressure;																	// sorry
-																																	// for
-																																	// the
-																																	// naming
-																																	// convention
+	private FloatMeasure						agent_pressure;																		// sorry
+																																		// for
+																																		// the
+																																		// naming
+																																		// convention
 	private FloatMeasure						lowPressure;
-	private FloatMeasure						highPressure;																		// only
+	private FloatMeasure						highPressure;																			// only
 	// positive
 	// measures
 
 	// communication
 	// up
-	private Environment							parent;
+	private EnvironmentKCA						parent;
 	@SuppressWarnings("unused")
-	private Vector<Fact>						externalRequests		= new Vector<Fact>();										// data
-																																	// id's
-																																	// requested
-																																	// from
-																																	// outside
+	private Vector<Fact>						externalRequests		= new Vector<Fact>();											// data
+																																		// id's
+																																		// requested
+																																		// from
+																																		// outside
 	// peer
-	private Queue<Message<Collection<Fact>>>	inbox					= new PriorityBlockingQueue<Message<Collection<Fact>>>();
-	private Queue<Message<Collection<Fact>>>	atemporalInbox			= new PriorityBlockingQueue<Message<Collection<Fact>>>();
+	private Queue<MessageKCA<Collection<Fact>>>	inbox					= new PriorityBlockingQueue<MessageKCA<Collection<Fact>>>();
+	private Queue<MessageKCA<Collection<Fact>>>	atemporalInbox			= new PriorityBlockingQueue<MessageKCA<Collection<Fact>>>();
 
 	private NumericMeasure						agentBalance;
 	private NumericMeasure						agentUselessFacts;
@@ -107,16 +107,16 @@ public class KCAAgent extends AbstractAgent {
 	public Location								location;
 
 	@SuppressWarnings("hiding")
-	public KCAAgent(Environment parent, AgentID id, Location loc, int capacity, int nsteps) {
+	public KCAAgent(EnvironmentKCA parent, AgentID id, Location loc, int capacity, int nsteps) {
 		this(parent, id, loc, capacity, null, nsteps);
 	}
 
-	public void setParent(Environment env) {
+	public void setParent(EnvironmentKCA env) {
 		this.parent = env;
 	}
 
 	@SuppressWarnings({ "hiding", "unused" })
-	KCAAgent(Environment parent, AgentID id, Location loc, double capacity, Specialty spec,
+	KCAAgent(EnvironmentKCA parent, AgentID id, Location loc, double capacity, Specialty spec,
 			int nsteps) {
 		super();
 		neighbours = new HashMap<AgentID, KCAAgent>();
@@ -178,6 +178,7 @@ public class KCAAgent extends AbstractAgent {
 		return location;
 	}
 
+	@SuppressWarnings("hiding")
 	public void setLocation(Location location) {
 		this.location = location;
 	}
@@ -208,9 +209,10 @@ public class KCAAgent extends AbstractAgent {
 			log.li("received ~", message);
 		else
 			log.lf("received ~", message);
-		atemporalInbox.offer((Message<Collection<Fact>>) message);
+		atemporalInbox.offer((MessageKCA<Collection<Fact>>) message);
 	}
 
+	@SuppressWarnings("boxing")
 	@Override
 	public void step() throws Exception {
 		// We will really make it BDI this time
@@ -219,8 +221,8 @@ public class KCAAgent extends AbstractAgent {
 		agentPrint();
 
 		// fill the inbox for this time step
-		for (Iterator<Message<Collection<Fact>>> it = atemporalInbox.iterator(); it.hasNext();) {
-			Message<Collection<Fact>> msg = it.next();
+		for (Iterator<MessageKCA<Collection<Fact>>> it = atemporalInbox.iterator(); it.hasNext();) {
+			MessageKCA<Collection<Fact>> msg = it.next();
 			if (!msg.isFuture()) {
 				inbox.offer(msg);
 				it.remove();
@@ -406,9 +408,9 @@ public class KCAAgent extends AbstractAgent {
 		// check received facts, limited by the allowed amount of processing
 		// (according to agent pressure)
 		int nHandled = 0;
-		for (Iterator<Message<Collection<Fact>>> it = inbox.iterator(); it.hasNext()
+		for (Iterator<MessageKCA<Collection<Fact>>> it = inbox.iterator(); it.hasNext()
 				&& nHandled < amount.intValue(); nHandled++) {
-			Message<Collection<Fact>> m = it.next();
+			MessageKCA<Collection<Fact>> m = it.next();
 			switch (m.getType()) {
 			case INFORM:
 				for (Fact f : m.getContents()) { // getting informed on new
@@ -519,16 +521,17 @@ public class KCAAgent extends AbstractAgent {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					// case GET:
-					// if(kb.doesAgentHaveData(id, i.goal.relatedData))
-					// {
-					// log.li("plan done: ~", i);
-					// // goal is satisfied
-					// goals.remove(i.goal);
-					// // plan done
-					// it.remove();
-					// }
-					// break;
+					break;
+				// case GET:
+				// if(kb.doesAgentHaveData(id, i.goal.relatedData))
+				// {
+				// log.li("plan done: ~", i);
+				// // goal is satisfied
+				// goals.remove(i.goal);
+				// // plan done
+				// it.remove();
+				// }
+				// break;
 				case FREE:
 					if (usedCapacity <= Logix.memoryThresh() * capacity.getValue().intValue()) {
 						log.li("plan done: ~", i);
@@ -567,6 +570,7 @@ public class KCAAgent extends AbstractAgent {
 		log.li("~", kb.printFacts());
 	}
 
+	@SuppressWarnings("null")
 	protected void plan() {
 		Goal primaryGoal = null, chosenGoal = null;
 
@@ -705,6 +709,7 @@ public class KCAAgent extends AbstractAgent {
 		}
 	}
 
+	@SuppressWarnings("boxing")
 	protected void execute() {
 		log.li("intentions [~]: ~", intentions.size(), intentions);
 		// get the primary intention
@@ -733,7 +738,7 @@ public class KCAAgent extends AbstractAgent {
 		// Fact(id, action.relatedData).toCollection()));
 		// break;
 		case INFORM:
-			sendMessage(action.targetAgent, new Message<Collection<Fact>>(id, Type.INFORM,
+			sendMessage(action.targetAgent, new MessageKCA<Collection<Fact>>(id, Type.INFORM,
 					action.relatedFact.toCollection()));
 			break;
 
@@ -783,14 +788,14 @@ public class KCAAgent extends AbstractAgent {
 				maxSim = sim;
 			}
 		}
-		return ((double) (maxI - ((double) firstStep) + 1.0f))
-				/ ((double) ((double) currentSpecialtyIndex - (double) firstStep + 1.0f));
+		return (maxI - firstStep + 1.0f)
+				/ ((double) currentSpecialtyIndex - (double) firstStep + 1.0f);
 	}
 
 	public double calculateAgentBalance() throws Exception {
 		// FIXME not flexible Domain implementation
 		Collection<Fact> facts = getFacts(false);
-		double n = (double) facts.size();
+		double n = facts.size();
 		if (n == 0) {
 			agentBalance.setValue(new Double(0.0));
 			agentUselessFacts.setValue(new Double(0.0));
@@ -849,7 +854,7 @@ public class KCAAgent extends AbstractAgent {
 		return intentions;
 	}
 
-	public Queue<Message<Collection<Fact>>> getInbox() // for Drawer
+	public Queue<MessageKCA<Collection<Fact>>> getInbox() // for Drawer
 	{
 		return inbox;
 	}

@@ -4,16 +4,16 @@ import java.awt.Component;
 
 import javax.swing.JFrame;
 
-import base.Environment;
+import KCAAgent.EnvironmentKCA;
 
 public abstract class AbstractViewer implements ControllableView, UpdateListener {
-	protected Environment cm;
+	protected EnvironmentKCA cm;
 	protected Object data;
 	
 	protected JFrame frame;
 	
 	@SuppressWarnings("hiding")
-	protected AbstractViewer(Environment cm, Object data) {
+	protected AbstractViewer(EnvironmentKCA cm, Object data) {
 		this.data = data;
 		frame = new JFrame();
 		relink(cm);
@@ -35,7 +35,7 @@ public abstract class AbstractViewer implements ControllableView, UpdateListener
 	
 	@SuppressWarnings("hiding")
 	@Override
-	public void relink(Environment cm)
+	public void relink(EnvironmentKCA cm)
 	{
 		if(this.cm != cm)
 		{

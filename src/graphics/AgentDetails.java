@@ -1,11 +1,12 @@
 package graphics;
 
 import java.awt.Graphics2D;
-import base.Environment;
+
+import KCAAgent.EnvironmentKCA;
 
 public class AgentDetails extends AbstractViewer2D {
 	@SuppressWarnings("hiding")
-	public AgentDetails(Environment cm) {
+	public AgentDetails(EnvironmentKCA cm) {
 		super(cm, null);
 		setSize(600, 600);
 	}

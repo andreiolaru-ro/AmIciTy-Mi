@@ -127,7 +127,7 @@ public class XMLTree
 			attributes.addAll(node.attributes);
 
 			if(node.valueString != null)
-				valueString = new String();
+				valueString = new String(node.valueString);
 			if(node.valueInt != null)
 				valueInt = new Integer(node.valueInt.intValue());
 			if(node.valueDouble != null)

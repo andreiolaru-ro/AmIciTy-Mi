@@ -2,8 +2,8 @@ package graphics;
 
 import java.awt.Color;
 
+import KCAAgent.EnvironmentKCA;
 import KCAAgent.KCAAgent;
-import base.Environment;
 
 public abstract class AbstractAggregGraphViewer extends AbstractGraphViewer
 {
@@ -13,19 +13,19 @@ public abstract class AbstractAggregGraphViewer extends AbstractGraphViewer
 	double	min;
 	
 	@SuppressWarnings("hiding")
-	protected AbstractAggregGraphViewer(Environment cm, Object data)
+	protected AbstractAggregGraphViewer(EnvironmentKCA cm, Object data)
 	{
 		this(cm, data, new GraphParam(null, null, null));
 	}
 	
 	@SuppressWarnings("hiding")
-	protected AbstractAggregGraphViewer(Environment cm, Object data, Color color)
+	protected AbstractAggregGraphViewer(EnvironmentKCA cm, Object data, Color color)
 	{
 		this(cm, data, new GraphParam(color, null, null));
 	}
 	
 	@SuppressWarnings("hiding")
-	protected AbstractAggregGraphViewer(Environment cm, Object data, GraphParam param)
+	protected AbstractAggregGraphViewer(EnvironmentKCA cm, Object data, GraphParam param)
 	{
 		super(cm, data, param);
 	}

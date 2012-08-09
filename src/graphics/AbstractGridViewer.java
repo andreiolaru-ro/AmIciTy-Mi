@@ -5,22 +5,22 @@ import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import KCAAgent.EnvironmentKCA;
 import KCAAgent.KCAAgent;
-import base.Environment;
 
 public abstract class AbstractGridViewer extends AbstractViewer2D implements MouseListener {
 	int w;
 	int h;
 	
 	@SuppressWarnings("hiding")
-	protected AbstractGridViewer(Environment cm, Object data) {
+	protected AbstractGridViewer(EnvironmentKCA cm, Object data) {
 		super(cm, data);
 		setSize(120, 150);
 		addMouseListener(this);
 	}
 	
 	@SuppressWarnings("hiding")
-	protected AbstractGridViewer(Environment cm) {
+	protected AbstractGridViewer(EnvironmentKCA cm) {
 		this(cm, null);
 	}
 	

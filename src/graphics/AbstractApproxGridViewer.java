@@ -5,15 +5,15 @@ import java.awt.Graphics2D;
 import java.util.List;
 import java.util.Vector;
 
+import KCAAgent.EnvironmentKCA;
 import KCAAgent.KCAAgent;
-import base.Environment;
 
 public abstract class AbstractApproxGridViewer extends AbstractGridViewer
 {
 	int rezX, rezY;
 	
 	@SuppressWarnings("hiding")
-	protected AbstractApproxGridViewer(Environment cm, Object data, int resolutionX, int resolutionY)
+	protected AbstractApproxGridViewer(EnvironmentKCA cm, Object data, int resolutionX, int resolutionY)
 	{
 		super(cm, data);
 		rezX = resolutionX;

@@ -7,9 +7,9 @@ import java.text.DecimalFormat;
 import java.util.LinkedList;
 import java.util.List;
 
+import KCAAgent.EnvironmentKCA;
 import KCAAgent.KCAAgent;
 import KCAAgent.Specialty;
-import base.Environment;
 
 public abstract class AbstractGraphViewer extends AbstractViewer2D
 {
@@ -101,19 +101,19 @@ public abstract class AbstractGraphViewer extends AbstractViewer2D
 	GraphParam param;
 	
 	@SuppressWarnings("hiding")
-	protected AbstractGraphViewer(Environment cm, Object data)
+	protected AbstractGraphViewer(EnvironmentKCA cm, Object data)
 	{
 		this(cm, data, new GraphParam(null,null,null));
 	}
 	
 	@SuppressWarnings("hiding")
-	protected AbstractGraphViewer(Environment cm, Object data, Color color)
+	protected AbstractGraphViewer(EnvironmentKCA cm, Object data, Color color)
 	{
 		this(cm, data, new GraphParam(color, null, null));
 	}
 	
 	@SuppressWarnings("hiding")
-	protected AbstractGraphViewer(Environment cm, Object data, GraphParam param)
+	protected AbstractGraphViewer(EnvironmentKCA cm, Object data, GraphParam param)
 	{
 		super(cm, data);
 
@@ -159,7 +159,7 @@ public abstract class AbstractGraphViewer extends AbstractViewer2D
 	public void update()
 	{
 		super.update();
-		if(!points.isEmpty() && (!points.get(0).isEmpty()) && (points.get(0).get(points.get(0).size() - 1).step == Environment.getStep()))
+		if(!points.isEmpty() && (!points.get(0).isEmpty()) && (points.get(0).get(points.get(0).size() - 1).step == EnvironmentKCA.getStep()))
 			return;
 		double value = calculateValue();
 		for(int i = 0; i < param.traces; i++)
@@ -170,7 +170,7 @@ public abstract class AbstractGraphViewer extends AbstractViewer2D
 			else
 				traceValue = getValue(i);
 			param.link.update(traceValue);
-			points.get(i).add(new GraphPoint(Environment.getStep(), traceValue));
+			points.get(i).add(new GraphPoint(EnvironmentKCA.getStep(), traceValue));
 		}
 	}
 	

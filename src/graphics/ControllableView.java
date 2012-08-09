@@ -1,6 +1,6 @@
 package graphics;
 
-import base.Environment;
+import KCAAgent.EnvironmentKCA;
 
 public interface ControllableView {
 	// sets viewer location
@@ -12,5 +12,5 @@ public interface ControllableView {
 	// hides viewer and cancels updates
 	void hide();
 	// links viewer to an environment
-	void relink(Environment cm);
+	void relink(EnvironmentKCA cm);
 }
