@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.example.org/scenarioSchema" xmlns:tns="http://www.example.org/scenarioSchema"
-	elementFormDefault="qualified" xmlns:kb="http://www.example.org/kbSchema" xmlns:pr="http://www.example.org/parameterSchema">
+<schema 
+	xmlns="http://www.w3.org/2001/XMLSchema" 
+	targetNamespace="http://www.example.org/scenarioSchema" 
+	xmlns:tns="http://www.example.org/scenarioSchema"
+	elementFormDefault="qualified" 
+	xmlns:kb="http://www.example.org/kbSchema" 
+	xmlns:pr="http://www.example.org/parameterSchema">
+	
 	<import schemaLocation="kbSchema.xsd" namespace="http://www.example.org/kbSchema"></import>
 	<import schemaLocation="parameterSchema.xsd" namespace="http://www.example.org/parameterSchema"></import>
 	<element name="scenario">

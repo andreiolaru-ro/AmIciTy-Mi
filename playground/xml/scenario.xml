@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scen:scenario xmlns:pr="http://www.example.org/parameterSchema"
-	xmlns:kb="http://www.example.org/kbSchema" xmlns:scen="http://www.example.org/scenarioSchema"
+<scen:scenario 
+	xmlns:pr="http://www.example.org/parameterSchema"
+	xmlns:kb="http://www.example.org/kbSchema" 
+	xmlns:scen="http://www.example.org/scenarioSchema"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.example.org/scenarioSchema ./scenarioSchema2.xsd ">
 

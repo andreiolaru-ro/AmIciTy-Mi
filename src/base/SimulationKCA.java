@@ -71,7 +71,7 @@ public class SimulationKCA extends JFrame implements Runnable, UpdateListener
 	private final static Log.Level	LEVELTO		= Log.Level.INFO;								// switch to this level
 																								
 //	 private Scenario scenario = new Scenario("test/testSmall2.xml");
-	KCAScenario				scenario	= new KCAScenario("test/test_scenario.xml");
+	KCAScenario				scenario	= new KCAScenario("scenarios/kcaScenario.xml");
 //	Scenario				scenario	= new Scenario("test/test1.xml");
 	
 	private Environment				cm;

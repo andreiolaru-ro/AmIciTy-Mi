@@ -40,7 +40,7 @@ public class P2PAgent extends AbstractAgent
 	/**all the measures of our agent*/
 	private Measures					measures;
 	/**probability that our agent will send a request about a file that it doesn't want*/
-	private NumericMeasure				probability;
+	private NumericMeasure				probability ;
 	final static int					maxNumberOfContacts	= 10;
 	/**inbox for all the messages(request, data...) that our agent received*/
 	private List<Message<?>>			waitingMessage;
@@ -48,7 +48,7 @@ public class P2PAgent extends AbstractAgent
 	private static HashMap<AgentID,P2PAgent>	directory;
 
 	@SuppressWarnings("hiding")
-	public P2PAgent(Environment parent, AgentID id,Location loc, double probability)
+	public P2PAgent(Environment parent, AgentID id)
 	{
 		super();
 		this.id = id;
@@ -58,7 +58,7 @@ public class P2PAgent extends AbstractAgent
 		this.itemsLocation = new HashMap<Item, Set<AgentID>>();
 		this.contacts = new HashSet<AgentID>();
 		this.measures=new Measures(this.id);
-		this.probability=(NumericMeasure) this.measures.createMeasure(new NumericMeasure(probability,MeasureName.PROBABILITY));
+		this.probability=(NumericMeasure) this.measures.createMeasure(new NumericMeasure(0.5,MeasureName.PROBABILITY));
 		this.waitingMessage=new ArrayList<Message<?>>();
 		//this.log=new Log(this);
 		if(directory==null)
@@ -340,10 +340,10 @@ public class P2PAgent extends AbstractAgent
 	static class test{
 		public static void main(String[] args)
 		{
-			P2PAgent agent1= new P2PAgent(null, new AgentID(""+1), new Location(0,0), 0.5);
-			P2PAgent agent2= new P2PAgent(null, new AgentID(""+2), new Location(0,0), 0.5);
-			P2PAgent agent3= new P2PAgent(null, new AgentID(""+3), new Location(0,0), 0.5);
-			P2PAgent agent4= new P2PAgent(null, new AgentID(""+4), new Location(0,0), 0.5);
+			P2PAgent agent1= new P2PAgent(null, new AgentID(""+1));
+			P2PAgent agent2= new P2PAgent(null, new AgentID(""+2));
+			P2PAgent agent3= new P2PAgent(null, new AgentID(""+3));
+			P2PAgent agent4= new P2PAgent(null, new AgentID(""+4));
 			
 			agent1.contacts.add(agent3.id);
 			agent3.contacts.add(agent4.id);

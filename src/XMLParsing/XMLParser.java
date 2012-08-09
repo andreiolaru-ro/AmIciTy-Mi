@@ -1,6 +1,5 @@
 package XMLParsing;
 
-import java.io.Console;
 import java.io.File;
 import java.io.IOException;
 import java.util.Vector;
@@ -23,7 +22,6 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 
-import logging.Log;
 import logging.Logger;
 
 import org.w3c.dom.Document;
@@ -129,7 +127,7 @@ public class XMLParser extends DefaultHandler
 				}
 				src.add(new StreamSource(schema));
 			}
-			Source srcA[] = (Source[])src.toArray(new Source[0]);
+			Source srcA[] = src.toArray(new Source[0]);
 			schemaXSD = schemaFactory.newSchema(srcA);
 		} catch(SAXException e)
 		{
@@ -201,9 +199,9 @@ public class XMLParser extends DefaultHandler
 	@Override
 	public void startElement(String ns, String localName, String qName, Attributes att) throws SAXException
 	{
-		String attr = "";
-		for(int i = 0; i < att.getLength(); i++)
-			attr += "[" + att.getQName(i) + " " + att.getValue(i) + "]";
+//		String attr = "";
+//		for(int i = 0; i < att.getLength(); i++)
+//			attr += "[" + att.getQName(i) + " " + att.getValue(i) + "]";
 		//		log.trace("> " + ns + " | " + localName + " | " + qName + " | " + attr);
 
 		XMLNode node = new XMLNode(qName);
@@ -279,6 +277,7 @@ public class XMLParser extends DefaultHandler
 		//		log.trace("enddoc");
 	}
 
+	@SuppressWarnings({ "static-method", "unused" })
 	protected void save(File file)
 	{
 		// DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
