@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scen:scenario seed="-56552949266271195"
+	xmlns:pr="http://www.example.org/parameterSchema" xmlns:scen="http://www.example.org/scenarioSchema"
+	xmlns:ma="http://www.example.org/mapSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.example.org/scenarioSchema ../schemas/agent/p2pSchema.xsd ">
+
+	<scen:agent>
+		<scen:numberAgents>30</scen:numberAgents>
+		<scen:numberContactsMin>1</scen:numberContactsMin>
+		<scen:numberContactsMax>5</scen:numberContactsMax>
+	</scen:agent>
+	<scen:timeline duration="100">
+		<scen:items number="50">
+			<!-- time 0 -->
+<!-- 			<scen:possessed> -->
+<!-- 				<scen:idAgent> -->
+<!-- 					<pr:min>0</pr:min> -->
+<!-- 					<pr:max>20</pr:max> -->
+<!-- 					<pr:select>4</pr:select> -->
+<!-- 					<pr:foreach>idItem</pr:foreach> -->
+<!-- 				</scen:idAgent> -->
+<!-- 				<scen:idItem> -->
+<!-- 					<pr:min>0</pr:min> -->
+<!-- 					<pr:max>49</pr:max> -->
+<!-- 					<pr:select>20</pr:select> -->
+<!-- 				</scen:idItem> -->
+<!-- 				<scen:time> -->
+<!-- 					<pr:value>0</pr:value> -->
+<!-- 				</scen:time> -->
+<!-- 			</scen:possessed> -->
+
+<!-- 			<scen:wanted> -->
+<!-- 				<scen:idAgent> -->
+<!-- 					<pr:min>0</pr:min> -->
+<!-- 					<pr:max>20</pr:max> -->
+<!-- 					<pr:select>2</pr:select> -->
+<!-- 					<pr:foreach>idItem</pr:foreach> -->
+<!-- 				</scen:idAgent> -->
+<!-- 				<scen:idItem> -->
+<!-- 					<pr:min>0</pr:min> -->
+<!-- 					<pr:max>49</pr:max> -->
+<!-- 					<pr:select>30</pr:select> -->
+<!-- 				</scen:idItem> -->
+<!-- 				<scen:time> -->
+<!-- 					<pr:value>0</pr:value> -->
+<!-- 				</scen:time> -->
+<!-- 			</scen:wanted> -->
+
+			<!-- time > 0 -->
+			<scen:wanted>
+				<scen:idAgent>
+					<pr:min>0</pr:min>
+					<pr:max>30</pr:max>
+					<pr:select>3</pr:select>
+					<pr:foreach>idItem</pr:foreach>
+				</scen:idAgent>
+				<scen:idItem>
+					<pr:min>0</pr:min>
+					<pr:max>30</pr:max>
+					<pr:select>3</pr:select>
+				</scen:idItem>
+				<scen:time>
+					<pr:min>1</pr:min>
+					<pr:max>30</pr:max>
+					<pr:select>2</pr:select>
+				</scen:time>
+			</scen:wanted>
+			<scen:possessed>
+				<scen:idAgent>
+					<pr:min>0</pr:min>
+					<pr:max>20</pr:max>
+					<pr:select>2</pr:select>
+					<pr:foreach>idItem</pr:foreach>
+				</scen:idAgent>
+				<scen:idItem>
+					<pr:min>0</pr:min>
+					<pr:max>30</pr:max>
+					<pr:select>2</pr:select>
+					<pr:foreach>time</pr:foreach>
+				</scen:idItem>
+				<scen:time>
+					<pr:min>1</pr:min>
+					<pr:max>30</pr:max>
+					<pr:select>2</pr:select>
+				</scen:time>
+			</scen:possessed>
+		</scen:items>
+	</scen:timeline>
+</scen:scenario>

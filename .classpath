@@ -3,6 +3,6 @@
 	<classpathentry excluding="graphics/AbstractViewer3D.java|XMLParsing/Boot.java|oldScenario/" kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/gnujaxp.jar"/>
-	<classpathentry kind="lib" path="/Users/Hoki/git/AmIciTy-Mi/lib/expr.jar"/>
+	<classpathentry kind="lib" path="lib/expr.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.example.org/scenarioSchema"
+	xmlns:tns="http://www.example.org/scenarioSchema" elementFormDefault="qualified"
+	xmlns:pr="http://www.example.org/parameterSchema" xmlns:ma="http://www.example.org/mapSchema">
+
+	<import schemaLocation="../base/parameterSchema.xsd" namespace="http://www.example.org/parameterSchema" />
+	<import schemaLocation="../base/mapSchema.xsd" namespace="http://www.example.org/mapSchema" />
+
+	<!-- XML STRUCTURE -->
+	<element name="scenario">
+		<complexType>
+			<all>
+				<element name="map" type="ma:map"/>
+				<element name="timeline">
+					<complexType>
+						<sequence>
+							<element name="event" minOccurs="0" maxOccurs="unbounded">
+								<complexType>
+									<all>
+										<element name="type">
+											<simpleType>
+												<restriction base="string">
+													<enumeration value="inject" />
+													<enumeration value="request" />
+													<enumeration value="snapshot" />
+												</restriction>
+											</simpleType>
+										</element>
+										<element name="pressure" type="pr:eventBoundedValue" />
+										<element name="persistence" type="pr:eventBoundedValue" />
+										<element name="domain">
+											<complexType>
+												<all>
+													<element name="a" type="pr:eventBoundedValue" />
+													<element name="b" type="pr:eventBoundedValue" />
+													<element name="c" type="pr:eventBoundedValue" />
+												</all>
+											</complexType>
+										</element>
+										<element name="location">
+											<complexType>
+												<all>
+													<element name="x" type="pr:eventIntegerValue" />
+													<element name="y" type="pr:eventIntegerValue" />
+												</all>
+											</complexType>
+										</element>
+										<element name="time" type="pr:eventIntegerValue" />
+									</all>
+								</complexType>
+							</element>
+						</sequence>
+						<attribute name="duration" type="positiveInteger" use="required" />
+					</complexType>
+				</element>
+			</all>
+			<attribute name="seed" type="integer" use="optional" />
+		</complexType>
+	</element>
+</schema>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.example.org/functionSchema"
+	elementFormDefault="qualified" targetNamespace="http://www.example.org/functionSchema">
+
+	<complexType name="functionMove">
+		
+	</complexType>
+
+	<complexType name="functionArea">
+		
+	</complexType>
+
+
+	<complexType name="coordinates">
+		<all>
+			<element name="x" type="decimal" />
+			<element name="y" type="decimal" />
+		</all>
+	</complexType>
+
+	<complexType name="functionAndCoordinates">
+		<all>
+			<element name="x" type="decimal" />
+			<element name="functionMove" type="tns:functionMove" />
+		</all>
+	</complexType>
+
+	<group name="agentMove">
+		<sequence>
+			<element name="idAgent" type="nonNegativeInteger" />
+			<element name="functionArea" type="tns:functionArea"
+				minOccurs="0" />
+			<choice>
+				<element name="endCordinnates" type="tns:coordinates" />
+				<element name="endCordinnatesWithFunction" type="tns:functionAndCoordinates" />
+			</choice>
+		</sequence>
+	</group>
+
+	<group name="areaMove">
+		<sequence>
+			<element name="startCoordinnates" type="tns:coordinates" />
+			<element name="functionArea" type="tns:functionArea" />
+			<choice>
+				<element name="endCordinnates" type="tns:coordinates" />
+				<element name="endCordinnatesWithFunction" type="tns:functionAndCoordinates" />
+			</choice>
+		</sequence>
+	</group>
+
+
+	<complexType name="agentMovement">
+		<sequence>
+			<element name="step">
+				<complexType>
+					<all>
+						<element name="start" type="nonNegativeInteger" />
+						<element name="end" type="nonNegativeInteger" />
+						<element name="numberLeap" type="nonNegativeInteger"
+							minOccurs="0" />
+					</all>
+				</complexType>
+			</element>
+			<choice>
+				<group ref="tns:agentMove" />
+				<group ref="tns:areaMove" />
+			</choice>
+		</sequence>
+
+	</complexType>
+
+	function move
+	cooordinate_end_middle_area_x
+
+	cooordinate_end_middle_area_x
+	cooordinate_end_middle_area_y
+	linear movement
+
+</schema>
