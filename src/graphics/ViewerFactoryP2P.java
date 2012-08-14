@@ -1,9 +1,12 @@
 package graphics;
 
+import java.awt.Color;
+
+import agent.AbstractAgent;
+
 import logging.LogViewer;
 import graphics.ViewerFactory.Type;
 import graphics.ViewerFactory.WindowParameters;
-import KCAAgent.EnvironmentKCA;
 import P2PAgent.EnvironmentP2P;
 import P2PAgent.SimulationP2P;
 
@@ -48,8 +51,19 @@ public class ViewerFactoryP2P
 	{
 		switch(type)
 		{
+		case AGENT_SELECTION_GRID:
+			return new AbstractGridViewerWhitoutLocation<EnvironmentP2P>(environment) {
+				@Override
+				public Color getColor(AbstractAgent cell)
+				{
+					return Color.GREEN;
+				}
+				
+			}.setTitle("Selection Grid");
 			case LOG_VIEWER:
 				return new LogViewer<EnvironmentP2P>(environment).setTitle("Event Log");
+			case CONTROL:
+				return null;
 			default:
 				return null;
 		}

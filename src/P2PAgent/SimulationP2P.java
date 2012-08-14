@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Iterator;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -19,6 +20,7 @@ import graphics.UpdateListener;
 import graphics.ViewerFactory.Type;
 import graphics.ViewerFactory.WindowLayout;
 import graphics.ViewerFactory.WindowParameters;
+import graphics.ViewerFactory.WindowLayout.Row;
 import graphics.ViewerFactoryP2P;
 import logging.Log;
 import scenario.AbstractScenario;
@@ -72,7 +74,8 @@ public class SimulationP2P extends Simulation<EnvironmentP2P, CommandP2P>
 		commands = scenario.getCommands();
 		init1();
 		WindowLayout layout = new WindowLayout(0, 0, 1000, 600, 60, 1, 5, true, true); 
-		
+		//Row row = null;
+		layout.addMain(new WindowParameters(Type.AGENT_SELECTION_GRID));
 		layout.addMain(new WindowParameters(Type.CONTROL, -1, -1, this));
 		layout.addMain(new WindowParameters(Type.LOG_VIEWER, -1, -1, 0, 0));
 		
@@ -80,6 +83,12 @@ public class SimulationP2P extends Simulation<EnvironmentP2P, CommandP2P>
 		
 		viewers = ViewerFactoryP2P.createViewers(environment, layout.toCollection());
 		environment.check();
+		Iterator<P2PAgent> test=environment.getAgents().iterator();
+		while(test.hasNext())
+		{
+			P2PAgent agent= test.next();
+			agent.toggleSelected();
+		}
 		init2();
 	}
 	

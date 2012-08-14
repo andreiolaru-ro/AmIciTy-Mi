@@ -98,12 +98,9 @@ public class ViewerFactoryKCA extends ViewerFactory
 						double c = 1 - pr; // complement
 						return new Color(1.0f, (float)c, (float)c);
 					}
-					else
-					{
-						double pr = 1 - Math.pow(1 + pressure, 2); // make low pressure look slightly higher
-						double c = 1 - pr; // complement
-						return new Color((float)c, (float)c, 1.0f);
-					}
+					double pr = 1 - Math.pow(1 + pressure, 2); // make low pressure look slightly higher
+					double c = 1 - pr; // complement
+					return new Color((float)c, (float)c, 1.0f);
 				}
 			}.setTitle("Pressure Grid");
 		case DOMAIN_INTEREST_GRID:
@@ -154,16 +151,15 @@ public class ViewerFactoryKCA extends ViewerFactory
 								agentColor = Color.red;		// good
 								break;
 							}
-							else
-								agentColor = Color.green;		// bad
-							/*if(Logix.similarity(cell.getSpecialty(), fact.getSpecialty())* cell.gradeFactHistory(fact.getSpecialty(), fact.firstStep) >= balanceMinimum)
-							//if(Logix.similarity(cell.specialtyHistory[cell.currentSpecialty-1], fact.getSpecialty()) >= balanceMinimum)
-							{
-								agentColor = Color.red;
-								break;
-							}
-							else
-								agentColor = Color.green;*/
+							agentColor = Color.green;		// bad
+/*if(Logix.similarity(cell.getSpecialty(), fact.getSpecialty())* cell.gradeFactHistory(fact.getSpecialty(), fact.firstStep) >= balanceMinimum)
+//if(Logix.similarity(cell.specialtyHistory[cell.currentSpecialty-1], fact.getSpecialty()) >= balanceMinimum)
+{
+							agentColor = Color.red;
+							break;
+}
+else
+							agentColor = Color.green;*/
 						}
 					}
 					return agentColor;
@@ -204,8 +200,7 @@ public class ViewerFactoryKCA extends ViewerFactory
 				{
 					if(data!=null)
 						return Fact.filterCollectionOnAbstractContent(cell.getFacts(false), (DataContent)data).size();
-					else
-						return cell.getFacts(false).size();
+					return cell.getFacts(false).size();
 				}
 //			}.setTitle(data!=null ? "Data Facts Number - " + data : "Total Facts Number");
 			}.setTitle(data!=null ? data + " - Facts Number" : "Total Facts Number");
@@ -216,8 +211,7 @@ public class ViewerFactoryKCA extends ViewerFactory
 				{
 					if((data != null) && (data instanceof GoalType))
 						return Goal.filterCollectionOfType(cell.getGoals(), (GoalType)data).size();
-					else
-						return cell.getGoals().size();
+					return cell.getGoals().size();
 				}
 			}.setTitle("Goal Number" + (((data != null) && (data instanceof GoalType)) ? (" - " + ((GoalType)data).toString()) : ""));
 		case GLOBAL_PRESSURE_GRAPH:

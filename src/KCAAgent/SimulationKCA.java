@@ -89,10 +89,10 @@ public class SimulationKCA extends Simulation<EnvironmentKCA, CommandKCA>
 		
 		init1();
 		
-//		WindowLayout layout = new WindowLayout(0, 0, 1280, 1000, 15, 1, 5, true, true); // (1366), windows 7
+		WindowLayout layout = new WindowLayout(0, 0, 1280, 1000, 15, 1, 5, true, true); // (1366), windows 7
 //		WindowLayout layout = new WindowLayout(70, 0, 1600, 1000, 15, 1, 5, true, true); // larger (1680), windows 7
 		// WindowLayout layout = new WindowLayout(70, 0, 1200, 800, 20, 1, 5, true, true); // large (1280), windows 7
-		 WindowLayout layout = new WindowLayout(0, 0, 1000, 600, 60, 1, 5, true, true); // small (1024)
+		 //WindowLayout layout = new WindowLayout(0, 0, 1000, 600, 60, 1, 5, true, true); // small (1024)
 		
 		Row row;
 		

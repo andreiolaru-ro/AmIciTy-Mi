@@ -50,6 +50,8 @@ public class P2PAgent extends AbstractAgent {
 	private static HashMap<AgentID, P2PAgent>	directory;
 	/** Environment where our agent evolve */
 	private EnvironmentP2P						parent;
+	/**its a graphical variable*/
+	private boolean selected;
 
 	public P2PAgent(EnvironmentP2P parent, AgentID id) {
 		super(id);
@@ -64,6 +66,7 @@ public class P2PAgent extends AbstractAgent {
 		this.waitingMessage = new ArrayList<MessageP2P<?>>();
 		this.parent = parent;
 		this.log = new Log(this);
+		this.selected=true;
 
 		if (directory == null) {
 			directory = new HashMap<AgentID, P2PAgent>();
@@ -444,14 +447,19 @@ public class P2PAgent extends AbstractAgent {
 	public boolean isSelected()
 	{
 		// TODO Auto-generated method stub
-		return false;
+		return selected;
 	}
 
 	@Override
 	public void toggleSelected()
 	{
 		// TODO Auto-generated method stub
-		
+		selected = !selected;
+		if (selected)
+			parent.addSelected(this);
+		else
+			parent.removeSelected(this);
+		parent.doUpdate();
 	}
 
 }

@@ -5,28 +5,32 @@ import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import agent.AbstractAgent;
 import agent.LocationAgent;
 import base.Environment;
 
-public abstract class AbstractGridViewer<ENVIRONMENT extends Environment<?,? extends LocationAgent>, AGENT extends LocationAgent> extends AbstractViewer2D<ENVIRONMENT> implements MouseListener {
+public abstract class AbstractGridViewerWhitoutLocation<ENVIRONMENT extends Environment<?,?>>  extends AbstractViewer2D<ENVIRONMENT> implements MouseListener {
+
 	int w;
 	int h;
-	
-	protected AbstractGridViewer(ENVIRONMENT cm, Object data) {
+	protected AbstractGridViewerWhitoutLocation(ENVIRONMENT cm, Object data)
+	{
 		super(cm, data);
 		setSize(120, 150);
 		addMouseListener(this);
 	}
 	
-	
-	protected AbstractGridViewer(ENVIRONMENT cm) {
-		this(cm, null);
+	protected AbstractGridViewerWhitoutLocation(ENVIRONMENT cm)
+	{
+		super(cm,null);
 	}
-	
-	public abstract Color getColor(AGENT cell);
+
+	public abstract Color getColor(AbstractAgent cell);	
 
 	@Override
-	public void draw(Graphics2D g) {
+	protected void draw(Graphics2D g)
+	{
+		// TODO Auto-generated method stub
 		w = getWidth();
 		h = getHeight();
 		double dw = 0.7 * w / Math.sqrt(cm.getAgents().size());
@@ -34,11 +38,19 @@ public abstract class AbstractGridViewer<ENVIRONMENT extends Environment<?,? ext
 		
 		g.setBackground(Color.white);
 		g.clearRect(0, 0, w, h);
-		for (LocationAgent cell : cm.getAgents()) {
-			double x = (cell.getLocation().getX() - cm.x) * w / cm.width;
-			double y = (cell.getLocation().getY() - cm.y) * h / cm.height;
-			
-			Color color = getColor((AGENT) cell);
+		int nbRow=0;
+		int nbCol=0;
+		for (AbstractAgent cell : cm.getAgents()) {
+			if((nbRow+1/5)*cm.getAgents().size()<cell.getId().id.intValue())
+			{
+				nbRow++;
+				nbCol=0;
+			}
+				double x = (nbRow - cm.x) * w / cm.width;
+				double y = (nbCol - cm.y) * h / cm.height;
+				System.out.println(x+" "+y);
+				nbCol++;
+			Color color = getColor(cell);
 			g.setColor(color);
 			g.fillRect((int)x, (int)y, (int)dw, (int)dh);
 //			g.fill(new Rectangle2D.Double(x, y, dw, dh));
@@ -51,9 +63,11 @@ public abstract class AbstractGridViewer<ENVIRONMENT extends Environment<?,? ext
 			}
 		}
 	}
-
+	
 	@Override
-	public void mouseClicked(MouseEvent e) {
+	public void mouseClicked(MouseEvent e)
+	{
+		// TODO Auto-generated method stub
 		int mx = e.getX();
 		int my = e.getY();
 		double x = cm.x + mx * cm.width / w;
@@ -61,26 +75,35 @@ public abstract class AbstractGridViewer<ENVIRONMENT extends Environment<?,? ext
 //		System.out.println(i + " " + j);
 		if(x >= 0 && x < cm.width && y >= 0 && y < cm.height)
 			cm.cellAt(x, y).toggleSelected();
+		
 	}
-
+	
 	@Override
-	public void mouseEntered(MouseEvent e) {
-		//
+	public void mouseEntered(MouseEvent arg0)
+	{
+		// TODO Auto-generated method stub
+		
 	}
-
+	
 	@Override
-	public void mouseExited(MouseEvent e) {
-		//
+	public void mouseExited(MouseEvent arg0)
+	{
+		// TODO Auto-generated method stub
+		
 	}
-
+	
 	@Override
-	public void mousePressed(MouseEvent e) {
-		//
+	public void mousePressed(MouseEvent arg0)
+	{
+		// TODO Auto-generated method stub
+		
 	}
-
+	
 	@Override
-	public void mouseReleased(MouseEvent e) {
-		//
+	public void mouseReleased(MouseEvent arg0)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 
 }

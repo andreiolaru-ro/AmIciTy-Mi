@@ -2,7 +2,9 @@ package P2PAgent;
 
 import logging.Logger;
 import scenario.P2PScenario;
+import KCAAgent.KCAAgent;
 import agent.AgentID;
+import agent.Location;
 import base.Environment;
 
 
@@ -16,6 +18,10 @@ public class EnvironmentP2P extends Environment<SimulationP2P, P2PAgent>
 		logger = new Logger();
 		
 		agents= scenario.getAgents();
+		this.x=0;
+		this.y=0;
+		this.height=31;
+		this.width=31;
 		
 		// we initialize the agents
 		for(P2PAgent agent : agents.values()){
@@ -54,7 +60,17 @@ public class EnvironmentP2P extends Environment<SimulationP2P, P2PAgent>
 	public P2PAgent cellAt(double x, double y)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		Location loc = new Location(x, y);
+		P2PAgent res = null;
+		double minDist = Double.POSITIVE_INFINITY;
+		for (P2PAgent cell : agents.values()) {
+			double dist = loc.getDistance(new Location(cell.getId().id.doubleValue(),cell.getId().id.doubleValue()));
+			if (dist < minDist) {
+				minDist = dist;
+				res = cell;
+			}
+		}
+		return res;
 	}
 	
 }

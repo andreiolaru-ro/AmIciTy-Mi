@@ -11,7 +11,7 @@ public class CommandKCA extends Command
 	private Fact	fact	= null;
 
 	
-	@SuppressWarnings("hiding")
+	
 	public CommandKCA( CommandKCA.Action action,  Location location,  Fact fact,  int time)
 	{
 		this.action = action;
@@ -20,19 +20,19 @@ public class CommandKCA extends Command
 		this.time = time;
 	}
 	
-	@SuppressWarnings("hiding")
+	
 	public CommandKCA(CommandKCA.Action action, Location location, Fact fact)
 	{
 		this(action, location, fact, 0);
 	}
 	
-	@SuppressWarnings("hiding")
+	
 	public CommandKCA( CommandKCA.Action action, int ms)
 	{
 		this(action, null, null, ms);
 	}
 	
-	@SuppressWarnings("hiding")
+	
 	public void setFact( Fact fact) {
 		this.fact = fact;
 	}
@@ -41,7 +41,6 @@ public class CommandKCA extends Command
 		return fact;
 	}
 
-	@SuppressWarnings("hiding")
 	public void setLocation( Location location) {
 		this.location = location;
 	}
