@@ -1,8 +1,18 @@
 package P2PAgent;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Panel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JSlider;
+import javax.swing.SwingConstants;
+import javax.swing.WindowConstants;
 
 import graphics.ControllableView;
 import graphics.UpdateListener;
@@ -11,6 +21,7 @@ import graphics.ViewerFactory.WindowLayout;
 import graphics.ViewerFactory.WindowParameters;
 import graphics.ViewerFactoryP2P;
 import logging.Log;
+import scenario.AbstractScenario;
 import scenario.P2PScenario;
 import agent.AgentID;
 import base.Environment;
@@ -28,6 +39,7 @@ public class SimulationP2P extends Simulation<EnvironmentP2P, CommandP2P>
 	
 	private ControllableView<EnvironmentP2P>[]		viewers		= null;
 	private static StepNumber		sn			= new StepNumber();
+	private static JSlider			sw			= new JSlider(SwingConstants.HORIZONTAL, 0, 200, 0);
 	
 	private static class StepNumber extends JLabel implements UpdateListener
 	{
@@ -60,15 +72,15 @@ public class SimulationP2P extends Simulation<EnvironmentP2P, CommandP2P>
 		commands = scenario.getCommands();
 		init1();
 		WindowLayout layout = new WindowLayout(0, 0, 1000, 600, 60, 1, 5, true, true); 
+		
+		layout.addMain(new WindowParameters(Type.CONTROL, -1, -1, this));
 		layout.addMain(new WindowParameters(Type.LOG_VIEWER, -1, -1, 0, 0));
-layout.addMain(new WindowParameters(Type.LOG_VIEWER, -1, -1, 0, 0));
 		
 		// layout.addMain(new WindowParameters(Type.AGENT_DETAILS, -1, -1, 0, 0));
 		
 		viewers = ViewerFactoryP2P.createViewers(environment, layout.toCollection());
 		environment.check();
 		init2();
-		start();
 	}
 	
 	private void init1()
@@ -167,6 +179,86 @@ layout.addMain(new WindowParameters(Type.LOG_VIEWER, -1, -1, 0, 0));
 	public void createMainWindow(int x, int y, int w, int h)
 	{
 		// TODO Auto-generated method stub
+		this.setLayout(new BorderLayout());
+		
+		Panel box = new Panel();
+		box.setLayout(new BoxLayout(box, BoxLayout.LINE_AXIS));
+		box.setBackground(Color.white);
+		JButton start = new JButton("Start");
+		start.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				start();
+			}
+		});
+		box.add(start);
+		JButton stop = new JButton("Stop");
+		stop.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				stop();
+			}
+		});
+		box.add(stop);
+		JButton step = new JButton("Step");
+		step.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				step();
+			}
+		});
+		box.add(step);
+		// JButton reset = new JButton("Reset !");
+		// reset.addActionListener(new ActionListener() {
+		// @Override
+		// public void actionPerformed(ActionEvent e)
+		// {
+		// init1();
+		// init2();
+		// }
+		// });
+		// box.add(reset);
+		
+		box.add(sn);
+		
+		final JButton randomize = new JButton("Randomize " + AbstractScenario.getSeed());
+		randomize.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				AbstractScenario.resetRandom();
+				randomize.setText("Randomize " + AbstractScenario.getSeed());
+			}
+		});
+		box.add(randomize);
+		JButton save = new JButton("Save");
+		save.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				JFileChooser fc = new JFileChooser(".");
+				
+				if(fc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION)
+				{
+					scenario.save(fc.getSelectedFile());
+				}
+			}
+		});
+		box.add(save);
+		this.add(box, BorderLayout.CENTER);
+		
+		box = new Panel();
+		box.add(sw);
+		this.add(box, BorderLayout.SOUTH);
+		
+		this.setTitle("KCA");
+		this.setLocation(x, y);
+		this.setSize(w, h);
+		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		this.setVisible(true);
 		
 	}
 
