@@ -7,10 +7,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import KCAAgent.KCAAgent;
 import agent.AbstractAgent;
 import agent.AgentID;
 
 import logging.Logger;
+
+
 
 public abstract class Environment<SIMULATION extends Simulation<?,?>, AGENT extends AbstractAgent>
 {
@@ -23,7 +26,11 @@ public abstract class Environment<SIMULATION extends Simulation<?,?>, AGENT exte
 	// sequence (sub-step) number for messages, used for comparing messages
 	protected static int sequence = 0;
 	
-	
+	// public because they are used for drawing
+	public double x;
+	public double y;
+	public double width;
+	public double height;
 	
 	//FIXME shouldn't the cells be updating simultaneously?
 	public void step() throws Exception {
@@ -81,4 +88,6 @@ public abstract class Environment<SIMULATION extends Simulation<?,?>, AGENT exte
 	public static int getSequence() {
 		return sequence++;
 	}
+	
+	public abstract AGENT cellAt(double x, double y);
 }

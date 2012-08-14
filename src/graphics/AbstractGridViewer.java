@@ -5,25 +5,29 @@ import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import agent.LocationAgent;
+import base.Environment;
+import base.Simulation;
+
 import KCAAgent.EnvironmentKCA;
 import KCAAgent.KCAAgent;
 
-public abstract class AbstractGridViewer extends AbstractViewer2D<EnvironmentKCA> implements MouseListener {
+public abstract class AbstractGridViewer<ENVIRONMENT extends Environment<?,? extends LocationAgent>, AGENT extends LocationAgent> extends AbstractViewer2D<ENVIRONMENT> implements MouseListener {
 	int w;
 	int h;
 	
-	protected AbstractGridViewer(EnvironmentKCA cm, Object data) {
+	protected AbstractGridViewer(ENVIRONMENT cm, Object data) {
 		super(cm, data);
 		setSize(120, 150);
 		addMouseListener(this);
 	}
 	
 	
-	protected AbstractGridViewer(EnvironmentKCA cm) {
+	protected AbstractGridViewer(ENVIRONMENT cm) {
 		this(cm, null);
 	}
 	
-	public abstract Color getColor(KCAAgent cell);
+	public abstract Color getColor(AGENT cell);
 
 	@Override
 	public void draw(Graphics2D g) {
@@ -34,11 +38,11 @@ public abstract class AbstractGridViewer extends AbstractViewer2D<EnvironmentKCA
 		
 		g.setBackground(Color.white);
 		g.clearRect(0, 0, w, h);
-		for (KCAAgent cell : cm.getAgents()) {
+		for (LocationAgent cell : cm.getAgents()) {
 			double x = (cell.getLocation().getX() - cm.x) * w / cm.width;
 			double y = (cell.getLocation().getY() - cm.y) * h / cm.height;
 			
-			Color color = getColor(cell);
+			Color color = getColor((AGENT) cell);
 			g.setColor(color);
 			g.fillRect((int)x, (int)y, (int)dw, (int)dh);
 //			g.fill(new Rectangle2D.Double(x, y, dw, dh));

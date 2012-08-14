@@ -8,7 +8,7 @@ import java.util.Vector;
 import KCAAgent.EnvironmentKCA;
 import KCAAgent.KCAAgent;
 
-public abstract class AbstractApproxGridViewer extends AbstractGridViewer
+public abstract class AbstractApproxGridViewer extends AbstractGridViewer<EnvironmentKCA, KCAAgent>
 {
 	int rezX, rezY;
 	

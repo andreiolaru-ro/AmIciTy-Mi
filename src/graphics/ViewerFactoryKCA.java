@@ -62,7 +62,7 @@ public class ViewerFactoryKCA extends ViewerFactory
 //		case AGENT_DETAILS:
 //			return new AgentDetails(cm).setTitle("Agent Details");
 		case AGENT_SELECTION_GRID:
-			return new AbstractGridViewer(cm) {
+			return new AbstractGridViewer<EnvironmentKCA,KCAAgent>(cm) {
 				@Override
 				public Color getColor(KCAAgent cell)
 				{
@@ -71,7 +71,7 @@ public class ViewerFactoryKCA extends ViewerFactory
 				
 			}.setTitle("Selection Grid");
 		case PAUSE_GRID:
-			return new AbstractGridViewer(cm) {
+			return new AbstractGridViewer<EnvironmentKCA,KCAAgent>(cm) {
 				@Override
 				public Color getColor(KCAAgent cell)
 				{
@@ -87,7 +87,7 @@ public class ViewerFactoryKCA extends ViewerFactory
 				}
 			}.setTitle("Interest Grid - all");
 		case PRESSURE_GRID:
-			return new AbstractGridViewer(cm) {
+			return new AbstractGridViewer<EnvironmentKCA,KCAAgent>(cm) {
 				@Override
 				public Color getColor(KCAAgent cell)
 				{
@@ -107,7 +107,7 @@ public class ViewerFactoryKCA extends ViewerFactory
 				}
 			}.setTitle("Pressure Grid");
 		case DOMAIN_INTEREST_GRID:
-			return new AbstractGridViewer(cm, data) {
+			return new AbstractGridViewer<EnvironmentKCA,KCAAgent>(cm, data) {
 				@Override
 				public Color getColor(KCAAgent cell)
 				{
@@ -129,7 +129,7 @@ public class ViewerFactoryKCA extends ViewerFactory
 				}
 			}.setTitle("Interest Grid - " + data);
 //		case DATA_GRID:
-//			return new AbstractGridViewer(cm, data) {
+//			return new AbstractGridViewer<EnvironmentKCA,KCAAgent>(cm, data) {
 //				@Override
 //				public Color getColor(Agent cell)
 //				{
@@ -138,7 +138,7 @@ public class ViewerFactoryKCA extends ViewerFactory
 //				}
 //			}.setTitle("Data Grid - " + data);
 		case FACTS_GRID:
-			return new AbstractGridViewer(cm, data) {
+			return new AbstractGridViewer<EnvironmentKCA,KCAAgent>(cm, data) {
 				@Override
 				public Color getColor(KCAAgent cell)
 				{
@@ -294,7 +294,7 @@ public class ViewerFactoryKCA extends ViewerFactory
 				}
 			}.setTitle("Useless Facts Number");
 		case AGENT_BALANCE:
-			return new AbstractGridViewer(cm) {
+			return new AbstractGridViewer<EnvironmentKCA,KCAAgent>(cm) {
 				@Override
 				public Color getColor(KCAAgent cell)
 				{	// more red -> higher balance value -> good

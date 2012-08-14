@@ -49,6 +49,13 @@ public class EnvironmentP2P extends Environment<SimulationP2P, P2PAgent>
 			System.out.println("id: "+agent.getId()+"contact: "+agent.getContacts()+"item: "+agent.getItems()+"itemwan: "+agent.getItemsWanted());
 		}
 	}
+
+	@Override
+	public P2PAgent cellAt(double x, double y)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }
 

@@ -440,4 +440,18 @@ public class P2PAgent extends AbstractAgent {
 
 	}
 
+	@Override
+	public boolean isSelected()
+	{
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void toggleSelected()
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
 }

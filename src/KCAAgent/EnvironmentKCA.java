@@ -33,11 +33,7 @@ public class EnvironmentKCA extends Environment<SimulationKCA, KCAAgent> {
 }; */
 
 	
-	// public because they are used for drawing
-	public double x;
-	public double y;
-	public double width;
-	public double height;
+
 
 	
 	//private static int CAPACITY = Logix.agentCapacity;
@@ -45,7 +41,6 @@ public class EnvironmentKCA extends Environment<SimulationKCA, KCAAgent> {
 	
 	Collection<UpdateListener> listeners = new ArrayList<UpdateListener>();
 	
-	@SuppressWarnings("hiding")
 	public EnvironmentKCA(SimulationKCA parent, KCAScenario scenario) {
 		this.parent = parent;
 		this.x = scenario.getX();
@@ -81,7 +76,7 @@ public class EnvironmentKCA extends Environment<SimulationKCA, KCAAgent> {
 		return id;
 	}
 	
-	public KCAAgent cellAt(@SuppressWarnings("hiding") double x, @SuppressWarnings("hiding") double y) {
+	public KCAAgent cellAt(double x, double y) {
 		Location loc = new Location(x, y);
 		KCAAgent res = null;
 		double minDist = Double.POSITIVE_INFINITY;
