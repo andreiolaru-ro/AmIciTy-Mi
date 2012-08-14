@@ -6,10 +6,10 @@ import base.Command;
 public class CommandP2P extends Command
 {
 	
-	private Item item=null;
-	private AgentID agentID=null;
+	private Item item = null;
+	private AgentID agentID = null;
 	
-	public CommandP2P(CommandP2P.Action action,AgentID agentID, Item item, int time)
+	public CommandP2P(CommandP2P.Action action, AgentID agentID, Item item, int time)
 	{
 		this.action=action;
 		this.time=time;
@@ -33,7 +33,4 @@ public class CommandP2P extends Command
 	{
 		this.agentID = agentID;
 	}
-	
-	
-
 }

@@ -1,5 +1,15 @@
 package P2PAgent;
 
+import java.awt.Color;
+
+import javax.swing.JLabel;
+
+import graphics.ControllableView;
+import graphics.UpdateListener;
+import graphics.ViewerFactory.Type;
+import graphics.ViewerFactory.WindowLayout;
+import graphics.ViewerFactory.WindowParameters;
+import graphics.ViewerFactoryP2P;
 import logging.Log;
 import scenario.P2PScenario;
 import agent.AgentID;
@@ -16,6 +26,29 @@ public class SimulationP2P extends Simulation<EnvironmentP2P, CommandP2P>
 	private static SimulationP2P p2p;
 	private P2PScenario scenario = new P2PScenario("scenarios/p2pScenario.xml");
 	
+	private ControllableView<EnvironmentP2P>[]		viewers		= null;
+	private static StepNumber		sn			= new StepNumber();
+	
+	private static class StepNumber extends JLabel implements UpdateListener
+	{
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public StepNumber()
+		{
+			super("   ---   ");
+			setForeground(Color.black);
+		}
+		
+		@Override
+		public void update()
+		{
+			setText("   step " + Environment.getStep() + "   ");
+		}
+	}
+	
 	public static void main(String[] args)
 	{
 		setP2P(new SimulationP2P());
@@ -26,18 +59,26 @@ public class SimulationP2P extends Simulation<EnvironmentP2P, CommandP2P>
 	{
 		commands = scenario.getCommands();
 		init1();
-		cm.check();
+		WindowLayout layout = new WindowLayout(0, 0, 1000, 600, 60, 1, 5, true, true); 
+		layout.addMain(new WindowParameters(Type.LOG_VIEWER, -1, -1, 0, 0));
+layout.addMain(new WindowParameters(Type.LOG_VIEWER, -1, -1, 0, 0));
+		
+		// layout.addMain(new WindowParameters(Type.AGENT_DETAILS, -1, -1, 0, 0));
+		
+		viewers = ViewerFactoryP2P.createViewers(environment, layout.toCollection());
+		environment.check();
+		init2();
 		start();
 	}
 	
 	private void init1()
 	{
 		// TODO Auto-generated method stub
-		cm= new EnvironmentP2P(this, scenario);
-		cm.getLogger().setLevel(LEVEL);
+		environment= new EnvironmentP2P(this, scenario);
+		environment.getLogger().setLevel(LEVEL);
 		log = new Log(null);
-		cm.getLogger().addLog(log);
-		nextcommand=0;
+		environment.getLogger().addLog(log);
+		nextcommand = 0;
 		//to initialize the variable item and itemWanted in P2PAgent
 		int step= Environment.getStep();
 		//System.out.println((step));
@@ -45,11 +86,21 @@ public class SimulationP2P extends Simulation<EnvironmentP2P, CommandP2P>
 		{
 			doCommand(commands[nextcommand++]);
 		}
-		nextcommand=0;
+		nextcommand = 0;
+	}
+	
+	private void init2()
+	{
+		environment.addUpdateListener(this);
+		environment.addUpdateListener(sn);
+		
+		for(ControllableView<EnvironmentP2P> viewer : viewers)
+			if(viewer != null)
+				viewer.relink(environment);
+		
+		environment.doUpdate();
 	}
 
-
-	@SuppressWarnings("hiding")
 	public static void setP2P(SimulationP2P p2p)
 	{
 		SimulationP2P.p2p=p2p;
@@ -72,7 +123,7 @@ public class SimulationP2P extends Simulation<EnvironmentP2P, CommandP2P>
 		{
 			step = Environment.getStep();
 			if(step == LEVELSWITCH)
-				cm.getLogger().setLevel(LEVELTO);
+				environment.getLogger().setLevel(LEVELTO);
 			
 			if(step % PRINTSTEP == 0)
 			{
@@ -88,11 +139,11 @@ public class SimulationP2P extends Simulation<EnvironmentP2P, CommandP2P>
 			}
 			try
 			{
-				cm.step();
+				environment.step();
 			} catch (Exception e1)
 			{
 				// TODO Auto-generated catch block
-				//e1.printStackTrace();
+				e1.printStackTrace();
 			}
 			if(oneStep)
 			{
@@ -101,7 +152,7 @@ public class SimulationP2P extends Simulation<EnvironmentP2P, CommandP2P>
 			}
 		}
 		active = false;
-		cm.check();
+		environment.check();
 	}
 
 
@@ -126,14 +177,15 @@ public class SimulationP2P extends Simulation<EnvironmentP2P, CommandP2P>
 		if(command.getAction() == CommandP2P.Action.INJECT_ITEM)
 		{
 			log.le("injecting ~ at ~", command.getItem());
-			AgentID receiver = cm.injectItem(command.getAgentID(), command.getItem());
+			AgentID receiver = environment.injectItem(command.getAgentID(), command.getItem());
 			log.le("received by ~", receiver);
 		}
 		else if(command.getAction() == CommandP2P.Action.INJECT_ITEM_WANTED)
 		{
 			log.le("injecting ~ at ~", command.getItem());
-			AgentID receiver = cm.injectItemWanted(command.getAgentID(), command.getItem());
+			AgentID receiver = environment.injectItemWanted(command.getAgentID(), command.getItem());
 			log.le("received by ~", receiver);
 		}
 	}
 }
+

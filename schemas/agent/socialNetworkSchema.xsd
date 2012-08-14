@@ -1,17 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.example.org/scenarioSchema"
 	xmlns:tns="http://www.example.org/scenarioSchema" elementFormDefault="qualified"
-	xmlns:pr="http://www.example.org/parameterSchema" xmlns:fun="http://www.example.org/functionSchema">
+	xmlns:pr="http://www.example.org/parameterSchema" xmlns:sel="http://www.example.org/selectionSchema"
+	xmlns:ma="http://www.example.org/mapSchema">
 
-	<import schemaLocation="parameterSchema.xsd" namespace="http://www.example.org/parameterSchema" />
-	<import schemaLocation="functionSchema.xsd" namespace="http://www.example.org/functionSchema" />
+	<import schemaLocation="../base/parameterSchema.xsd" namespace="http://www.example.org/parameterSchema" />
+	<import schemaLocation="../base/mapSchema.xsd" namespace="http://www.example.org/mapSchema" />
+	<import schemaLocation="../base/selectionSchema.xsd" namespace="http://www.example.org/selectionSchema" />
 
 	<element name="scenario">
 		<complexType>
 			<sequence>
-				<element name="map" type="" />
+				<element name="map" type="ma:map" />
+				<element name="timeline">
+					<complexType>
+						<sequence>
+							<element name="selection" type="sel:selectionAction"
+								minOccurs="0" maxOccurs="unbounded" />
+						</sequence>
+						<attribute name="duration" type="positiveInteger" use="required" />
+					</complexType>
+				</element>
 			</sequence>
+			<attribute name="seed" type="integer" use="optional" />
 		</complexType>
 	</element>
-
 </schema>
+

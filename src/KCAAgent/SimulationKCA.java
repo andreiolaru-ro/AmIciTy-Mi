@@ -3,11 +3,11 @@ package KCAAgent;
 import graphics.AbstractGraphViewer;
 import graphics.ControllableView;
 import graphics.UpdateListener;
-import graphics.ViewerFactory;
 import graphics.ViewerFactory.Type;
 import graphics.ViewerFactory.WindowLayout;
 import graphics.ViewerFactory.WindowLayout.Row;
 import graphics.ViewerFactory.WindowParameters;
+import graphics.ViewerFactoryKCA;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -16,7 +16,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
-import java.util.Collection;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -26,7 +25,6 @@ import javax.swing.JSlider;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 
-import base.Command;
 import base.Environment;
 import base.Message;
 import base.Simulation;
@@ -73,7 +71,7 @@ public class SimulationKCA extends Simulation<EnvironmentKCA, CommandKCA>
 	private static StepNumber		sn			= new StepNumber();
 	private static JSlider			sw			= new JSlider(SwingConstants.HORIZONTAL, 0, 200, 0);
 	
-	private ControllableView[]		viewers		= null;
+	private ControllableView<EnvironmentKCA>[]		viewers		= null;
 	
 	private static SimulationKCA kca;
 	
@@ -91,10 +89,10 @@ public class SimulationKCA extends Simulation<EnvironmentKCA, CommandKCA>
 		
 		init1();
 		
-		WindowLayout layout = new WindowLayout(0, 0, 1280, 1000, 15, 1, 5, true, true); // (1366), windows 7
+//		WindowLayout layout = new WindowLayout(0, 0, 1280, 1000, 15, 1, 5, true, true); // (1366), windows 7
 //		WindowLayout layout = new WindowLayout(70, 0, 1600, 1000, 15, 1, 5, true, true); // larger (1680), windows 7
 		// WindowLayout layout = new WindowLayout(70, 0, 1200, 800, 20, 1, 5, true, true); // large (1280), windows 7
-		// WindowLayout layout = new WindowLayout(0, 0, 1000, 600, 60, 1, 5, true, true); // small (1024)
+		 WindowLayout layout = new WindowLayout(0, 0, 1000, 600, 60, 1, 5, true, true); // small (1024)
 		
 		Row row;
 		
@@ -110,6 +108,7 @@ public class SimulationKCA extends Simulation<EnvironmentKCA, CommandKCA>
 			row.add(dom);
 		row.add(new WindowParameters(Type.PRESSURE_GRID));
 		row.add(new WindowParameters(Type.AGENT_SELECTION_GRID));
+		row.add(new WindowParameters(Type.PAUSE_GRID));
 		
 		row = layout.addRow(Type.GLOBAL_FACT_NUMBER_GRAPH, ndata + 1, new AbstractGraphViewer.GraphParam(null, new AbstractGraphViewer.GraphLink("LF"), new Integer(1)));
 		for(int i = 0; i < ndata; i++)
@@ -136,7 +135,7 @@ public class SimulationKCA extends Simulation<EnvironmentKCA, CommandKCA>
 		
 		// layout.addMain(new WindowParameters(Type.AGENT_DETAILS, -1, -1, 0, 0));
 		
-		viewers = ViewerFactory.createViewers(cm, layout.toCollection());
+		viewers = ViewerFactoryKCA.createViewers(environment, layout.toCollection());
 		
 		init2();
 	}
@@ -228,23 +227,23 @@ public class SimulationKCA extends Simulation<EnvironmentKCA, CommandKCA>
 	
 	private void init1()
 	{
-		cm = new EnvironmentKCA(this, scenario);
-		cm.getLogger().setLevel(LEVEL);
+		environment = new EnvironmentKCA(this, scenario);
+		environment.getLogger().setLevel(LEVEL);
 		log = new Log(null);
-		cm.getLogger().addLog(log);
+		environment.getLogger().addLog(log);
 		nextcommand = 0;
 	}
 	
 	private void init2()
 	{
-		cm.addUpdateListener(this);
-		cm.addUpdateListener(sn);
+		environment.addUpdateListener(this);
+		environment.addUpdateListener(sn);
 		
-		for(ControllableView viewer : viewers)
+		for(ControllableView<EnvironmentKCA> viewer : viewers)
 			if(viewer != null)
-				viewer.relink(cm);
+				viewer.relink(environment);
 		
-		cm.doUpdate();
+		environment.doUpdate();
 	}
 	
 	@Override
@@ -253,13 +252,13 @@ public class SimulationKCA extends Simulation<EnvironmentKCA, CommandKCA>
 		if(command.getAction() == CommandKCA.Action.INJECT)
 		{
 			log.le("injecting ~ at ~", command.getFact(), command.getLocation());
-			AgentID receiver = cm.inject(command.getLocation(), new MessageKCA<Collection<Fact>>(null, MessageKCA.Type.INFORM, command.getFact().toCollection()));
+			AgentID receiver = environment.inject(command.getLocation(), new MessageKCA(null, MessageKCA.Type.INFORM, command.getFact().toCollection()));
 			log.le("received by ~", receiver);
 		}
 		else if(command.getAction() == CommandKCA.Action.REQUEST)
 		{
 			log.le("requesting ~ from ~", command.getFact(), command.getLocation());
-			cm.inject(command.getLocation(), new MessageKCA<Collection<Fact>>(null, MessageKCA.Type.REQUEST, command.getFact().toCollection()));
+			environment.inject(command.getLocation(), new MessageKCA(null, MessageKCA.Type.REQUEST, command.getFact().toCollection()));
 		}
 		else if(command.getAction() == CommandKCA.Action.SNAPSHOT)
 		{
@@ -309,7 +308,7 @@ public class SimulationKCA extends Simulation<EnvironmentKCA, CommandKCA>
 			step = Environment.getStep();
 			
 			if(step == LEVELSWITCH)
-				cm.getLogger().setLevel(LEVELTO);
+				environment.getLogger().setLevel(LEVELTO);
 			
 			if(step % PRINTSTEP == 0)
 			{
@@ -330,7 +329,7 @@ public class SimulationKCA extends Simulation<EnvironmentKCA, CommandKCA>
 			}
 			try
 			{
-				cm.step();
+				environment.step();
 			} catch (Exception e1)
 			{
 				// TODO Auto-generated catch block

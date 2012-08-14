@@ -6,7 +6,7 @@
 	xsi:schemaLocation="http://www.example.org/scenarioSchema ../schemas/agent/kcaSchema.xsd ">
 
 	<scen:map>
-		<ma:characteristic>
+		<ma:features>
 			<ma:coordinates>
 				<ma:x>0</ma:x>
 				<ma:y>0</ma:y>
@@ -15,7 +15,7 @@
 				<ma:width>31</ma:width>
 				<ma:height>31</ma:height>
 			</ma:size>
-		</ma:characteristic>
+		</ma:features>
 		<ma:agent>
 			<ma:location>
 				<ma:x>
@@ -30,16 +30,16 @@
 				</ma:y>
 			</ma:location>
 		</ma:agent>
-		<scen:agent>
-			<scen:location>
-				<scen:x>
+		<ma:agent>
+			<ma:location>
+				<ma:x>
 					<pr:value>20</pr:value>
-				</scen:x>
-				<scen:y>
+				</ma:x>
+				<ma:y>
 					<pr:value>20</pr:value>
-				</scen:y>
-			</scen:location>
-		</scen:agent>
+				</ma:y>
+			</ma:location>
+		</ma:agent>
 	</scen:map>
 
 	<scen:timeline duration="1000">

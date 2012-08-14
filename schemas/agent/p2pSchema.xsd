@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.example.org/scenarioSchema"
 	xmlns:tns="http://www.example.org/scenarioSchema" elementFormDefault="qualified"
-	xmlns:pr="http://www.example.org/parameterSchema" >
+	xmlns:pr="http://www.example.org/parameterSchema" xmlns:fun="http://www.example.org/functionSchema">
 
 	<import schemaLocation="../base/parameterSchema.xsd" namespace="http://www.example.org/parameterSchema" />
 

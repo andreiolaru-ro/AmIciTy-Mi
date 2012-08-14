@@ -15,7 +15,7 @@ public class MessageP2P<T> extends Message<T>  implements Comparable<MessageP2P<
 	
 	private Type type;
 
-	@SuppressWarnings("hiding")
+
 	public MessageP2P(AgentID from, Type type, T content)
 	{
 		super();
@@ -57,3 +57,4 @@ public class MessageP2P<T> extends Message<T>  implements Comparable<MessageP2P<
 	}
 
 }
+

@@ -18,14 +18,12 @@ import java.util.TreeSet;
 
 import javax.xml.transform.TransformerFactoryConfigurationError;
 
-import base.Command;
-
-import agent.AbstractAgent;
-import agent.AgentID;
-
 import XMLParsing.XMLParser;
 import XMLParsing.XMLTree;
 import XMLParsing.XMLTree.XMLNode;
+import agent.AbstractAgent;
+import agent.AgentID;
+import base.Command;
 
 public class AbstractScenario<T extends AbstractAgent, C extends Command> {
 
@@ -41,50 +39,25 @@ public class AbstractScenario<T extends AbstractAgent, C extends Command> {
 
 	protected String			fileName;
 	protected int				nsteps;
-	protected C[]			commands;
-	protected Map<AgentID, T>	agents			= new HashMap<AgentID,T>();
+	protected C[]				commands;
+	protected Map<AgentID, T>	agents			= new HashMap<AgentID, T>();
 
 	protected XMLTree			scenario;
 
-	protected SortedSet<Command>			commandset			= new TreeSet<Command>(
-			new Comparator<Command>() {
-				@Override
-				public int compare(
-						Command c1,
-						Command c2) {
-					if (c1.getTime() != c2
-							.getTime()) {
-						return c1.getTime()
-								- c2.getTime();
-					}
-					return c1.hashCode()
-							- c2.hashCode();
-				}
-			});
+	protected SortedSet<Command>	commandset		= new TreeSet<Command>(new Comparator<Command>() {
+													@Override
+													public int compare(Command c1, Command c2) {
+														if (c1.getTime() != c2.getTime()) {
+															return c1.getTime() - c2.getTime();
+														}
+														return c1.hashCode() - c2.hashCode();
+													}
+												});
 
 	public AbstractScenario(String schemaFileName, String scenarioFileName) {
-
 		scenario = getScenarioTree(schemaFileName, scenarioFileName);
-
-		/*************************************** seed random ***************************************/
-		// attributes are always String with XMLParser
-		String stringSeed = scenario.getRoot().getAttributeValue("seed");
-
-		// seed specified in the xml
-		if (stringSeed != null) {
-			seed = Long.parseLong(stringSeed);
-			AbstractScenario.initRandom(seed);
-		}
-		// or not : read seed value in test/seed
-		else {
-			AbstractScenario.initRandom();
-		}
-
-		/****************************** duration : number of steps ********************************/
-		// attributes are always String
-		String steps = scenario.getRoot().getNodeIterator("timeline").next()
-				.getAttributeValue("duration");
-		nsteps = Integer.parseInt(steps);
+		parseSeed();
+		parseDuration();
 	}
 
 	/**
@@ -245,7 +218,9 @@ public class AbstractScenario<T extends AbstractAgent, C extends Command> {
 		return newNode;
 	}
 
-	// read random in test/seed
+	/**
+	 * Read seed in a file "test/seed"
+	 */
 	public static void initRandom() {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(SEED_FILE));
@@ -276,6 +251,28 @@ public class AbstractScenario<T extends AbstractAgent, C extends Command> {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
+	}
+
+	protected void parseSeed() {
+		// attributes are always String with XMLParser
+		String stringSeed = scenario.getRoot().getAttributeValue("seed");
+
+		// seed specified in the xml
+		if (stringSeed != null) {
+			seed = Long.parseLong(stringSeed);
+			AbstractScenario.initRandom(seed);
+		}
+		// or not : read seed value in test/seed
+		else {
+			AbstractScenario.initRandom();
+		}
+	}
+
+	protected void parseDuration() {
+		// attributes are always String
+		String steps = scenario.getRoot().getNodeIterator("timeline").next()
+				.getAttributeValue("duration");
+		nsteps = Integer.parseInt(steps);
 	}
 
 	/* need to FIX */

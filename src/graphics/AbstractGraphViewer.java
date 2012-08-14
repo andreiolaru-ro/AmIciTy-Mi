@@ -7,11 +7,11 @@ import java.text.DecimalFormat;
 import java.util.LinkedList;
 import java.util.List;
 
-import KCAAgent.EnvironmentKCA;
+import base.Environment;
 import KCAAgent.KCAAgent;
 import KCAAgent.Specialty;
 
-public abstract class AbstractGraphViewer extends AbstractViewer2D
+public abstract class AbstractGraphViewer<ENVIRONMENT extends Environment<?,?>> extends AbstractViewer2D<ENVIRONMENT>
 {
 	public static class GraphParam
 	{
@@ -19,7 +19,7 @@ public abstract class AbstractGraphViewer extends AbstractViewer2D
 		GraphLink link;
 		int traces;
 		
-		@SuppressWarnings("hiding")
+		
 		public GraphParam(Color color, GraphLink link, Integer traces)
 		{
 			this.link = (link == null) ? new GraphLink() : link;
@@ -39,7 +39,6 @@ public abstract class AbstractGraphViewer extends AbstractViewer2D
 		{
 		}
 		
-		@SuppressWarnings("hiding")
 		public GraphLink(String name)
 		{
 			this.name = name;
@@ -88,7 +87,7 @@ public abstract class AbstractGraphViewer extends AbstractViewer2D
 		int		step;
 		double	value;
 		
-		@SuppressWarnings("hiding")
+		
 		public GraphPoint(int step, double value)
 		{
 			this.step = step;
@@ -100,20 +99,20 @@ public abstract class AbstractGraphViewer extends AbstractViewer2D
 	boolean				dolines	= true;
 	GraphParam param;
 	
-	@SuppressWarnings("hiding")
-	protected AbstractGraphViewer(EnvironmentKCA cm, Object data)
+	
+	protected AbstractGraphViewer(ENVIRONMENT cm, Object data)
 	{
 		this(cm, data, new GraphParam(null,null,null));
 	}
 	
-	@SuppressWarnings("hiding")
-	protected AbstractGraphViewer(EnvironmentKCA cm, Object data, Color color)
+	
+	protected AbstractGraphViewer(ENVIRONMENT cm, Object data, Color color)
 	{
 		this(cm, data, new GraphParam(color, null, null));
 	}
 	
-	@SuppressWarnings("hiding")
-	protected AbstractGraphViewer(EnvironmentKCA cm, Object data, GraphParam param)
+	
+	protected AbstractGraphViewer(ENVIRONMENT cm, Object data, GraphParam param)
 	{
 		super(cm, data);
 
@@ -159,7 +158,7 @@ public abstract class AbstractGraphViewer extends AbstractViewer2D
 	public void update()
 	{
 		super.update();
-		if(!points.isEmpty() && (!points.get(0).isEmpty()) && (points.get(0).get(points.get(0).size() - 1).step == EnvironmentKCA.getStep()))
+		if(!points.isEmpty() && (!points.get(0).isEmpty()) && (points.get(0).get(points.get(0).size() - 1).step == Environment.getStep()))
 			return;
 		double value = calculateValue();
 		for(int i = 0; i < param.traces; i++)
@@ -170,7 +169,7 @@ public abstract class AbstractGraphViewer extends AbstractViewer2D
 			else
 				traceValue = getValue(i);
 			param.link.update(traceValue);
-			points.get(i).add(new GraphPoint(EnvironmentKCA.getStep(), traceValue));
+			points.get(i).add(new GraphPoint(Environment.getStep(), traceValue));
 		}
 	}
 	

@@ -27,7 +27,7 @@ public abstract class AbstractMeasure<T> implements Measure<T>
 		return  this.value;
 	}
 
-	@SuppressWarnings({ "hiding", "unchecked" })
+	@SuppressWarnings({"unchecked" })
 	@Override
 	public void setValue(Object value) throws Exception
 	{

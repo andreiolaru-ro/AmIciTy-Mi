@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.example.org/functionSchema"
-	elementFormDefault="qualified" targetNamespace="http://www.example.org/functionSchema">
+<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.example.org/selectionSchema"
+	elementFormDefault="qualified" targetNamespace="http://www.example.org/selectionSchema">
 
 
 	<complexType name="coordinates">
@@ -10,36 +10,28 @@
 		</all>
 	</complexType>
 
-	<complexType name="dimensionName">
+	<complexType name="areaFunction">
 		<sequence>
 			<element name="function" type="string" />
-			<element name="dependsOn" minOccurs="0" maxOccurs="2">
-				<simpleType>
-					<restriction base="string">
-						<enumeration value="x" />
-						<enumeration value="y" />
-						<enumeration value="t" />
-					</restriction>
-				</simpleType>
-			</element>
+<!-- 			<element name="dependsOn" minOccurs="0" maxOccurs="3"> -->
+<!-- 				<simpleType> -->
+<!-- 					<restriction base="string"> -->
+<!-- 						<enumeration value="x" /> -->
+<!-- 						<enumeration value="y" /> -->
+<!-- 						<enumeration value="t" /> -->
+<!-- 					</restriction> -->
+<!-- 				</simpleType> -->
+<!-- 			</element> -->
 		</sequence>
 	</complexType>
-
-	<complexType name="areaFunction">
-		<choice>
-			<element name="x" type="tns:dimensionName" />
-			<element name="y" type="tns:dimensionName" />
-		</choice>
-	</complexType>
-
 
 
 	<group name="complexSelection">
-		<sequence>
+		<all>
 			<element name="firstAreaFunction" type="tns:areaFunction" />
 			<element name="secondAreaFunction" type="tns:areaFunction" />
 			<element name="inside" type="boolean" />
-		</sequence>
+		</all>
 	</group>
 
 	<complexType name="selection">
@@ -53,8 +45,8 @@
 	</complexType>
 
 	<complexType name="selectionAction">
-		<sequence>
-			<element name="selection" type="tns:selection" />
+		<all>
+			<element name="area" type="tns:selection" />
 			<element name="action">
 				<simpleType>
 					<restriction base="string">
@@ -63,7 +55,8 @@
 					</restriction>
 				</simpleType>
 			</element>
-		</sequence>
+			<element name="time"/>
+		</all>
 	</complexType>
 
 </schema>

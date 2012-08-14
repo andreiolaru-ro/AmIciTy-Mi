@@ -16,7 +16,7 @@ public abstract class Simulation<ENVIRONMENT extends Environment<?, ?>, COMMAND 
 	protected final static Log.Level	LEVEL		= Log.Level.INFO;	// initial level of logging, and
 	protected final static int		LEVELSWITCH	= -1;// after this number of steps. negative value: never change
 	protected final static Log.Level	LEVELTO		= Log.Level.INFO;								// switch to this level
-	protected ENVIRONMENT cm;
+	protected ENVIRONMENT environment;
 	protected Log log;
 	protected int	nextcommand	= 0;
 	protected COMMAND[]	commands;

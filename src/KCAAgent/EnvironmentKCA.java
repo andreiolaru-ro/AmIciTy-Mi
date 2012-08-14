@@ -70,7 +70,7 @@ public class EnvironmentKCA extends Environment<SimulationKCA, KCAAgent> {
 		double dist = Double.POSITIVE_INFINITY;
 		AgentID id = null;
 		for (AgentID agent : agents.keySet()) {
-			double d = agents.get(agent).location.getDistance(location);
+			double d = agents.get(agent).getLocation().getDistance(location);
 			if (d < dist) {
 				dist = d;
 				id = agent;
@@ -86,7 +86,7 @@ public class EnvironmentKCA extends Environment<SimulationKCA, KCAAgent> {
 		KCAAgent res = null;
 		double minDist = Double.POSITIVE_INFINITY;
 		for (KCAAgent cell : agents.values()) {
-			double dist = loc.getDistance(cell.location);
+			double dist = loc.getDistance(cell.getLocation());
 			if (dist < minDist) {
 				minDist = dist;
 				res = cell;
@@ -108,3 +108,4 @@ public class EnvironmentKCA extends Environment<SimulationKCA, KCAAgent> {
 		CAPACITY = cAPACITY;
 	}*/
 }
+

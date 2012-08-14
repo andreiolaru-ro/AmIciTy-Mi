@@ -8,18 +8,17 @@ import java.awt.event.MouseListener;
 import KCAAgent.EnvironmentKCA;
 import KCAAgent.KCAAgent;
 
-public abstract class AbstractGridViewer extends AbstractViewer2D implements MouseListener {
+public abstract class AbstractGridViewer extends AbstractViewer2D<EnvironmentKCA> implements MouseListener {
 	int w;
 	int h;
 	
-	@SuppressWarnings("hiding")
 	protected AbstractGridViewer(EnvironmentKCA cm, Object data) {
 		super(cm, data);
 		setSize(120, 150);
 		addMouseListener(this);
 	}
 	
-	@SuppressWarnings("hiding")
+	
 	protected AbstractGridViewer(EnvironmentKCA cm) {
 		this(cm, null);
 	}
@@ -36,8 +35,8 @@ public abstract class AbstractGridViewer extends AbstractViewer2D implements Mou
 		g.setBackground(Color.white);
 		g.clearRect(0, 0, w, h);
 		for (KCAAgent cell : cm.getAgents()) {
-			double x = (cell.location.getX() - cm.x) * w / cm.width;
-			double y = (cell.location.getY() - cm.y) * h / cm.height;
+			double x = (cell.getLocation().getX() - cm.x) * w / cm.width;
+			double y = (cell.getLocation().getY() - cm.y) * h / cm.height;
 			
 			Color color = getColor(cell);
 			g.setColor(color);

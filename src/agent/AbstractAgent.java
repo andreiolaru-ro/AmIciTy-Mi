@@ -14,16 +14,24 @@ public abstract class AbstractAgent implements Measurable
 {
 	protected AgentID id; 
 	protected Log log;
+	protected boolean pause ;
 	protected abstract void agentPrint();
 	public abstract void step() throws Exception;
 	protected abstract void sendMessage(AgentID to, Message<?> msg);
 	public abstract void receiveMessage(Message<?> message);
 	
+	
+	
+	public AbstractAgent(AgentID id) {
+		super();
+		this.id = id;
+	}
+	
 	public AgentID getId()
 	{
 		return id;
 	}
-	@SuppressWarnings("hiding")
+
 	public void setId(AgentID id)
 	{
 		this.id = id;
@@ -33,6 +41,13 @@ public abstract class AbstractAgent implements Measurable
 	{
 		return log;
 	}
+	public boolean isPause() {
+		return pause;
+	}
+	public void setPause(boolean pause) {
+		this.pause = pause;
+	}
+	
 	
 	
 }

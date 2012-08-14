@@ -50,3 +50,4 @@ public class CommandKCA extends Command
 		return location;
 	}
 }
+

@@ -16,7 +16,7 @@ public class Location implements Measure<Map<String, NumericMeasure>>{
 	private double y;
 	private Map<String, NumericMeasure> coord; //map which contains all the informations about the location of an agent
 	
-	@SuppressWarnings("hiding")
+
 	public Location(double x, double y) {
 		this.x = x;
 		this.y = y;

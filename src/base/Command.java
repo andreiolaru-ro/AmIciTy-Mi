@@ -10,7 +10,7 @@ public class Command
 	protected Command.Action action	= null;
 	protected int time;
 	
-	@SuppressWarnings("hiding")
+
 	public void setTime( int time) {
 		this.time = time;
 	}
@@ -19,7 +19,7 @@ public class Command
 		return time;
 	}
 
-	@SuppressWarnings("hiding")
+
 	public void setAction( Command.Action action) {
 		this.action = action;
 	}

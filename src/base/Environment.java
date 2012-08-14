@@ -30,10 +30,11 @@ public abstract class Environment<SIMULATION extends Simulation<?,?>, AGENT exte
 		for (AGENT agent : agents.values()) {
 			agent.step();
 		}
-		//doUpdate();
+
+		doUpdate(); //update UI
 
 		step++;
-		//sequence = 0;
+		sequence = 0;
 	}
 	
 	public void addSelected(AbstractAgent agent) {
