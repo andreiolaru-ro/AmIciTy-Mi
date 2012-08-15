@@ -1,8 +1,12 @@
 package P2PAgent;
 
+import java.util.ArrayList;
+
+import graphics.AbstractGridViewerWhitoutLocation;
 import logging.Logger;
 import scenario.P2PScenario;
 import KCAAgent.KCAAgent;
+import agent.AbstractAgent;
 import agent.AgentID;
 import agent.Location;
 import base.Environment;
@@ -16,7 +20,7 @@ public class EnvironmentP2P extends Environment<SimulationP2P, P2PAgent>
 	{
 		this.parent=parent;
 		logger = new Logger();
-		
+		selected = new ArrayList<AbstractAgent>();
 		agents= scenario.getAgents();
 		this.x=0;
 		this.y=0;
@@ -64,7 +68,7 @@ public class EnvironmentP2P extends Environment<SimulationP2P, P2PAgent>
 		P2PAgent res = null;
 		double minDist = Double.POSITIVE_INFINITY;
 		for (P2PAgent cell : agents.values()) {
-			double dist = loc.getDistance(new Location(cell.getId().id.doubleValue(),cell.getId().id.doubleValue()));
+			double dist = loc.getDistance(AbstractGridViewerWhitoutLocation.getLocationOnTheGrid().get(cell));
 			if (dist < minDist) {
 				minDist = dist;
 				res = cell;

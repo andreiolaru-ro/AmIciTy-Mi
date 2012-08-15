@@ -46,12 +46,12 @@ public abstract class Environment<SIMULATION extends Simulation<?,?>, AGENT exte
 	
 	public void addSelected(AbstractAgent agent) {
 		selected.add(agent);
-//		logger.addLog(agent.getLog());
+		logger.addLog(agent.getLog());
 	}
 	
 	public void removeSelected(AbstractAgent agent) {
 		selected.remove(agent);
-//		logger.removeLog(agent.getLog());
+		logger.removeLog(agent.getLog());
 	}
 	
 	public List<AbstractAgent> getSelected() {

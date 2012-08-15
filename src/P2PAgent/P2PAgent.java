@@ -66,7 +66,7 @@ public class P2PAgent extends AbstractAgent {
 		this.waitingMessage = new ArrayList<MessageP2P<?>>();
 		this.parent = parent;
 		this.log = new Log(this);
-		this.selected=true;
+		this.selected=false;
 
 		if (directory == null) {
 			directory = new HashMap<AgentID, P2PAgent>();

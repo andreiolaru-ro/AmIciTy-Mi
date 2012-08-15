@@ -83,12 +83,6 @@ public class SimulationP2P extends Simulation<EnvironmentP2P, CommandP2P>
 		
 		viewers = ViewerFactoryP2P.createViewers(environment, layout.toCollection());
 		environment.check();
-		Iterator<P2PAgent> test=environment.getAgents().iterator();
-		while(test.hasNext())
-		{
-			P2PAgent agent= test.next();
-			agent.toggleSelected();
-		}
 		init2();
 	}
 	
@@ -118,7 +112,6 @@ public class SimulationP2P extends Simulation<EnvironmentP2P, CommandP2P>
 		for(ControllableView<EnvironmentP2P> viewer : viewers)
 			if(viewer != null)
 				viewer.relink(environment);
-		
 		environment.doUpdate();
 	}
 

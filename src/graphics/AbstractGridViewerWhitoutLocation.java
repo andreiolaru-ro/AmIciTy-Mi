@@ -4,25 +4,31 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.HashMap;
+import java.util.Map;
 
 import agent.AbstractAgent;
-import agent.LocationAgent;
 import base.Environment;
+import agent.Location;
 
 public abstract class AbstractGridViewerWhitoutLocation<ENVIRONMENT extends Environment<?,?>>  extends AbstractViewer2D<ENVIRONMENT> implements MouseListener {
 
 	int w;
 	int h;
+	private static Map<AbstractAgent, Location> LocationOnTheGrid;
+
 	protected AbstractGridViewerWhitoutLocation(ENVIRONMENT cm, Object data)
 	{
 		super(cm, data);
 		setSize(120, 150);
+		LocationOnTheGrid = new HashMap<AbstractAgent, Location>();
 		addMouseListener(this);
+		
 	}
 	
 	protected AbstractGridViewerWhitoutLocation(ENVIRONMENT cm)
 	{
-		super(cm,null);
+		this(cm,null);
 	}
 
 	public abstract Color getColor(AbstractAgent cell);	
@@ -40,16 +46,19 @@ public abstract class AbstractGridViewerWhitoutLocation<ENVIRONMENT extends Envi
 		g.clearRect(0, 0, w, h);
 		int nbRow=0;
 		int nbCol=0;
+		int number=5;
 		for (AbstractAgent cell : cm.getAgents()) {
-			if((nbRow+1/5)*cm.getAgents().size()<cell.getId().id.intValue())
+			if((cell.getId().id.intValue())/number==1)
 			{
 				nbRow++;
 				nbCol=0;
+				number=number+5;
 			}
 				double x = (nbRow - cm.x) * w / cm.width;
 				double y = (nbCol - cm.y) * h / cm.height;
-				System.out.println(x+" "+y);
+				//System.out.println(x+" "+y);
 				nbCol++;
+				LocationOnTheGrid.put(cell, new Location(nbRow, nbCol));
 			Color color = getColor(cell);
 			g.setColor(color);
 			g.fillRect((int)x, (int)y, (int)dw, (int)dh);
@@ -103,7 +112,12 @@ public abstract class AbstractGridViewerWhitoutLocation<ENVIRONMENT extends Envi
 	public void mouseReleased(MouseEvent arg0)
 	{
 		// TODO Auto-generated method stub
-		
+
+	}
+	
+	public static Map<AbstractAgent, Location> getLocationOnTheGrid()
+	{
+		return LocationOnTheGrid;
 	}
 
 }
