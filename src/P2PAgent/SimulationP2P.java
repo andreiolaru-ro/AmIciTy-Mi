@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Iterator;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -19,8 +18,8 @@ import graphics.ControllableView;
 import graphics.UpdateListener;
 import graphics.ViewerFactory.Type;
 import graphics.ViewerFactory.WindowLayout;
-import graphics.ViewerFactory.WindowParameters;
 import graphics.ViewerFactory.WindowLayout.Row;
+import graphics.ViewerFactory.WindowParameters;
 import graphics.ViewerFactoryP2P;
 import logging.Log;
 import scenario.AbstractScenario;
@@ -37,7 +36,7 @@ public class SimulationP2P extends Simulation<EnvironmentP2P, CommandP2P>
 	 */
 	private static final long	serialVersionUID	= 1L;
 	private static SimulationP2P p2p;
-	private P2PScenario scenario = new P2PScenario("scenarios/p2pScenario.xml");
+	P2PScenario scenario = new P2PScenario("scenarios/p2pScenario.xml");
 	
 	private ControllableView<EnvironmentP2P>[]		viewers		= null;
 	private static StepNumber		sn			= new StepNumber();
@@ -74,8 +73,11 @@ public class SimulationP2P extends Simulation<EnvironmentP2P, CommandP2P>
 		commands = scenario.getCommands();
 		init1();
 		WindowLayout layout = new WindowLayout(0, 0, 1000, 600, 60, 1, 5, true, true); 
-		//Row row = null;
-		layout.addMain(new WindowParameters(Type.AGENT_SELECTION_GRID));
+		Row row = null;
+		row = layout.addRow(Type.DOMAIN_INTEREST_GRID, 6);
+		
+		row.add(new WindowParameters(Type.AGENT_SELECTION_GRID));
+		row.add(new WindowParameters(Type.ITEM_GRAF));
 		layout.addMain(new WindowParameters(Type.CONTROL, -1, -1, this));
 		layout.addMain(new WindowParameters(Type.LOG_VIEWER, -1, -1, 0, 0));
 		

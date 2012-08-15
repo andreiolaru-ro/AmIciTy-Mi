@@ -7,11 +7,11 @@ import java.text.DecimalFormat;
 import java.util.LinkedList;
 import java.util.List;
 
+import agent.AbstractAgent;
 import base.Environment;
-import KCAAgent.KCAAgent;
 import KCAAgent.Specialty;
 
-public abstract class AbstractGraphViewer<ENVIRONMENT extends Environment<?,?>> extends AbstractViewer2D<ENVIRONMENT>
+public abstract class AbstractGraphViewer<ENVIRONMENT extends Environment<?,?>, AGENT extends AbstractAgent> extends AbstractViewer2D<ENVIRONMENT>
 {
 	public static class GraphParam
 	{
@@ -125,7 +125,9 @@ public abstract class AbstractGraphViewer<ENVIRONMENT extends Environment<?,?>> 
 			points.add(new LinkedList<GraphPoint>());
 	}
 	
-	protected abstract double getCellValue(KCAAgent cell);
+	protected abstract double getCellValue(AGENT cell);
+	
+	
 	
 	protected abstract double calculateValue();
 	

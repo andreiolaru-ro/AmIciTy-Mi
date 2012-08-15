@@ -50,8 +50,10 @@ public class P2PAgent extends AbstractAgent {
 	private static HashMap<AgentID, P2PAgent>	directory;
 	/** Environment where our agent evolve */
 	private EnvironmentP2P						parent;
-	/**its a graphical variable*/
+	/**its a graphical variable to know if an agent is selected*/
 	private boolean selected;
+	/**graphical variable to know the global number of items */
+	private static Integer numberItem;
 
 	public P2PAgent(EnvironmentP2P parent, AgentID id) {
 		super(id);
@@ -72,6 +74,11 @@ public class P2PAgent extends AbstractAgent {
 			directory = new HashMap<AgentID, P2PAgent>();
 		}
 		P2PAgent.directory.put(this.id, this);
+		
+		if(numberItem == null)
+		{
+			numberItem=new Integer(0);
+		}
 
 	}
 
@@ -330,9 +337,9 @@ public class P2PAgent extends AbstractAgent {
 				// response to a request
 				case SEND_ITEM:
 
-					if (this.items.addAll((Set<Item>) msg.getContents())) {
-						System.out.println("l'agent " + this.id + " download" + msg.getContents());
-					}
+					if (this.items.addAll((Set<Item>) msg.getContents()))
+						numberItem = new Integer(numberItem.intValue() + this.items.size());
+					
 					this.itemsWanted.removeAll((Set<Item>) msg.getContents());
 					break;
 
@@ -394,8 +401,38 @@ public class P2PAgent extends AbstractAgent {
 	public Set<Item> getItems() {
 		return items;
 	}
+	
+	@Override
+	public boolean isSelected()
+	{
+		// TODO Auto-generated method stub
+		return selected;
+	}
 
-	static class test {
+	@Override
+	public void toggleSelected()
+	{
+		// TODO Auto-generated method stub
+		selected = !selected;
+		if (selected)
+			parent.addSelected(this);
+		else
+			parent.removeSelected(this);
+		parent.doUpdate();
+	}
+
+	public static Integer getNumberItem()
+	{
+		return numberItem;
+	}
+
+	public static void setNumberItem(Integer numberItem)
+	{
+		P2PAgent.numberItem = numberItem;
+	}
+	
+
+	/*static class test {
 		public static void main(String[] args) {
 			P2PAgent agent1 = new P2PAgent(null, new AgentID("" + 1));
 			P2PAgent agent2 = new P2PAgent(null, new AgentID("" + 2));
@@ -441,25 +478,5 @@ public class P2PAgent extends AbstractAgent {
 			}
 		}
 
-	}
-
-	@Override
-	public boolean isSelected()
-	{
-		// TODO Auto-generated method stub
-		return selected;
-	}
-
-	@Override
-	public void toggleSelected()
-	{
-		// TODO Auto-generated method stub
-		selected = !selected;
-		if (selected)
-			parent.addSelected(this);
-		else
-			parent.removeSelected(this);
-		parent.doUpdate();
-	}
-
+	}*/
 }

@@ -8,6 +8,7 @@ import logging.LogViewer;
 import graphics.ViewerFactory.Type;
 import graphics.ViewerFactory.WindowParameters;
 import P2PAgent.EnvironmentP2P;
+import P2PAgent.P2PAgent;
 import P2PAgent.SimulationP2P;
 
 public class ViewerFactoryP2P
@@ -51,15 +52,38 @@ public class ViewerFactoryP2P
 	{
 		switch(type)
 		{
-		case AGENT_SELECTION_GRID:
-			return new AbstractGridViewerWhitoutLocation<EnvironmentP2P>(environment) {
-				@Override
-				public Color getColor(AbstractAgent cell)
-				{
-					return Color.GREEN;
-				}
+			case AGENT_SELECTION_GRID:
+				return new AbstractGridViewerWhitoutLocation<EnvironmentP2P>(environment) {
+					@Override
+					public Color getColor(AbstractAgent cell)
+					{
+						return Color.GREEN;
+					}
+				}.setTitle("Selection Grid");
+			case ITEM_GRAF:
+				return new AbstractGraphViewer<EnvironmentP2P,P2PAgent>(environment, null, Color.red){
+					@Override
+					public double getCellValue(P2PAgent cell)
+					{
+						return P2PAgent.getNumberItem().doubleValue();
+					}
+					
+					
+					@Override
+					public double stringScale()
+					{
+						return 100;
+					}
+
+
+					@Override
+					protected double calculateValue()
+					{
+						// TODO Auto-generated method stub
+						return P2PAgent.getNumberItem().doubleValue();
+					}
+				}.setTitle("Item owned");
 				
-			}.setTitle("Selection Grid");
 			case LOG_VIEWER:
 				return new LogViewer<EnvironmentP2P>(environment).setTitle("Event Log");
 			case CONTROL:

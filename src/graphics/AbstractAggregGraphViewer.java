@@ -5,7 +5,7 @@ import java.awt.Color;
 import KCAAgent.EnvironmentKCA;
 import KCAAgent.KCAAgent;
 
-public abstract class AbstractAggregGraphViewer extends AbstractGraphViewer<EnvironmentKCA>
+public abstract class AbstractAggregGraphViewer extends AbstractGraphViewer<EnvironmentKCA, KCAAgent>
 {
 	double	sum;
 	double	avg;

@@ -45,7 +45,13 @@ public abstract class ViewerFactory
 		
 		AGENT_BALANCE,
 		
-		AGENT_BALANCE_AVG_GRAF
+		AGENT_BALANCE_AVG_GRAF,
+		
+		ITEM_GRAF,
+		
+		ITEM_WANTED_GRAF,
+		
+		ITEM_LOCATION_GRAF
 	}
 	
 	public static class WindowLayout

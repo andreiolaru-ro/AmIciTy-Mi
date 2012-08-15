@@ -5,7 +5,7 @@ import java.awt.Color;
 import KCAAgent.EnvironmentKCA;
 import KCAAgent.KCAAgent;
 
-public abstract class AbstractAvgGraphViewer extends AbstractGraphViewer<EnvironmentKCA>
+public abstract class AbstractAvgGraphViewer extends AbstractGraphViewer<EnvironmentKCA,KCAAgent>
 {
 	protected AbstractAvgGraphViewer(EnvironmentKCA cm, Object data, Color color)
 	{

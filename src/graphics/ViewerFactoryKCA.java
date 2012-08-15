@@ -234,7 +234,7 @@ else
 				};
 			}.setTitle("Pressure Average Graph");
 		case MAX_PRESSURE_GRAPH:
-			return new AbstractMaxGraphViewer(cm, data, Color.red) {
+			return new AbstractMaxGraphViewer<EnvironmentKCA, KCAAgent>(cm, data, Color.red) {
 				@Override
 				public double getCellValue(KCAAgent cell)
 				{
