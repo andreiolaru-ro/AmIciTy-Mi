@@ -11,11 +11,8 @@ import base.Message;
 
 public class SocialNetworkAgent extends LocationAgent {
 	
-	protected Location location; 
-	
-	public SocialNetworkAgent(Location location2) {
-		// TODO Auto-generated constructor stub
-		this.location = location2;
+	public SocialNetworkAgent(AgentID id, Location location2) {
+		super(id, location2);
 	}
 
 	@Override

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scen:scenario seed="-56552949266271195"
 	xmlns:pr="http://www.example.org/parameterSchema" xmlns:scen="http://www.example.org/scenarioSchema"
-	xmlns:ma="http://www.example.org/mapSchema"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:ma="http://www.example.org/mapSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:sel="http://www.example.org/selectionSchema"
 	xsi:schemaLocation="http://www.example.org/scenarioSchema ../schemas/agent/kcaSchema.xsd ">
 
 	<scen:map>
-		<ma:characteristic>
+		<ma:features>
 			<ma:coordinates>
 				<ma:x>0</ma:x>
 				<ma:y>0</ma:y>
@@ -15,34 +15,34 @@
 				<ma:width>31</ma:width>
 				<ma:height>31</ma:height>
 			</ma:size>
-		</ma:characteristic>
+		</ma:features>
 		<ma:agent>
 			<ma:location>
 				<ma:x>
 					<pr:first>0</pr:first>
-					<pr:last>10</pr:last>
-					<pr:count>10</pr:count>
+					<pr:last>30</pr:last>
+					<pr:count>40</pr:count>
 				</ma:x>
 				<ma:y>
 					<pr:first>0</pr:first>
-					<pr:last>10</pr:last>
-					<pr:count>10</pr:count>
+					<pr:last>30</pr:last>
+					<pr:count>40</pr:count>
 				</ma:y>
 			</ma:location>
 		</ma:agent>
-		<ma:agent>
-			<ma:location>
-				<ma:x>
-					<pr:value>20</pr:value>
-				</ma:x>
-				<ma:y>
-					<pr:value>20</pr:value>
-				</ma:y>
-			</ma:location>
-		</ma:agent>
+		<!-- <ma:agent> -->
+		<!-- <ma:location> -->
+		<!-- <ma:x> -->
+		<!-- <pr:value>20</pr:value> -->
+		<!-- </ma:x> -->
+		<!-- <ma:y> -->
+		<!-- <pr:value>20</pr:value> -->
+		<!-- </ma:y> -->
+		<!-- </ma:location> -->
+		<!-- </ma:agent> -->
 	</scen:map>
 
-	<scen:timeline duration="1000">
+	<scen:timeline duration="100">
 		<scen:event>
 			<scen:type>inject</scen:type>
 			<scen:pressure>
@@ -91,8 +91,76 @@
 			<scen:time>
 				<pr:min>1</pr:min>
 				<pr:max>90</pr:max>
-				<pr:select>3</pr:select>
+				<pr:select>40</pr:select>
 			</scen:time>
 		</scen:event>
+
+		<scen:selection>
+			<sel:area>
+				<sel:function> sqrt(x^2+y^2) &lt; (14 + 2*t) </sel:function>
+				<sel:centerCoordinates>
+					<sel:x>15</sel:x>
+					<sel:y>15</sel:y>
+				</sel:centerCoordinates>
+				<sel:inside>true</sel:inside>
+			</sel:area>
+			<sel:area>
+				<sel:function> sqrt(x^2+y^2) &lt; 2 </sel:function>
+				<sel:centerCoordinates>
+					<sel:x>15</sel:x>
+					<sel:y>15</sel:y>
+				</sel:centerCoordinates>
+				<sel:inside>false</sel:inside>
+			</sel:area>
+			<sel:area>
+				<sel:function> sqrt(x^2+y^2) &lt; 3 </sel:function>
+				<sel:centerCoordinates>
+					<sel:x>8</sel:x>
+					<sel:y>8</sel:y>
+				</sel:centerCoordinates>
+				<sel:inside>false</sel:inside>
+			</sel:area>
+			<sel:action>pause</sel:action>
+			<sel:timeStart>0</sel:timeStart>
+			<sel:timeEnd>7</sel:timeEnd>
+		</scen:selection>
+
+		<!-- <scen:selection> -->
+		<!-- <sel:area> -->
+		<!-- <sel:centerCoordinates> -->
+		<!-- <sel:x>15</sel:x> -->
+		<!-- <sel:y>15</sel:y> -->
+		<!-- </sel:centerCoordinates> -->
+		<!-- <sel:firstAreaFunction> -->
+		<!-- <sel:function> sqrt(x^2+y^2) &lt; 8 </sel:function> -->
+		<!-- </sel:firstAreaFunction> -->
+		<!-- <sel:secondAreaFunction> -->
+		<!-- <sel:function> sqrt(x^2+y^2) &lt; 16 </sel:function> -->
+		<!-- </sel:secondAreaFunction> -->
+		<!-- <sel:inside>true</sel:inside> -->
+		<!-- </sel:area> -->
+		<!-- <sel:action>pause</sel:action> -->
+		<!-- <sel:timeStart>2</sel:timeStart> -->
+		<!-- </scen:selection> -->
+
+		<!-- <scen:selection> -->
+		<!-- <sel:area> -->
+		<!-- <sel:centerCoordinates> -->
+		<!-- <sel:x>25</sel:x> -->
+		<!-- <sel:y>25</sel:y> -->
+		<!-- </sel:centerCoordinates> -->
+		<!-- <sel:firstAreaFunction> -->
+		<!-- <sel:function> sqrt(x^2+y^2) &lt; 8 </sel:function> -->
+		<!-- </sel:firstAreaFunction> -->
+		<!-- <sel:secondAreaFunction> -->
+		<!-- <sel:function> sqrt(x^2+y^2) &lt; 16 </sel:function> -->
+		<!-- </sel:secondAreaFunction> -->
+		<!-- <sel:inside>true</sel:inside> -->
+		<!-- </sel:area> -->
+		<!-- <sel:action>pause</sel:action> -->
+		<!-- <sel:timeStart>5</sel:timeStart> -->
+		<!-- <sel:timeEnd>13</sel:timeEnd> -->
+		<!-- </scen:selection> -->
+
 	</scen:timeline>
 </scen:scenario>

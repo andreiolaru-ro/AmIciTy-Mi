@@ -12,39 +12,39 @@
 	<scen:timeline duration="100">
 		<scen:items number="50">
 			<!-- time 0 -->
-<!-- 			<scen:possessed> -->
-<!-- 				<scen:idAgent> -->
-<!-- 					<pr:min>0</pr:min> -->
-<!-- 					<pr:max>20</pr:max> -->
-<!-- 					<pr:select>4</pr:select> -->
-<!-- 					<pr:foreach>idItem</pr:foreach> -->
-<!-- 				</scen:idAgent> -->
-<!-- 				<scen:idItem> -->
-<!-- 					<pr:min>0</pr:min> -->
-<!-- 					<pr:max>49</pr:max> -->
-<!-- 					<pr:select>20</pr:select> -->
-<!-- 				</scen:idItem> -->
-<!-- 				<scen:time> -->
-<!-- 					<pr:value>0</pr:value> -->
-<!-- 				</scen:time> -->
-<!-- 			</scen:possessed> -->
+			<scen:owned>
+				<scen:idAgent>
+					<pr:min>0</pr:min>
+					<pr:max>20</pr:max>
+					<pr:select>4</pr:select>
+					<pr:foreach>idItem</pr:foreach>
+				</scen:idAgent>
+				<scen:idItem>
+					<pr:min>0</pr:min>
+					<pr:max>49</pr:max>
+					<pr:select>20</pr:select>
+				</scen:idItem>
+				<scen:time>
+					<pr:value>0</pr:value>
+				</scen:time>
+			</scen:owned>
 
-<!-- 			<scen:wanted> -->
-<!-- 				<scen:idAgent> -->
-<!-- 					<pr:min>0</pr:min> -->
-<!-- 					<pr:max>20</pr:max> -->
-<!-- 					<pr:select>2</pr:select> -->
-<!-- 					<pr:foreach>idItem</pr:foreach> -->
-<!-- 				</scen:idAgent> -->
-<!-- 				<scen:idItem> -->
-<!-- 					<pr:min>0</pr:min> -->
-<!-- 					<pr:max>49</pr:max> -->
-<!-- 					<pr:select>30</pr:select> -->
-<!-- 				</scen:idItem> -->
-<!-- 				<scen:time> -->
-<!-- 					<pr:value>0</pr:value> -->
-<!-- 				</scen:time> -->
-<!-- 			</scen:wanted> -->
+			<scen:wanted>
+				<scen:idAgent>
+					<pr:min>0</pr:min>
+					<pr:max>20</pr:max>
+					<pr:select>2</pr:select>
+					<pr:foreach>idItem</pr:foreach>
+				</scen:idAgent>
+				<scen:idItem>
+					<pr:min>0</pr:min>
+					<pr:max>49</pr:max>
+					<pr:select>30</pr:select>
+				</scen:idItem>
+				<scen:time>
+					<pr:value>0</pr:value>
+				</scen:time>
+			</scen:wanted>
 
 			<!-- time > 0 -->
 			<scen:wanted>
@@ -65,7 +65,7 @@
 					<pr:select>2</pr:select>
 				</scen:time>
 			</scen:wanted>
-			<scen:possessed>
+			<scen:owned>
 				<scen:idAgent>
 					<pr:min>0</pr:min>
 					<pr:max>20</pr:max>
@@ -83,7 +83,7 @@
 					<pr:max>30</pr:max>
 					<pr:select>2</pr:select>
 				</scen:time>
-			</scen:possessed>
+			</scen:owned>
 		</scen:items>
 	</scen:timeline>
 </scen:scenario>

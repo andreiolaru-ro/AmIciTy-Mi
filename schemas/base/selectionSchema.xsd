@@ -13,40 +13,26 @@
 	<complexType name="areaFunction">
 		<sequence>
 			<element name="function" type="string" />
-<!-- 			<element name="dependsOn" minOccurs="0" maxOccurs="3"> -->
-<!-- 				<simpleType> -->
-<!-- 					<restriction base="string"> -->
-<!-- 						<enumeration value="x" /> -->
-<!-- 						<enumeration value="y" /> -->
-<!-- 						<enumeration value="t" /> -->
-<!-- 					</restriction> -->
-<!-- 				</simpleType> -->
-<!-- 			</element> -->
-		</sequence>
-	</complexType>
-
-
-	<group name="complexSelection">
-		<all>
-			<element name="firstAreaFunction" type="tns:areaFunction" />
-			<element name="secondAreaFunction" type="tns:areaFunction" />
-			<element name="inside" type="boolean" />
-		</all>
-	</group>
-
-	<complexType name="selection">
-		<sequence>
 			<element name="centerCoordinates" type="tns:coordinates" />
-			<choice>
-				<group ref="tns:complexSelection" />
-				<element name="areaFunction" type="tns:areaFunction" />
-			</choice>
+			<element name="inside" type="boolean" />
+
+			<!-- <element name="dependsOn" minOccurs="0" maxOccurs="3"> -->
+			<!-- <simpleType> -->
+			<!-- <restriction base="string"> -->
+			<!-- <enumeration value="x" /> -->
+			<!-- <enumeration value="y" /> -->
+			<!-- <enumeration value="t" /> -->
+			<!-- </restriction> -->
+			<!-- </simpleType> -->
+			<!-- </element> -->
 		</sequence>
 	</complexType>
 
 	<complexType name="selectionAction">
-		<all>
-			<element name="area" type="tns:selection" />
+		<sequence>
+			<element name="area" type="tns:areaFunction" minOccurs="1"
+				maxOccurs="unbounded" />
+
 			<element name="action">
 				<simpleType>
 					<restriction base="string">
@@ -55,8 +41,10 @@
 					</restriction>
 				</simpleType>
 			</element>
-			<element name="time"/>
-		</all>
+			<element name="timeStart" type="nonNegativeInteger" />
+			<element name="timeEnd" type="nonNegativeInteger" minOccurs="0"
+				maxOccurs="1" />
+		</sequence>
 	</complexType>
 
 </schema>

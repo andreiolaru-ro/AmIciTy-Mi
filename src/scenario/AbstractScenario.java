@@ -7,11 +7,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -22,56 +23,57 @@ import XMLParsing.XMLTree;
 import XMLParsing.XMLTree.XMLNode;
 import agent.AbstractAgent;
 import agent.AgentID;
-import agent.Location;
-import agent.LocationAgent;
 import base.Command;
-import expr.Expr;
-import expr.Parser;
-import expr.SyntaxException;
-import expr.Variable;
 
 public class AbstractScenario<T extends AbstractAgent, C extends Command> {
 
-	private static final String	SEED_FILE		= "test/seed";
+	private static final String		SEED_FILE		= "test/seed";
 	/**
 	 * Split character use in the tag "foreach" of the xml scneario to define a
 	 * path.
 	 */
-	private static final String	SPLIT_CHARACTER	= "/";
+	private static final String		SPLIT_CHARACTER	= "/";
 
-	protected static Random		rand;
-	protected static long		seed;
+	protected static Random			rand;
+	protected static long			seed;
 
-	protected String			fileName;
-	protected int				nsteps;
-	protected C[]			commands;
-	protected Map<AgentID, T>	agents			= new HashMap<AgentID,T>();
+	protected String				fileName;
+	protected int					nsteps;
+	protected C[]					commands;
+	protected Map<AgentID, T>		agents			= new HashMap<AgentID, T>();
 
-	protected XMLTree			scenario;
+	protected XMLTree				scenario;
 
-	public AbstractScenario(String schemaFileName, String scenarioFileName) {
+//	 protected SortedSet<Command> commandset = new TreeSet<Command>(new
+//	 Comparator<Command>() {
+//	 @Override
+//	 public int compare(Command c1, Command c2) {
+//	 if (c1.getTime() != c2.getTime()) {
+//	 return c1.getTime() - c2.getTime();
+//	 }
+//	 return c1.hashCode() - c2.hashCode();
+//	 }
+//	 });
 
+	
+	protected SortedSet<Command>	commandset		= new TreeSet<Command>(
+															new Comparator<Command>() {
+																@Override
+																public int compare(Command c1,
+																		Command c2) {
+																	if (c1.getTime() != c2
+																			.getTime()) {
+																		return c1.getTime()
+																				- c2.getTime();
+																	}
+																	return c1.getId() - c2.getId();
+																}
+															});
+
+	protected AbstractScenario(String schemaFileName, String scenarioFileName) {
 		scenario = getScenarioTree(schemaFileName, scenarioFileName);
-
-		/*************************************** seed random ***************************************/
-		// attributes are always String with XMLParser
-		String stringSeed = scenario.getRoot().getAttributeValue("seed");
-
-		// seed specified in the xml
-		if (stringSeed != null) {
-			seed = Long.parseLong(stringSeed);
-			AbstractScenario.initRandom(seed);
-		}
-		// or not : read seed value in test/seed
-		else {
-			AbstractScenario.initRandom();
-		}
-
-		/****************************** duration : number of steps ********************************/
-		// attributes are always String
-		String steps = scenario.getRoot().getNodeIterator("timeline").next()
-				.getAttributeValue("duration");
-		nsteps = Integer.parseInt(steps);
+		parseSeed();
+		parseDuration();
 	}
 
 	/**
@@ -232,40 +234,6 @@ public class AbstractScenario<T extends AbstractAgent, C extends Command> {
 		return newNode;
 	}
 
-	// FIXME : asbtract LocationScenario extends AbstractScenario ?
-	protected<T extends LocationAgent> Set<AgentID> getAgentInArea(String function, Location center, int step){
-		Set<AgentID> agentsInArea = new TreeSet<AgentID>();
-		Expr expr;
-
-		//FIXME : special character < in xml
-		function = "sqrt(x^2+y^2)<5" ;
-		
-		Variable variable_x = Variable.make("x");
-		Variable variable_y = Variable.make("y");
-		Variable variable_t = Variable.make("t");
-		
-
-		try {
-			expr = Parser.parse(function);
-
-			for(AgentID agentId : agents.keySet()){
-				T agent = (T) agents.get(agentId) ;
-
-				variable_x.setValue(agent.getLocation().getX() - center.getX());
-				variable_y.setValue(agent.getLocation().getY() - center.getY());
-				variable_t.setValue(step);
-				// IN
-				System.out.println(expr.value());
-				if(expr.value() != 0){
-					agentsInArea.add(agentId);
-				}
-			}
-		} catch (SyntaxException e) {
-			System.err.println(e.explain());
-		}
-		return agentsInArea ;
-	}
-
 	/**
 	 * Read seed in a file "test/seed"
 	 */
@@ -299,6 +267,28 @@ public class AbstractScenario<T extends AbstractAgent, C extends Command> {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
+	}
+
+	protected void parseSeed() {
+		// attributes are always String with XMLParser
+		String stringSeed = scenario.getRoot().getAttributeValue("seed");
+
+		// seed specified in the xml
+		if (stringSeed != null) {
+			seed = Long.parseLong(stringSeed);
+			AbstractScenario.initRandom(seed);
+		}
+		// or not : read seed value in test/seed
+		else {
+			AbstractScenario.initRandom();
+		}
+	}
+
+	protected void parseDuration() {
+		// attributes are always String
+		String steps = scenario.getRoot().getNodeIterator("timeline").next()
+				.getAttributeValue("duration");
+		nsteps = Integer.parseInt(steps);
 	}
 
 	/* need to FIX */

@@ -33,7 +33,7 @@
 									<sequence minOccurs="0" maxOccurs="unbounded">
 										<element name="wanted" type="tns:item" minOccurs="0"
 											maxOccurs="1" />
-										<element name="possessed" type="tns:item" minOccurs="0"
+										<element name="owned" type="tns:item" minOccurs="0"
 											maxOccurs="1" />
 									</sequence>
 									<attribute name="number" type="nonNegativeInteger" />

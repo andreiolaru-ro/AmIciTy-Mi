@@ -57,7 +57,7 @@ public class Measures
 	 */
 	public Measure<?> createMeasure(Measure<?> value)
 	{
-		MeasureName name=value.getName();
+		MeasureName name = value.getName();
 		this.measures.put(name, value);
 		return value;
 	}

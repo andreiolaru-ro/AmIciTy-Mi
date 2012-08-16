@@ -7,7 +7,7 @@
 
 	<complexType name="map">
 		<sequence>
-			<element name="characteristic">
+			<element name="features">
 				<complexType>
 					<sequence>
 						<element name="coordinates">

@@ -36,6 +36,8 @@ public class ViewerFactory
 		FACTS_GRID,
 		
 		DOMAIN_INTEREST_GRID,
+		
+		PAUSE_GRID,
 
 //		DATA_GRID,
 
@@ -320,6 +322,18 @@ public class ViewerFactory
 				}
 				
 			}.setTitle("Selection Grid");
+		case PAUSE_GRID:
+			return new AbstractGridViewer(cm) {
+				@Override
+				public Color getColor(KCAAgent cell)
+				{
+					if(cell.isPause()){
+						cell.unpause();
+						return Color.red;
+					}
+					return Color.green ;
+				}
+			}.setTitle("Pause Grid");
 		case SPECIALTY_GRID:
 			return new AbstractApproxGridViewer(cm, null, 30, 30) {
 				@Override

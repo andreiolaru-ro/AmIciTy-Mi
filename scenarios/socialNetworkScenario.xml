@@ -6,7 +6,7 @@
 	xsi:schemaLocation="http://www.example.org/scenarioSchema ../schemas/agent/socialNetworkSchema.xsd ">
 
 	<scen:map>
-		<ma:characteristic>
+		<ma:features>
 			<ma:coordinates>
 				<ma:x>0</ma:x>
 				<ma:y>0</ma:y>
@@ -15,7 +15,7 @@
 				<ma:width>31</ma:width>
 				<ma:height>31</ma:height>
 			</ma:size>
-		</ma:characteristic>
+		</ma:features>
 		<ma:agent>
 			<ma:location>
 				<ma:x>

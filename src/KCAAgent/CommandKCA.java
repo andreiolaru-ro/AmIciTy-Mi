@@ -1,39 +1,41 @@
 package KCAAgent;
 
-import base.Command;
 import agent.Location;
+import base.Command;
+import base.PauseCommand;
 
+public class CommandKCA extends PauseCommand {
 
-public class CommandKCA extends Command
-{
-
-	private Location location = null;
-	private Fact	fact	= null;
+	private Location	location	= null;
+	private Fact		fact		= null;
 
 	
+	
+	public CommandKCA(Action action, KCAAgent agent, int time) {
+		super(action, agent, time);
+	}
+
+
 	@SuppressWarnings("hiding")
-	public CommandKCA( CommandKCA.Action action,  Location location,  Fact fact,  int time)
-	{
-		this.action = action;
+	public CommandKCA(Command.Action action, Location location, Fact fact, int time) {
+		super(action, null, time);
 		this.location = location;
 		this.fact = fact;
-		this.time = time;
 	}
-	
+
+
 	@SuppressWarnings("hiding")
-	public CommandKCA(CommandKCA.Action action, Location location, Fact fact)
-	{
+	public CommandKCA(CommandKCA.Action action, Location location, Fact fact) {
 		this(action, location, fact, 0);
 	}
-	
+
 	@SuppressWarnings("hiding")
-	public CommandKCA( CommandKCA.Action action, int ms)
-	{
+	public CommandKCA(CommandKCA.Action action, int ms) {
 		this(action, null, null, ms);
 	}
-	
+
 	@SuppressWarnings("hiding")
-	public void setFact( Fact fact) {
+	public void setFact(Fact fact) {
 		this.fact = fact;
 	}
 
@@ -42,11 +44,17 @@ public class CommandKCA extends Command
 	}
 
 	@SuppressWarnings("hiding")
-	public void setLocation( Location location) {
+	public void setLocation(Location location) {
 		this.location = location;
 	}
 
 	public Location getLocation() {
 		return location;
 	}
+
+	@Override
+	public String toString() {
+		return "CommandKCA [location=" + location + ", fact=" + fact + ", time=" + time + ", action=" + action + ", agent=" + agent +"]";
+	}
+	
 }

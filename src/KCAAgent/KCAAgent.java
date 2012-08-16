@@ -19,18 +19,18 @@ import scenario.AbstractScenario;
 import KCAAgent.Goal.GoalList;
 import KCAAgent.Logix.Domain;
 import KCAAgent.MessageKCA.Type;
-import agent.AbstractAgent;
 import agent.AbstractMeasure.FloatMeasure;
 import agent.AbstractMeasure.NumericMeasure;
 import agent.AgentID;
 import agent.Location;
+import agent.LocationAgent;
 import agent.Measure;
 import agent.MeasureName;
 import agent.Measures;
 import base.Environment;
 import base.Message;
 
-public class KCAAgent extends AbstractAgent {
+public class KCAAgent extends LocationAgent {
 	private static double						balanceMinimum			= 0.4;
 
 	// payload
@@ -104,7 +104,6 @@ public class KCAAgent extends AbstractAgent {
 
 	private Map<AgentID, KCAAgent>				neighbours;
 	private Measures							measures;
-	public Location								location;
 
 	@SuppressWarnings("hiding")
 	public KCAAgent(EnvironmentKCA parent, AgentID id, Location loc, int capacity, int nsteps) {
@@ -118,9 +117,8 @@ public class KCAAgent extends AbstractAgent {
 	@SuppressWarnings({ "hiding", "unused" })
 	KCAAgent(EnvironmentKCA parent, AgentID id, Location loc, double capacity, Specialty spec,
 			int nsteps) {
-		super();
+		super(id, loc);
 		neighbours = new HashMap<AgentID, KCAAgent>();
-		this.id = id;
 		this.measures = new Measures(id);
 
 		this.parent = parent;
@@ -174,14 +172,6 @@ public class KCAAgent extends AbstractAgent {
 		}
 	}
 
-	public Location getLocation() {
-		return location;
-	}
-
-	@SuppressWarnings("hiding")
-	public void setLocation(Location location) {
-		this.location = location;
-	}
 
 	public void setHistory(int nsteps) {
 		specialtyHistory = new Specialty[nsteps + 1];

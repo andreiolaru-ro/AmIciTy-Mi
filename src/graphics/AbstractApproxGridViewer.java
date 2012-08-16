@@ -43,8 +43,8 @@ public abstract class AbstractApproxGridViewer extends AbstractGridViewer
 		
 		for (KCAAgent cell : cm.getAgents())
 		{
-			int x = (int)((cell.location.getX() - cm.x) * rezX / cm.width);
-			int y = (int)((cell.location.getY() - cm.y) * rezY / cm.height);
+			int x = (int)((cell.getLocation().getX() - cm.x) * rezX / cm.width);
+			int y = (int)((cell.getLocation().getY() - cm.y) * rezY / cm.height);
 			
 			Color color = getColor(cell);
 			grid[x][y].add(color);
