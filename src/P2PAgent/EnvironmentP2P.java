@@ -39,6 +39,7 @@ public class EnvironmentP2P extends Environment<SimulationP2P, P2PAgent>
 		if(!agents.get(agentID).getItems().contains(item))
 		{
 			agents.get(agentID).getItems().add(item);
+			P2PAgent.setNumberItem(new Integer(P2PAgent.getNumberItem().intValue()+1));
 		}
 		return agentID;
 	}
@@ -48,6 +49,7 @@ public class EnvironmentP2P extends Environment<SimulationP2P, P2PAgent>
 		if((!agents.get(agentID).getItemsWanted().contains(itemWanted))&&(!agents.get(agentID).getItems().contains(itemWanted)))
 		{
 			agents.get(agentID).getItemsWanted().add(itemWanted);
+			P2PAgent.setNumberItemWanted(new Integer(P2PAgent.getNumberItem().intValue()+1));
 		}
 		return agentID;
 	}

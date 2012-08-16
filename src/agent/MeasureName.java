@@ -34,6 +34,12 @@ public enum MeasureName{
 	
 	PROBABILITY("probability"),
 	
+	NUMBER_OF_ITEM("number of item"),
+	
+	NUMBER_OF_ITEM_WANTED("number of item wanted"),
+	
+	NUMBER_OF_ITEM_LOCATION("number of item location"),
+	
 	AGENT_USELESS_FACT("agent useless fact");
 	
 	private String nameEnum;

@@ -7,7 +7,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import KCAAgent.KCAAgent;
 import agent.AbstractAgent;
 import agent.AgentID;
 

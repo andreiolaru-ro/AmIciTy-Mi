@@ -83,6 +83,52 @@ public class ViewerFactoryP2P
 						return P2PAgent.getNumberItem().doubleValue();
 					}
 				}.setTitle("Item owned");
+			case ITEM_LOCATION_GRAF:
+				return new AbstractGraphViewer<EnvironmentP2P,P2PAgent>(environment, null, Color.red){
+					@Override
+					public double getCellValue(P2PAgent cell)
+					{
+						return P2PAgent.getNumberItem().doubleValue();
+					}
+					
+					
+					@Override
+					public double stringScale()
+					{
+						return 100;
+					}
+
+
+					@Override
+					protected double calculateValue()
+					{
+						// TODO Auto-generated method stub
+						return P2PAgent.getNumberItemLocation().doubleValue();
+					}
+				}.setTitle("Item location");
+			case ITEM_WANTED_GRAF:
+				return new AbstractGraphViewer<EnvironmentP2P,P2PAgent>(environment, null, Color.red){
+					@Override
+					public double getCellValue(P2PAgent cell)
+					{
+						return P2PAgent.getNumberItem().doubleValue();
+					}
+					
+					
+					@Override
+					public double stringScale()
+					{
+						return 100;
+					}
+
+
+					@Override
+					protected double calculateValue()
+					{
+						// TODO Auto-generated method stub
+						return P2PAgent.getNumberItemWanted().doubleValue();
+					}
+				}.setTitle("Item wanted");
 				
 			case LOG_VIEWER:
 				return new LogViewer<EnvironmentP2P>(environment).setTitle("Event Log");
