@@ -2,7 +2,7 @@
 <scen:scenario seed="-56552949266271195"
 	xmlns:pr="http://www.example.org/parameterSchema" xmlns:scen="http://www.example.org/scenarioSchema"
 	xmlns:ma="http://www.example.org/mapSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:sel="http://www.example.org/selectionSchema"
+	xmlns:sel="http://www.example.org/selectionSchema" xmlns:mov="http://www.example.org/moveSchema"
 	xsi:schemaLocation="http://www.example.org/scenarioSchema ../schemas/agent/kcaSchema.xsd ">
 
 	<scen:map>
@@ -97,7 +97,7 @@
 
 		<scen:selection>
 			<sel:area>
-				<sel:function> sqrt(x^2+y^2) &lt; (14 + 2*t) </sel:function>
+				<sel:function> sqrt(x^2+y^2) &lt; (14-t) </sel:function>
 				<sel:centerCoordinates>
 					<sel:x>15</sel:x>
 					<sel:y>15</sel:y>
@@ -125,42 +125,91 @@
 			<sel:timeEnd>7</sel:timeEnd>
 		</scen:selection>
 
-		<!-- <scen:selection> -->
-		<!-- <sel:area> -->
-		<!-- <sel:centerCoordinates> -->
-		<!-- <sel:x>15</sel:x> -->
-		<!-- <sel:y>15</sel:y> -->
-		<!-- </sel:centerCoordinates> -->
-		<!-- <sel:firstAreaFunction> -->
-		<!-- <sel:function> sqrt(x^2+y^2) &lt; 8 </sel:function> -->
-		<!-- </sel:firstAreaFunction> -->
-		<!-- <sel:secondAreaFunction> -->
-		<!-- <sel:function> sqrt(x^2+y^2) &lt; 16 </sel:function> -->
-		<!-- </sel:secondAreaFunction> -->
-		<!-- <sel:inside>true</sel:inside> -->
-		<!-- </sel:area> -->
-		<!-- <sel:action>pause</sel:action> -->
-		<!-- <sel:timeStart>2</sel:timeStart> -->
-		<!-- </scen:selection> -->
+		<scen:selection>
+			<sel:area>
+				<sel:function> sqrt((x^2)/16+(y^2)/10) &lt; 3 </sel:function>
+				<sel:centerCoordinates>
+					<sel:x>20</sel:x>
+					<sel:y>20</sel:y>
+				</sel:centerCoordinates>
+				<sel:inside>true</sel:inside>
+			</sel:area>
+			<sel:action>pause</sel:action>
+			<sel:timeStart>10</sel:timeStart>
+			<sel:timeEnd>18</sel:timeEnd>
+		</scen:selection>
 
-		<!-- <scen:selection> -->
-		<!-- <sel:area> -->
-		<!-- <sel:centerCoordinates> -->
-		<!-- <sel:x>25</sel:x> -->
-		<!-- <sel:y>25</sel:y> -->
-		<!-- </sel:centerCoordinates> -->
-		<!-- <sel:firstAreaFunction> -->
-		<!-- <sel:function> sqrt(x^2+y^2) &lt; 8 </sel:function> -->
-		<!-- </sel:firstAreaFunction> -->
-		<!-- <sel:secondAreaFunction> -->
-		<!-- <sel:function> sqrt(x^2+y^2) &lt; 16 </sel:function> -->
-		<!-- </sel:secondAreaFunction> -->
-		<!-- <sel:inside>true</sel:inside> -->
-		<!-- </sel:area> -->
-		<!-- <sel:action>pause</sel:action> -->
-		<!-- <sel:timeStart>5</sel:timeStart> -->
-		<!-- <sel:timeEnd>13</sel:timeEnd> -->
-		<!-- </scen:selection> -->
+		<scen:selection>
+			<sel:area>
+				<sel:function> sqrt((x^2)/10+(y^2)/16) &lt; 2 </sel:function>
+				<sel:centerCoordinates>
+					<sel:x>15</sel:x>
+					<sel:y>15</sel:y>
+				</sel:centerCoordinates>
+				<sel:inside>true</sel:inside>
+			</sel:area>
+			<sel:action>pause</sel:action>
+			<sel:timeStart>6</sel:timeStart>
+			<sel:timeEnd>15</sel:timeEnd>
+		</scen:selection>
 
+
+		<scen:movement>
+			<!-- we should have just one inside function -->
+			<!-- movement is relative to the center of this function -->
+			<mov:area>
+				<sel:function> sqrt((x^2)+(y^2)) &lt; 4 </sel:function>
+				<sel:centerCoordinates>
+					<sel:x>5</sel:x>
+					<sel:y>5</sel:y>
+				</sel:centerCoordinates>
+				<sel:inside>true</sel:inside>
+			</mov:area>
+			<mov:moveFunctions>
+				<mov:x>
+					<mov:function>x+1</mov:function>
+				</mov:x>
+				<mov:y>
+					<mov:function>((x-5)*(x-5))/20</mov:function>
+					<mov:dependsOn>x</mov:dependsOn>
+				</mov:y>
+			</mov:moveFunctions>
+			<mov:numberLeap>4</mov:numberLeap>
+			<mov:timeStart>8</mov:timeStart>
+			<mov:timeEnd>17</mov:timeEnd>
+		</scen:movement>
+
+		<!-- <scen:movement> -->
+		<!-- <mov:area> -->
+		<!-- <sel:function> sqrt((x^2)+(y^2)) &lt; 6 </sel:function> -->
+		<!-- <sel:centerCoordinates> -->
+		<!-- <sel:x>30</sel:x> -->
+		<!-- <sel:y>0</sel:y> -->
+		<!-- </sel:centerCoordinates> -->
+		<!-- <sel:inside>true</sel:inside> -->
+		<!-- </mov:area> -->
+		<!-- <mov:area> -->
+		<!-- <sel:function> sqrt((x^2)+(y^2)) &lt; 3 </sel:function> -->
+		<!-- <sel:centerCoordinates> -->
+		<!-- <sel:x>30</sel:x> -->
+		<!-- <sel:y>0</sel:y> -->
+		<!-- </sel:centerCoordinates> -->
+		<!-- <sel:inside>false</sel:inside> -->
+		<!-- </mov:area> -->
+		<!-- <mov:moveFunctions> -->
+		<!-- <mov:x> -->
+		<!-- <mov:function>x-4</mov:function> -->
+		<!-- <mov:dependsOn></mov:dependsOn> -->
+		<!-- </mov:x> -->
+		<!-- <mov:y> -->
+		<!-- <mov:function>y+4</mov:function> -->
+		<!-- <mov:dependsOn></mov:dependsOn> -->
+		<!-- </mov:y> -->
+		<!-- </mov:moveFunctions> -->
+		<!-- <mov:numberLeap>3</mov:numberLeap> -->
+		<!-- <mov:timeStart>3</mov:timeStart> -->
+		<!-- <mov:timeEnd>15</mov:timeEnd> -->
+		<!-- </scen:movement> -->
+		
 	</scen:timeline>
 </scen:scenario>

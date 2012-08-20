@@ -5,9 +5,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
 
 import KCAAgent.CommandKCA;
 import KCAAgent.DataContent;
@@ -75,18 +72,34 @@ public class KCAScenario extends AbstractLocationScenario<KCAAgent, CommandKCA> 
 
 		/******************************** creation of pause events ********************************/
 		// need to have agents created before
-		pauseUnpauseEvents = parsePauseEvents() ;
+		pauseUnpauseEvents = parsePauseEvents();
 
-		for(Integer step : pauseUnpauseEvents.keySet()){
+		for (Integer step : pauseUnpauseEvents.keySet()) {
 			Map<AgentID, Boolean> inPause = pauseUnpauseEvents.get(step);
-			for(AgentID id : inPause.keySet()){
-				if(inPause.get(id).booleanValue())
-					commandset.add(new CommandKCA(Command.Action.PAUSE, agents.get(id), step));
-				else
-					commandset.add(new CommandKCA(Command.Action.UNPAUSE, agents.get(id), step));
+			for (AgentID id : inPause.keySet()) {
+				if (inPause.get(id).booleanValue()) {
+					commandset.add(new CommandKCA(Command.Action.PAUSE, agents.get(id), step
+							.intValue()));
+				} else {
+					commandset.add(new CommandKCA(Command.Action.UNPAUSE, agents.get(id), step
+							.intValue()));
+				}
 			}
 		}
+		
+		/******************************** movements implementation *********************************/
+		// need to have agents created before too
+		movingAgents = parseMoveEvents() ;
+		
+		for(Integer step : movingAgents.keySet()){
+			Map<AgentID, Location> locations = movingAgents.get(step);
+			for(AgentID id: locations.keySet()){
+				Location location = locations.get(id);
 
+				commandset.add(new CommandKCA(Command.Action.MOVE, agents.get(id), location, step.intValue()));
+			}
+		}
+		
 		/******************************** creation of inject events *******************************/
 
 		Map<String, ScenarioNode> parameters;
@@ -112,33 +125,35 @@ public class KCAScenario extends AbstractLocationScenario<KCAAgent, CommandKCA> 
 					datamap.put(dname, new DataContent(datamap.keySet().size()));
 
 				try {
-					commandset.add(new CommandKCA(Command.Action.INJECT, new Location(new Double(
-							Math.round(Double.parseDouble(value.get("location/x")))).doubleValue(),
-							new Double(Math.round(Double.parseDouble(value.get("location/y"))))
-					.doubleValue()), new Fact(null, datamap.get(dname), 0)
-					.setPressure(Float.parseFloat(value.get("pressure")))
-					.setPersistence(Float.parseFloat(value.get("persistence")))
-					.setSpecialty(
-							new Specialty(Double.parseDouble(value.get("domain/a")), Double
-									.parseDouble(value.get("domain/b")), Double
-									.parseDouble(value.get("domain/c")))), new Double(
-											Double.parseDouble(value.get("time"))).intValue()));
+					commandset.add(
+							new CommandKCA(
+									Command.Action.INJECT, 
+									new Location(
+											new Double(Math.round(Double.parseDouble(value.get("location/x")))).doubleValue(),
+											new Double(Math.round(Double.parseDouble(value.get("location/y")))).doubleValue()), 
+									new Fact(null, datamap.get(dname), 0)
+									.setPressure(Float.parseFloat(value.get("pressure")))
+									.setPersistence(Float.parseFloat(value.get("persistence")))
+									.setSpecialty(
+											new Specialty(
+													Double.parseDouble(value.get("domain/a")), 
+													Double.parseDouble(value.get("domain/b")), 
+													Double.parseDouble(value.get("domain/c")))), 
+													new Double(Double.parseDouble(value.get("time"))).intValue()));
 				} catch (NumberFormatException e) {
 					e.printStackTrace();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
-
 		}
 
-		
 		data = datamap.values().toArray(new DataContent[datamap.values().size()]);
 		commands = commandset.toArray(new CommandKCA[commandset.size()]);
 
 		// FIXME this is useless, generated data has consecutive ids
 		Arrays.sort(data, new DataContent.DataContentComparator());
-		
+
 	}
 
 	public DataContent[] getData() {

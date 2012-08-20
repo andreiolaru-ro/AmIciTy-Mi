@@ -6,7 +6,7 @@ public class Command
 	public static int iterator = 0 ;
 	
 	public static enum Action {
-		INJECT, REQUEST, SNAPSHOT, INJECT_ITEM_WANTED, INJECT_ITEM, PAUSE, UNPAUSE;
+		INJECT, REQUEST, SNAPSHOT, INJECT_ITEM_WANTED, INJECT_ITEM, PAUSE, UNPAUSE, MOVE;
 	}
 	
 	protected Command.Action action	= null;

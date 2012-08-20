@@ -44,16 +44,20 @@ public class AbstractScenario<T extends AbstractAgent, C extends Command> {
 
 	protected XMLTree				scenario;
 
-//	 protected SortedSet<Command> commandset = new TreeSet<Command>(new
-//	 Comparator<Command>() {
-//	 @Override
-//	 public int compare(Command c1, Command c2) {
-//	 if (c1.getTime() != c2.getTime()) {
-//	 return c1.getTime() - c2.getTime();
-//	 }
-//	 return c1.hashCode() - c2.hashCode();
-//	 }
-//	 });
+//	protected SortedSet<Command>	commandset		= new TreeSet<Command>(
+//															new Comparator<Command>() {
+//																@Override
+//																public int compare(Command c1,
+//																		Command c2) {
+//																	if (c1.getTime() != c2
+//																			.getTime()) {
+//																		return c1.getTime()
+//																				- c2.getTime();
+//																	}
+//																	return c1.hashCode()
+//																			- c2.hashCode();
+//																}
+//															});
 
 	
 	protected SortedSet<Command>	commandset		= new TreeSet<Command>(
@@ -77,7 +81,7 @@ public class AbstractScenario<T extends AbstractAgent, C extends Command> {
 	}
 
 	/**
-	 * Association between every nodes and theirs paths, relatively to a father
+	 * Association between each nodes and theirs paths, relatively to a father
 	 * node.
 	 * 
 	 * @param event

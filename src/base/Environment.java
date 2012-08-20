@@ -7,10 +7,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import logging.Logger;
+import KCAAgent.KCAAgent;
 import agent.AbstractAgent;
 import agent.AgentID;
-
-import logging.Logger;
 
 public abstract class Environment<SIMULATION extends Simulation<?, ?>, AGENT extends AbstractAgent> {
 	protected SIMULATION			parent;
@@ -25,7 +25,8 @@ public abstract class Environment<SIMULATION extends Simulation<?, ?>, AGENT ext
 	// FIXME shouldn't the cells be updating simultaneously?
 	public void step() throws Exception {
 		for (AGENT agent : agents.values()) {
-			agent.step();
+//			if(!agent.isPause())
+				agent.step();
 		}
 
 		doUpdate(); // update UI

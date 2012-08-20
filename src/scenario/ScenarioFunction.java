@@ -39,6 +39,4 @@ public class ScenarioFunction {
 		this.inside = inside;
 	}
 	
-	
-
 }

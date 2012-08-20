@@ -1,8 +1,8 @@
 package agent;
 
 
-import base.Message;
 import logging.Log;
+import base.Message;
 
 /**
  * 
@@ -15,10 +15,9 @@ public abstract class AbstractAgent implements Measurable
 	protected AgentID id; 
 	protected Log log;
 	/**
-	 * Number of times agent has been paused. For example, an agent could be paused in two different areas. 
-	 * When the first area is unpaused, agent is still in pause because the second area is not not yet unpaused.
+	 * Indicated if the agent is in pause in the scenario or not. 
 	 */
-	protected int  pause ;
+	protected boolean  pause ;
 	protected abstract void agentPrint();
 	public abstract void step() throws Exception;
 	protected abstract void sendMessage(AgentID to, Message<?> msg);
@@ -29,13 +28,14 @@ public abstract class AbstractAgent implements Measurable
 	public AbstractAgent(AgentID id) {
 		super();
 		this.id = id;
-		this.pause = 0 ;
+		this.pause = false ;
 	}
 	
 	public AgentID getId()
 	{
 		return id;
 	}
+	
 	@SuppressWarnings("hiding")
 	public void setId(AgentID id)
 	{
@@ -48,19 +48,15 @@ public abstract class AbstractAgent implements Measurable
 	}
 	
 	public boolean isPause() {
-		return (pause > 0) ;
+		return pause ;
 	}
 
 	public void unpause() {
-		this.pause--;
+		this.pause = false;
 	}
 	
 	public void pause() {
-		this.pause++ ;
-	}
-	
-	public void resetPause() {
-		this.pause = 0 ;
+		this.pause = true ;
 	}
 	
 }

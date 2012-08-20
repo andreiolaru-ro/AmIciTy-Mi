@@ -3,11 +3,11 @@
 	elementFormDefault="qualified" targetNamespace="http://www.example.org/functionSchema">
 
 	<complexType name="functionMove">
-		
+
 	</complexType>
 
 	<complexType name="functionArea">
-		
+
 	</complexType>
 
 
@@ -30,10 +30,7 @@
 			<element name="idAgent" type="nonNegativeInteger" />
 			<element name="functionArea" type="tns:functionArea"
 				minOccurs="0" />
-			<choice>
-				<element name="endCordinnates" type="tns:coordinates" />
-				<element name="endCordinnatesWithFunction" type="tns:functionAndCoordinates" />
-			</choice>
+			<element name="moveFunction" type="tns:functionAndCoordinates" />
 		</sequence>
 	</group>
 
@@ -41,10 +38,7 @@
 		<sequence>
 			<element name="startCoordinnates" type="tns:coordinates" />
 			<element name="functionArea" type="tns:functionArea" />
-			<choice>
-				<element name="endCordinnates" type="tns:coordinates" />
-				<element name="endCordinnatesWithFunction" type="tns:functionAndCoordinates" />
-			</choice>
+			<element name="moveFunction" type="tns:functionAndCoordinates" />
 		</sequence>
 	</group>
 
@@ -69,11 +63,6 @@
 
 	</complexType>
 
-	function move
-	cooordinate_end_middle_area_x
 
-	cooordinate_end_middle_area_x
-	cooordinate_end_middle_area_y
-	linear movement
 
 </schema>

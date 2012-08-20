@@ -37,6 +37,7 @@ import scenario.KCAScenario;
 import KCAAgent.Goal.GoalType;
 import KCAAgent.Logix.Domain;
 import agent.AgentID;
+import agent.LocationAgent;
 
 public class SimulationKCA extends Simulation<EnvironmentKCA, CommandKCA> {
 	/**
@@ -61,8 +62,8 @@ public class SimulationKCA extends Simulation<EnvironmentKCA, CommandKCA> {
 		}
 	}
 
-//	KCAScenario						scenario	= new KCAScenario("scenarios/kcaScenario.xml");
-	KCAScenario						scenario	= new KCAScenario("scenarios/kca_test3r.xml");
+	KCAScenario						scenario	= new KCAScenario("scenarios/kcaScenario.xml");
+	//	KCAScenario						scenario	= new KCAScenario("scenarios/kca_test3r.xml");
 
 	private DataContent[]			data		= scenario.getData();
 
@@ -89,9 +90,9 @@ public class SimulationKCA extends Simulation<EnvironmentKCA, CommandKCA> {
 		// WindowLayout layout = new WindowLayout(70, 0, 1600, 1000, 15, 1, 5,
 		// true, true); // larger (1680), windows 7
 		WindowLayout layout = new WindowLayout(70, 0, 1200, 800, 20, 1, 5, true, true); // large
-																						// (1280),
-																						// windows
-																						// 7
+		// (1280),
+		// windows
+		// 7
 		// WindowLayout layout = new WindowLayout(0, 0, 1000, 600, 60, 1, 5,
 		// true, true); // small (1024)
 
@@ -248,7 +249,10 @@ public class SimulationKCA extends Simulation<EnvironmentKCA, CommandKCA> {
 			log.le("injecting ~ at ~", command.getFact(), command.getLocation());
 			AgentID receiver = cm.inject(command.getLocation(), new MessageKCA<Collection<Fact>>(
 					null, MessageKCA.Type.INFORM, command.getFact().toCollection()));
-			log.le("received by ~", receiver);
+			if(receiver != null)
+				log.le("received by ~", receiver);
+			else
+				log.le("received by noone, every agents in pause");
 		} else if (command.getAction() == Command.Action.REQUEST) {
 			log.le("requesting ~ from ~", command.getFact(), command.getLocation());
 			cm.inject(command.getLocation(), new MessageKCA<Collection<Fact>>(null,
@@ -261,6 +265,9 @@ public class SimulationKCA extends Simulation<EnvironmentKCA, CommandKCA> {
 			command.getAgent().pause();
 		} else if (command.getAction() == Command.Action.UNPAUSE) {
 			command.getAgent().unpause();
+		} else if (command.getAction() == Command.Action.MOVE) {
+			LocationAgent agent = (LocationAgent) command.getAgent();
+			agent.setLocation(command.getLocation());
 		} 
 	}
 

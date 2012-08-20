@@ -25,6 +25,15 @@ public class Location implements Measure<Map<String, NumericMeasure>>{
 		coord.put("y", new NumericMeasure(y,MeasureName.LOCATION));
 	}
 	
+	public Location(Location lastLocation) {
+		// TODO Auto-generated constructor stub
+		this.x = lastLocation.getX();
+		this.y = lastLocation.getY();
+		coord= new HashMap<String,NumericMeasure>();
+		coord.put("x", new NumericMeasure(x,MeasureName.LOCATION));
+		coord.put("y", new NumericMeasure(y,MeasureName.LOCATION));
+	}
+
 	public double getDistance(Location loc) {
 		double dx = loc.x - x;
 		double dy = loc.y - y;
@@ -39,6 +48,18 @@ public class Location implements Measure<Map<String, NumericMeasure>>{
 		return y;
 	}
 	
+	public void setX(double x) {
+		coord.remove("x");
+		coord.put("x", new NumericMeasure(x,MeasureName.LOCATION));
+		this.x = x;
+	}
+
+	public void setY(double y) {
+		coord.remove("y");
+		coord.put("y", new NumericMeasure(y,MeasureName.LOCATION));
+		this.y = y;
+	}
+
 	@Override
 	public String toString()
 	{

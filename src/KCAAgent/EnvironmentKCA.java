@@ -67,18 +67,28 @@ public class EnvironmentKCA extends Environment<SimulationKCA, KCAAgent> {
 	}
 
 	public AgentID inject(Location location, Message<?> message) {
+		for (AgentID agent : agents.keySet()){
+			if(agents.get(agent).getLocation() == null){
+				System.out.println(agent);
+			}
+		}
+		
 		double dist = Double.POSITIVE_INFINITY;
 		AgentID id = null;
 		for (AgentID agent : agents.keySet()) {
+			if(agents.get(agent).getLocation() == null){
+				System.out.println(agent);
+			}
 			double d = agents.get(agent).getLocation().getDistance(location);
 			if (d < dist && !agents.get(agent).isPause()) {
-//			if (d < dist) {
 				dist = d;
 				id = agent;
 			}
 		}
-		assert agents.containsKey(id) : id;
-		agents.get(id).receiveMessage(message);
+		// the whole map could be in pause, id could be null
+		if(id != null)
+			agents.get(id).receiveMessage(message);
+		
 		return id;
 	}
 	

@@ -1,5 +1,6 @@
 package KCAAgent;
 
+import agent.AgentID;
 import agent.Location;
 import base.Command;
 import base.PauseCommand;
@@ -11,11 +12,9 @@ public class CommandKCA extends PauseCommand {
 
 	
 	
-	public CommandKCA(Action action, KCAAgent agent, int time) {
-		super(action, agent, time);
-	}
 
 
+	// inject fact
 	@SuppressWarnings("hiding")
 	public CommandKCA(Command.Action action, Location location, Fact fact, int time) {
 		super(action, null, time);
@@ -23,15 +22,27 @@ public class CommandKCA extends PauseCommand {
 		this.fact = fact;
 	}
 
-
 	@SuppressWarnings("hiding")
 	public CommandKCA(CommandKCA.Action action, Location location, Fact fact) {
 		this(action, location, fact, 0);
 	}
+	
+	// move
+	@SuppressWarnings("hiding")
+	public CommandKCA(Command.Action action, KCAAgent agent, Location location, int time) {
+		super(action, agent, time);
+		this.location = location;
+	}
+
+	// pause
+	public CommandKCA(Action action, KCAAgent agent, int time) {
+		super(action, agent, time);
+	}
+
 
 	@SuppressWarnings("hiding")
 	public CommandKCA(CommandKCA.Action action, int ms) {
-		this(action, null, null, ms);
+		super(action, null, ms);
 	}
 
 	@SuppressWarnings("hiding")

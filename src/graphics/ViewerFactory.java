@@ -327,11 +327,7 @@ public class ViewerFactory
 				@Override
 				public Color getColor(KCAAgent cell)
 				{
-					if(cell.isPause()){
-						cell.unpause();
-						return Color.red;
-					}
-					return Color.green ;
+					return cell.isPause() ? Color.red : Color.green ;
 				}
 			}.setTitle("Pause Grid");
 		case SPECIALTY_GRID:

@@ -17,7 +17,8 @@ public abstract class LocationAgent extends AbstractAgent {
 	}
 
 	public void setLocation(Location location) {
-		this.location = location;
+		this.location.setX(location.getX());
+		this.location.setY(location.getY());
 	} 
 
 	
