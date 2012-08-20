@@ -86,7 +86,6 @@ public class SimulationP2P extends Simulation<EnvironmentP2P, CommandP2P>
 		// layout.addMain(new WindowParameters(Type.AGENT_DETAILS, -1, -1, 0, 0));
 		
 		viewers = ViewerFactoryP2P.createViewers(environment, layout.toCollection());
-		environment.check();
 		init2();
 	}
 	
@@ -163,6 +162,13 @@ public class SimulationP2P extends Simulation<EnvironmentP2P, CommandP2P>
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
+			try
+			{
+				Thread.sleep(sw.getValue());
+			} catch(InterruptedException e)
+			{
+				e.printStackTrace();
+			}
 			if(oneStep)
 			{
 				oneStep = false;
@@ -170,7 +176,6 @@ public class SimulationP2P extends Simulation<EnvironmentP2P, CommandP2P>
 			}
 		}
 		active = false;
-		environment.check();
 	}
 
 
@@ -274,15 +279,15 @@ public class SimulationP2P extends Simulation<EnvironmentP2P, CommandP2P>
 		// TODO Auto-generated method stub
 		if(command.getAction() == CommandP2P.Action.INJECT_ITEM)
 		{
-			log.le("injecting ~ at ~", command.getItem());
+			log.le("injecting item owned ~", command.getItem().getItemID());
 			AgentID receiver = environment.injectItem(command.getAgentID(), command.getItem());
-			log.le("received by ~", receiver);
+			log.le("received by agent ~", receiver.name);
 		}
 		else if(command.getAction() == CommandP2P.Action.INJECT_ITEM_WANTED)
 		{
-			log.le("injecting ~ at ~", command.getItem());
+			log.le("injecting item wanted ~", command.getItem().getItemID());
 			AgentID receiver = environment.injectItemWanted(command.getAgentID(), command.getItem());
-			log.le("received by ~", receiver);
+			log.le("received by agent ~", receiver.name);
 		}
 	}
 }

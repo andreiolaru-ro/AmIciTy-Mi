@@ -14,7 +14,6 @@ import base.Environment;
 
 public class EnvironmentP2P extends Environment<SimulationP2P, P2PAgent>
 {
-	private SimulationP2P parent;
 	
 	public EnvironmentP2P(SimulationP2P parent, P2PScenario scenario)
 	{
@@ -52,14 +51,6 @@ public class EnvironmentP2P extends Environment<SimulationP2P, P2PAgent>
 			P2PAgent.setNumberItemWanted(new Integer(P2PAgent.getNumberItem().intValue()+1));
 		}
 		return agentID;
-	}
-	
-	public void check()
-	{
-		for(P2PAgent agent:agents.values())
-		{
-			System.out.println("id: "+agent.getId()+"contact: "+agent.getContacts()+"item: "+agent.getItems()+"itemwan: "+agent.getItemsWanted());
-		}
 	}
 
 	@Override

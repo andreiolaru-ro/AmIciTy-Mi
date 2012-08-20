@@ -9,7 +9,7 @@ import java.util.TreeSet;
 
 public class Logger implements LogListener
 {
-	private static final int		STEPS_SHOWN	= 5;
+	private static final int		STEPS_SHOWN	= 100;
 	
 	private SortedMap<Integer, SortedSet<LogEntry>>	entries		= new TreeMap<Integer, SortedSet<LogEntry>>();
 //	private SortedSet<LogEntry>			entries		= Collections.synchronizedSortedSet(new TreeSet<LogEntry>());
