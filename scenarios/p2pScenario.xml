@@ -5,24 +5,24 @@
 	xsi:schemaLocation="http://www.example.org/scenarioSchema ../schemas/agent/p2pSchema.xsd ">
 
 	<scen:agent>
-		<scen:numberAgents>30</scen:numberAgents>
+		<scen:numberAgents>5</scen:numberAgents>
 		<scen:numberContactsMin>1</scen:numberContactsMin>
-		<scen:numberContactsMax>5</scen:numberContactsMax>
+		<scen:numberContactsMax>2</scen:numberContactsMax>
 	</scen:agent>
 	<scen:timeline duration="100">
-		<scen:items number="50">
+		<scen:items number="10">
 			<!-- time 0 -->
 			<scen:possessed>
 				<scen:idAgent>
 					<pr:min>0</pr:min>
-					<pr:max>20</pr:max>
-					<pr:select>4</pr:select>
+					<pr:max>4</pr:max>
+					<pr:select>2</pr:select>
 					<pr:foreach>idItem</pr:foreach>
 				</scen:idAgent>
 				<scen:idItem>
 					<pr:min>0</pr:min>
-					<pr:max>49</pr:max>
-					<pr:select>20</pr:select>
+					<pr:max>9</pr:max>
+					<pr:select>4</pr:select>
 				</scen:idItem>
 				<scen:time>
 					<pr:value>0</pr:value>
@@ -32,14 +32,14 @@
 			<scen:wanted>
 				<scen:idAgent>
 					<pr:min>0</pr:min>
-					<pr:max>20</pr:max>
+					<pr:max>4</pr:max>
 					<pr:select>2</pr:select>
 					<pr:foreach>idItem</pr:foreach>
 				</scen:idAgent>
 				<scen:idItem>
 					<pr:min>0</pr:min>
-					<pr:max>49</pr:max>
-					<pr:select>30</pr:select>
+					<pr:max>9</pr:max>
+					<pr:select>5</pr:select>
 				</scen:idItem>
 				<scen:time>
 					<pr:value>0</pr:value>
@@ -50,37 +50,37 @@
 			<scen:wanted>
 				<scen:idAgent>
 					<pr:min>0</pr:min>
-					<pr:max>30</pr:max>
+					<pr:max>4</pr:max>
 					<pr:select>3</pr:select>
 					<pr:foreach>idItem</pr:foreach>
 				</scen:idAgent>
 				<scen:idItem>
 					<pr:min>0</pr:min>
-					<pr:max>30</pr:max>
+					<pr:max>8</pr:max>
 					<pr:select>3</pr:select>
 				</scen:idItem>
 				<scen:time>
 					<pr:min>1</pr:min>
-					<pr:max>30</pr:max>
+					<pr:max>99</pr:max>
 					<pr:select>2</pr:select>
 				</scen:time>
 			</scen:wanted>
 			<scen:possessed>
 				<scen:idAgent>
 					<pr:min>0</pr:min>
-					<pr:max>20</pr:max>
+					<pr:max>4</pr:max>
 					<pr:select>2</pr:select>
 					<pr:foreach>idItem</pr:foreach>
 				</scen:idAgent>
 				<scen:idItem>
 					<pr:min>0</pr:min>
-					<pr:max>30</pr:max>
+					<pr:max>9</pr:max>
 					<pr:select>2</pr:select>
 					<pr:foreach>time</pr:foreach>
 				</scen:idItem>
 				<scen:time>
 					<pr:min>1</pr:min>
-					<pr:max>30</pr:max>
+					<pr:max>99</pr:max>
 					<pr:select>2</pr:select>
 				</scen:time>
 			</scen:possessed>

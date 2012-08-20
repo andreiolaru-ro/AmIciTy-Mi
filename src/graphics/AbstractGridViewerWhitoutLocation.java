@@ -7,6 +7,7 @@ import java.awt.event.MouseListener;
 import java.util.HashMap;
 import java.util.Map;
 
+import P2PAgent.P2PAgent;
 import agent.AbstractAgent;
 import base.Environment;
 import agent.Location;
@@ -39,36 +40,43 @@ public abstract class AbstractGridViewerWhitoutLocation<ENVIRONMENT extends Envi
 		// TODO Auto-generated method stub
 		w = getWidth();
 		h = getHeight();
-		double dw = 0.7 * w / Math.sqrt(cm.getAgents().size());
-		double dh = 0.7 * h / Math.sqrt(cm.getAgents().size());
-		
 		g.setBackground(Color.white);
 		g.clearRect(0, 0, w, h);
-		int nbRow=0;
-		int nbCol=0;
-		int number=5;
-		for (AbstractAgent cell : cm.getAgents()) {
-			if((cell.getId().id.intValue())/number==1)
+		double nbRow=0;
+		double nbCol=0;
+		double number= (double)((int) Math.sqrt(cm.getAgents().size()));
+		int idAgent=0;
+		P2PAgent cell = null;
+		while(idAgent<cm.getAgents().size()) {
+			cell = (P2PAgent) cm.getAgent(idAgent);
+			if((cell.getId().id.doubleValue()/number)==1)
 			{
 				nbRow++;
 				nbCol=0;
-				number=number+5;
+				number=number+(int) Math.sqrt(cm.getAgents().size());
 			}
-				double x = (nbRow - cm.x) * w / cm.width;
-				double y = (nbCol - cm.y) * h / cm.height;
+			double x = (nbRow - cm.x) * w / cm.width;
+			double y = (nbCol - cm.y) * h / cm.height;
 				//System.out.println(x+" "+y);
-				nbCol++;
-				LocationOnTheGrid.put(cell, new Location(nbRow, nbCol));
+			LocationOnTheGrid.put(cell, new Location(nbRow, nbCol));
+			nbCol++;
+			idAgent++;
 			Color color = getColor(cell);
 			g.setColor(color);
-			g.fillRect((int)x, (int)y, (int)dw, (int)dh);
+			//g.fillRect((int)x, (int)y, (int)dw, (int)dh);
 //			g.fill(new Rectangle2D.Double(x, y, dw, dh));
 //			g.fill(new Ellipse2D.Double(x, y, dw, dh));
 			if (cell.isSelected()) {
-				g.setColor(new Color(255 - color.getRed(), 255 - color.getGreen(), 255 - color.getBlue()));
+				g.setColor(Color.RED);
 //				g.fill(new Ellipse2D.Double(x, y, 2, 2));
 				g.fillRect((int)x, (int)y, 2, 2);
 //				g.fill(new Rectangle2D.Double(x, y, 2, 2));
+			}
+			else
+			{
+				g.setColor(Color.BLACK);
+//				g.fill(new Ellipse2D.Double(x, y, 2, 2));
+				g.fillRect((int)x, (int)y, 2, 2);
 			}
 		}
 	}

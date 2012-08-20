@@ -58,9 +58,11 @@ public class EnvironmentP2P extends Environment<SimulationP2P, P2PAgent>
 	{
 		// TODO Auto-generated method stub
 		Location loc = new Location(x, y);
+		System.out.println("début: " +loc.toString());
 		P2PAgent res = null;
 		double minDist = Double.POSITIVE_INFINITY;
 		for (P2PAgent cell : agents.values()) {
+			
 			double dist = loc.getDistance(AbstractGridViewerWhitoutLocation.getLocationOnTheGrid().get(cell));
 			if (dist < minDist) {
 				minDist = dist;

@@ -72,7 +72,7 @@ public class ViewerFactoryP2P
 					@Override
 					public double stringScale()
 					{
-						return 100;
+						return 1;
 					}
 
 
@@ -95,7 +95,7 @@ public class ViewerFactoryP2P
 					@Override
 					public double stringScale()
 					{
-						return 100;
+						return 1;
 					}
 
 
@@ -118,7 +118,7 @@ public class ViewerFactoryP2P
 					@Override
 					public double stringScale()
 					{
-						return 100;
+						return 1;
 					}
 
 

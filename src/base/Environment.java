@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import P2PAgent.P2PAgent;
 import agent.AbstractAgent;
 import agent.AgentID;
 
@@ -82,6 +83,10 @@ public abstract class Environment<SIMULATION extends Simulation<?,?>, AGENT exte
 
 	public Collection<AGENT> getAgents() {
 		return agents.values();
+	}
+	
+	public AGENT getAgent(int idAgent){
+		return agents.get(new AgentID(new Integer(idAgent)));
 	}
 	
 	public static int getSequence() {
