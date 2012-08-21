@@ -27,6 +27,7 @@ public abstract class AbstractAgent implements Measurable
 	public AbstractAgent(AgentID id) {
 		super();
 		this.id = id;
+		this.log = new Log(this);
 	}
 	
 	public AgentID getId()

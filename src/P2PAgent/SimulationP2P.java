@@ -72,9 +72,9 @@ public class SimulationP2P extends Simulation<EnvironmentP2P, CommandP2P>
 	{
 		commands = scenario.getCommands();
 		init1();
-		WindowLayout layout = new WindowLayout(0, 0, 1000, 600, 60, 1, 5, true, true); 
+		WindowLayout layout = new WindowLayout(0, 0, 1280, 1000, 15, 1, 5, true, true);
 		Row row = null;
-		row = layout.addRow(Type.DOMAIN_INTEREST_GRID, 4);
+		row = layout.addRow(Type.ITEM_GRAF, 4);
 		
 		row.add(new WindowParameters(Type.AGENT_SELECTION_GRID));
 		row.add(new WindowParameters(Type.ITEM_GRAF));

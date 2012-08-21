@@ -70,7 +70,6 @@ public class P2PAgent extends AbstractAgent {
 				MeasureName.PROBABILITY));
 		this.waitingMessage = new ArrayList<MessageP2P<?>>();
 		this.parent = parent;
-		this.log = new Log(this);
 		this.selected=false;
 
 		if (directory == null) {
