@@ -14,9 +14,11 @@ import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
@@ -280,27 +282,27 @@ public class XMLParser extends DefaultHandler
 	@SuppressWarnings({ "static-method", "unused" })
 	protected void save(File file)
 	{
-		// DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		// DocumentBuilder builder = null;
-		// try
-		// {
-		// builder = factory.newDocumentBuilder();
-		// } catch(ParserConfigurationException e)
-		// {
-		// e.printStackTrace();
-		// }
-		// Document doc = null;
-		// try
-		// {
-		// doc = builder.parse(new File(fileName));
-		// } catch(SAXException e)
-		// {
-		// e.printStackTrace();
-		// } catch(IOException e)
-		// {
-		// e.printStackTrace();
-		// }
-		//		
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder = null;
+		try
+		{
+			builder = factory.newDocumentBuilder();
+		} catch(ParserConfigurationException e)
+		{
+			e.printStackTrace();
+		}
+		Document doc = null;
+		try
+		{
+			doc = builder.parse(new File(fileName));
+		} catch(SAXException e)
+		{
+			e.printStackTrace();
+		} catch(IOException e)
+		{
+			e.printStackTrace();
+		}
+
 		Transformer transformer = null;
 		try
 		{
@@ -316,16 +318,15 @@ public class XMLParser extends DefaultHandler
 		}
 
 		// initialize StreamResult with File object to save to file
-		// StreamResult result = new StreamResult(file);
-		// DOMSource source = new DOMSource(doc);
-		// try
-		// {
-		// transformer.transform(source, result);
-		// } catch(TransformerException e)
-		// {
-		// e.printStackTrace();
-		// }
-
+		StreamResult result = new StreamResult(file);
+		DOMSource source = new DOMSource(doc);
+		try
+		{
+			transformer.transform(source, result);
+		} catch(TransformerException e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	public void close()

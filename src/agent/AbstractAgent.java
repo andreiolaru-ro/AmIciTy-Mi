@@ -15,7 +15,7 @@ public abstract class AbstractAgent implements Measurable
 	protected AgentID id; 
 	protected Log log;
 	/**
-	 * Indicated if the agent is in pause in the scenario or not. 
+	 * Indicated if the agent is in pause in the simulation or not. 
 	 */
 	protected boolean  pause ;
 	protected abstract void agentPrint();
@@ -29,6 +29,7 @@ public abstract class AbstractAgent implements Measurable
 		super();
 		this.id = id;
 		this.pause = false ;
+		this.log = new Log(null);
 	}
 	
 	public AgentID getId()

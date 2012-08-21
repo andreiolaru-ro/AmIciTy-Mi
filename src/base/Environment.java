@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 import logging.Logger;
-import KCAAgent.KCAAgent;
 import agent.AbstractAgent;
 import agent.AgentID;
 
@@ -37,12 +36,12 @@ public abstract class Environment<SIMULATION extends Simulation<?, ?>, AGENT ext
 
 	public void addSelected(AbstractAgent agent) {
 		selected.add(agent);
-		// logger.addLog(agent.getLog());
+		 logger.addLog(agent.getLog());
 	}
 
 	public void removeSelected(AbstractAgent agent) {
 		selected.remove(agent);
-		// logger.removeLog(agent.getLog());
+		 logger.removeLog(agent.getLog());
 	}
 
 	public List<AbstractAgent> getSelected() {

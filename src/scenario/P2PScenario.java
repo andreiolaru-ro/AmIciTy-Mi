@@ -128,8 +128,4 @@ public class P2PScenario extends AbstractScenario<P2PAgent, CommandP2P> {
 		return contacts;
 	}
 
-	public static void main(String[] args) {
-		P2PScenario p2pScenario = new P2PScenario("scenarios/p2pScenario.xml");
-	}
-
 }

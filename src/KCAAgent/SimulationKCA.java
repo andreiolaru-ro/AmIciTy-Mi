@@ -61,16 +61,17 @@ public class SimulationKCA extends Simulation<EnvironmentKCA, CommandKCA> {
 			setText("   step " + Environment.getStep() + "   ");
 		}
 	}
+//	static String					scenarioName	= "scenarios/kca_test3r.xml";
+	static String					scenarioName	= "scenarios/kcaScenario.xml";
+	KCAScenario						scenario		= new KCAScenario(scenarioName);
 
-	KCAScenario						scenario	= new KCAScenario("scenarios/kcaScenario.xml");
-	//	KCAScenario						scenario	= new KCAScenario("scenarios/kca_test3r.xml");
+	private DataContent[]			data			= scenario.getData();
 
-	private DataContent[]			data		= scenario.getData();
+	private static StepNumber		sn				= new StepNumber();
+	private static JSlider			sw				= new JSlider(SwingConstants.HORIZONTAL, 0,
+															200, 0);
 
-	private static StepNumber		sn			= new StepNumber();
-	private static JSlider			sw			= new JSlider(SwingConstants.HORIZONTAL, 0, 200, 0);
-
-	private ControllableView[]		viewers		= null;
+	private ControllableView[]		viewers			= null;
 
 	private static SimulationKCA	kca;
 
@@ -177,16 +178,15 @@ public class SimulationKCA extends Simulation<EnvironmentKCA, CommandKCA> {
 			}
 		});
 		box.add(step);
-		// JButton reset = new JButton("Reset !");
-		// reset.addActionListener(new ActionListener() {
-		// @Override
-		// public void actionPerformed(ActionEvent e)
-		// {
-		// init1();
-		// init2();
-		// }
-		// });
-		// box.add(reset);
+		JButton reset = new JButton("Reset !");
+		reset.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				init1();
+				init2();
+			}
+		});
+		box.add(reset);
 
 		box.add(sn);
 
@@ -249,7 +249,7 @@ public class SimulationKCA extends Simulation<EnvironmentKCA, CommandKCA> {
 			log.le("injecting ~ at ~", command.getFact(), command.getLocation());
 			AgentID receiver = cm.inject(command.getLocation(), new MessageKCA<Collection<Fact>>(
 					null, MessageKCA.Type.INFORM, command.getFact().toCollection()));
-			if(receiver != null)
+			if (receiver != null)
 				log.le("received by ~", receiver);
 			else
 				log.le("received by noone, every agents in pause");
@@ -262,13 +262,17 @@ public class SimulationKCA extends Simulation<EnvironmentKCA, CommandKCA> {
 			// + ".txt", command.fact.getData().getId());
 			// log.li("Snapshot on ~", command.fact.getData().getId());
 		} else if (command.getAction() == Command.Action.PAUSE) {
+			if(!command.getAgent().isPause())
+				log.le("agents ~ paused ", command.getAgent().getId().getId() );
 			command.getAgent().pause();
 		} else if (command.getAction() == Command.Action.UNPAUSE) {
+			if(command.getAgent().isPause())
+				log.le("agents ~ unpaused ", command.getAgent().getId().getId() );
 			command.getAgent().unpause();
 		} else if (command.getAction() == Command.Action.MOVE) {
 			LocationAgent agent = (LocationAgent) command.getAgent();
 			agent.setLocation(command.getLocation());
-		} 
+		}
 	}
 
 	void doSnapshot(String name) {

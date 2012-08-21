@@ -122,7 +122,6 @@ public class KCAAgent extends LocationAgent {
 		this.measures = new Measures(id);
 
 		this.parent = parent;
-		this.log = new Log(this);
 
 		// definition of all the measures of the agent
 		this.location = (Location) this.measures.createMeasure(loc);

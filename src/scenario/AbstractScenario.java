@@ -296,7 +296,7 @@ public class AbstractScenario<T extends AbstractAgent, C extends Command> {
 	}
 
 	/* need to FIX */
-	public void save(File file) {
+	public void save(File file ) {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(fileName));
 			String line = br.readLine();

@@ -95,7 +95,6 @@ public class KCAScenario extends AbstractLocationScenario<KCAAgent, CommandKCA> 
 			Map<AgentID, Location> locations = movingAgents.get(step);
 			for(AgentID id: locations.keySet()){
 				Location location = locations.get(id);
-
 				commandset.add(new CommandKCA(Command.Action.MOVE, agents.get(id), location, step.intValue()));
 			}
 		}
