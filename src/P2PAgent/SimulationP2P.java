@@ -36,7 +36,7 @@ public class SimulationP2P extends Simulation<EnvironmentP2P, CommandP2P>
 	 */
 	private static final long	serialVersionUID	= 1L;
 	private static SimulationP2P p2p;
-	P2PScenario scenario = new P2PScenario("scenarios/p2pScenarioNormal.xml");
+	P2PScenario scenario = new P2PScenario("scenarios/p2pScenario.xml");
 	
 	private ControllableView<EnvironmentP2P>[]		viewers		= null;
 	private static StepNumber		sn			= new StepNumber();

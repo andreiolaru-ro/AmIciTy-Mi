@@ -92,10 +92,10 @@ public class P2PAgent extends AbstractAgent {
 	protected void agentPrint() {
 		// TODO Auto-generated method
 		StringBuffer statPrint = new StringBuffer();
-		statPrint.append("\" agent ").append(this.id);
+		statPrint.append("\" =========================agent ").append(this.id);
 		statPrint.append(" has ").append(this.items.size()).append(" items");
-		statPrint.append(" and it knows ").append(this.itemsLocation.size()).append("items");
-		statPrint.append(" and it wants ").append(this.itemsWanted.size()).append("items");
+		statPrint.append(" and it knows ").append(this.itemsLocation.size()).append(" items");
+		statPrint.append(" and it wants ").append(this.itemsWanted.size()).append(" items==================================");
 
 		log.li("~", statPrint);
 	}
@@ -153,6 +153,7 @@ public class P2PAgent extends AbstractAgent {
 	 * @param msg
 	 */
 	public void receiveMessage(Message<?> msg) {
+		agentPrint();
 		MessageP2P<?> msgP2P = (MessageP2P<?>) msg;
 		Set<Integer> idItem = new HashSet<Integer>();
 		if(msgP2P.getType() != Type.SEND_LOCATION)
@@ -199,11 +200,29 @@ public class P2PAgent extends AbstractAgent {
 		// we send our requests to our contacts about the items that our agent
 		// wants
 		if (!this.itemsWanted.isEmpty()) {
-			for (AgentID contact : this.contacts) {
-				// System.out.println(this.id+" veut "+ this.itemsWanted);
-				this.sendMessage(contact, new MessageP2P<Set<Item>>(this.id, Type.REQUEST_ITEM, this.itemsWanted));
+			Set<Item> itemLocationAsk = new HashSet<Item>();
+			for(Item wantedItem : this.itemsWanted)
+			{
+				if(this.itemsLocation.containsKey(wantedItem))
+				{
+					Iterator<AgentID> iteratorItemLocation = this.itemsLocation.get(wantedItem).iterator();
+					//with iteratorItemLocation.next we take a contact from the list
+					this.sendMessage(iteratorItemLocation.next(), new MessageP2P<Item>(this.id, Type.REQUEST_ITEM, wantedItem));
+				}
+				else
+				{
+					itemLocationAsk.add(wantedItem);
+				}
 			}
+			for (AgentID contact : this.contacts) {
+
+				this.sendMessage(contact, new MessageP2P<Set<Item>>(this.id, Type.ASK_LOCATION, itemLocationAsk));
+			}
+			
+			
 		}
+		
+		agentPrint();
 	}
 
 	/**
@@ -277,7 +296,7 @@ public class P2PAgent extends AbstractAgent {
 					AgentID possessor = possessors.next();// we take the last
 															// agent of the list
 					// System.out.println("possesseur"+possessor);
-					if (!locationOfItemsRequested.containsKey(possessor) && (possessor != p2pAgent)) {
+					if (!locationOfItemsRequested.containsKey(possessor)) {
 						Set<Item> itemPossessed = new HashSet<Item>();
 						locationOfItemsRequested.put(possessor, itemPossessed);
 					}
@@ -396,6 +415,25 @@ public class P2PAgent extends AbstractAgent {
 	
 					// ask for the location of an item
 					case ASK_LOCATION:
+						Iterator<Item> iteratorItemAskLocation =( (Set<Item>) msg.getContents()).iterator();
+						Set<Item> owned = new HashSet<Item>();
+						Item itemAskLocation = null;
+						while(iteratorItemAskLocation.hasNext())
+						{
+							itemAskLocation=iteratorItemAskLocation.next();
+							if(this.items.contains(itemAskLocation))
+							{
+								owned.add(itemAskLocation);
+								( (Set<Item>) msg.getContents()).remove(itemAskLocation);
+							}
+						}
+						System.out.println("test");
+						if(!owned.isEmpty())
+						{
+							Map<AgentID, Set<Item>> ownedItems= new HashMap<AgentID, Set<Item>>();
+							ownedItems.put(this.id,owned);
+							this.sendMessage(msg.getFrom(),  new MessageP2P<Map<AgentID, Set<Item>>>(this.id, Type.SEND_LOCATION, ownedItems));
+						}
 						if (!this.pendingQueries.containsKey(msg.getFrom())) {
 							Set<Item> itemsLocRequested = new HashSet<Item>();
 							this.pendingQueries.put(msg.getFrom(), itemsLocRequested);
