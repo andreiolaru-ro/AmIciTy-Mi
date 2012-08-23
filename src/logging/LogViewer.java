@@ -4,15 +4,14 @@ import graphics.AbstractViewer;
 
 import java.awt.TextArea;
 
+import base.Environment;
 
-import KCAAgent.EnvironmentKCA;
 
-public class LogViewer extends AbstractViewer {
+public class LogViewer<ENVIRONMENT extends Environment<?,?>> extends AbstractViewer<ENVIRONMENT> {
 	Logger logger;
 	TextArea text;
-	
-	@SuppressWarnings("hiding")
-	public LogViewer(EnvironmentKCA cm) {
+
+	public LogViewer(ENVIRONMENT cm) {
 		super(cm, null);
 		this.logger = cm.getLogger();
 		text = new TextArea();

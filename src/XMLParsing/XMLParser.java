@@ -2,6 +2,7 @@ package XMLParsing;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Vector;
 
 import javax.xml.XMLConstants;
@@ -55,8 +56,6 @@ public class XMLParser extends DefaultHandler
 	 *            The files containing the schemas for the XML file.
 	 * @param file
 	 *            The file to parse.
-	 * @param cm 
-	 *            Environment to get the logger
 	 * 
 	 * @return The {@link XMLTree} containing the information in the XML file.
 	 */
@@ -75,8 +74,6 @@ public class XMLParser extends DefaultHandler
 	 *            The files containing the schemas for the XML file.
 	 * @param file
 	 *            The file to parse.
-	 * @param cm 
-	 *            Environment to get the logger
 	 * @return The {@link XMLTree} containing the information in the XML file.
 	 */
 	public static XMLTree validateParse(String schemas[], String file)
@@ -201,9 +198,9 @@ public class XMLParser extends DefaultHandler
 	@Override
 	public void startElement(String ns, String localName, String qName, Attributes att) throws SAXException
 	{
-//		String attr = "";
-//		for(int i = 0; i < att.getLength(); i++)
-//			attr += "[" + att.getQName(i) + " " + att.getValue(i) + "]";
+		//		String attr = "";
+		//		for(int i = 0; i < att.getLength(); i++)
+		//			attr += "[" + att.getQName(i) + " " + att.getValue(i) + "]";
 		//		log.trace("> " + ns + " | " + localName + " | " + qName + " | " + attr);
 
 		XMLNode node = new XMLNode(qName);
@@ -233,32 +230,32 @@ public class XMLParser extends DefaultHandler
 	{
 		String value = (new String(ch, start, length)).trim();
 		//		log.trace("value: [" + value + "]");
-		
+
 		if(!value.equals("")){
 
 			try
 			{
 				double dvalue= Double.parseDouble(value) ;
-//				double dvalueRound = new Double(Math.round(dvalue)).doubleValue() ;
+				//				double dvalueRound = new Double(Math.round(dvalue)).doubleValue() ;
 
-//				if(dvalue != dvalueRound)
-//				{
-					thetree.currentNode().setValue(dvalue);
-//				}
-//				else{
-//					thetree.currentNode().setValue(new Long(Math.round(dvalue)).intValue());
-//				}
+				//				if(dvalue != dvalueRound)
+				//				{
+				thetree.currentNode().setValue(dvalue);
+				//				}
+				//				else{
+				//					thetree.currentNode().setValue(new Long(Math.round(dvalue)).intValue());
+				//				}
 			}
 			catch(NumberFormatException ex)
 			{
-//				try
-//				{
-//					int nvalue = Integer.parseInt(value);
-//					thetree.currentNode().setValue(nvalue);
-//				} catch(NumberFormatException ex2)
-//				{
-					thetree.currentNode().setValue(value);
-//				}
+				//				try
+				//				{
+				//					int nvalue = Integer.parseInt(value);
+				//					thetree.currentNode().setValue(nvalue);
+				//				} catch(NumberFormatException ex2)
+				//				{
+				thetree.currentNode().setValue(value);
+				//				}
 			}
 		}
 
@@ -279,51 +276,54 @@ public class XMLParser extends DefaultHandler
 		//		log.trace("enddoc");
 	}
 
-	@SuppressWarnings({ "static-method", "unused" })
-	protected void save(File file)
+	@SuppressWarnings({ "static-method" })
+	protected void save(String filename, InputStream input)
 	{
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder = null;
+		File file = new File(filename);
+		
 		try
 		{
 			builder = factory.newDocumentBuilder();
+
+			Document doc = null;
+			try
+			{
+				doc = builder.parse(input);
+			} catch(SAXException e)
+			{
+				e.printStackTrace();
+			} catch(IOException e)
+			{
+				e.printStackTrace();
+			}
+
+			Transformer transformer = null;
+			try
+			{
+				transformer = TransformerFactory.newInstance().newTransformer();
+				transformer.setOutputProperty(OutputKeys.METHOD, "text");
+				transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+
+				// initialize StreamResult with File object to save to file
+				StreamResult result = new StreamResult(file);
+				DOMSource source = new DOMSource(doc);
+				try
+				{
+					transformer.transform(source, result);
+				} catch(TransformerException e)
+				{
+					e.printStackTrace();
+				}
+			} catch(TransformerConfigurationException e)
+			{
+				e.printStackTrace();
+			} catch(TransformerFactoryConfigurationError e)
+			{
+				e.printStackTrace();
+			}
 		} catch(ParserConfigurationException e)
-		{
-			e.printStackTrace();
-		}
-		Document doc = null;
-		try
-		{
-			doc = builder.parse(new File(fileName));
-		} catch(SAXException e)
-		{
-			e.printStackTrace();
-		} catch(IOException e)
-		{
-			e.printStackTrace();
-		}
-
-		Transformer transformer = null;
-		try
-		{
-			transformer = TransformerFactory.newInstance().newTransformer();
-			transformer.setOutputProperty(OutputKeys.METHOD, "text");
-			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-		} catch(TransformerConfigurationException e)
-		{
-			e.printStackTrace();
-		} catch(TransformerFactoryConfigurationError e)
-		{
-			e.printStackTrace();
-		}
-
-		// initialize StreamResult with File object to save to file
-		StreamResult result = new StreamResult(file);
-		DOMSource source = new DOMSource(doc);
-		try
-		{
-			transformer.transform(source, result);
-		} catch(TransformerException e)
 		{
 			e.printStackTrace();
 		}

@@ -50,7 +50,14 @@ public class P2PAgent extends AbstractAgent {
 	private static HashMap<AgentID, P2PAgent>	directory;
 	/** Environment where our agent evolve */
 	private EnvironmentP2P						parent;
-
+	/**its a graphical variable to know if an agent is selected*/
+	private boolean selected;
+	/**graphical variable to know the global number of items */
+	private static Integer numberItem;
+	private static Integer numberItemWanted;
+	private static Integer numberItemLocation;
+	
+	
 	public P2PAgent(EnvironmentP2P parent, AgentID id) {
 		super(id);
 		this.items = new HashSet<Item>();
@@ -63,13 +70,21 @@ public class P2PAgent extends AbstractAgent {
 				MeasureName.PROBABILITY));
 		this.waitingMessage = new ArrayList<MessageP2P<?>>();
 		this.parent = parent;
-//		this.log = new Log(this);
+		this.selected=false;
 
 		if (directory == null) {
 			directory = new HashMap<AgentID, P2PAgent>();
 		}
 		P2PAgent.directory.put(this.id, this);
-
+		
+		if(numberItem == null)
+			numberItem = new Integer(0);
+		
+		if(numberItemWanted == null)
+			numberItemWanted = new Integer(0);
+		
+		if(numberItemLocation == null)
+			numberItemLocation = new Integer(0);
 	}
 
 	/** function to print some basic things about an agent */
@@ -105,9 +120,29 @@ public class P2PAgent extends AbstractAgent {
 	 * @param msg
 	 */
 	protected void sendMessage(AgentID to, Message<?> msg) {
+		MessageP2P<?> msgP2P = (MessageP2P<?>) msg;
 		if ((P2PAgent.directory.containsKey(to)) && (to != msg.getFrom())) {
 			P2PAgent.getAgentById(to).receiveMessage(msg);
-			log.lf("sending to ~ :", to, msg);
+			Set<Integer> idItem = new HashSet<Integer>();
+			if(msgP2P.getType() != Type.SEND_LOCATION)
+			{
+				for(Item item : (Set<Item>) msg.getContents())
+				{
+					idItem.add(new Integer(item.getItemID()));
+				}
+			}
+			else
+			{
+
+				for(Entry<AgentID, Set<Item>> itemsLocation : ((Map<AgentID, Set<Item>>) msg.getContents()).entrySet())
+				{
+					for(Item item : itemsLocation.getValue())
+					{
+						idItem.add(new Integer(item.getItemID()));
+					}
+				}
+			}
+			log.lf("sending "+msgP2P.getType()+ " for the items "+idItem.toString()+" to the agent ~ :", to.getId());
 		}
 
 	}
@@ -118,9 +153,31 @@ public class P2PAgent extends AbstractAgent {
 	 * @param msg
 	 */
 	public void receiveMessage(Message<?> msg) {
-		log.lf("received ~", msg);
+		MessageP2P<?> msgP2P = (MessageP2P<?>) msg;
+		Set<Integer> idItem = new HashSet<Integer>();
+		if(msgP2P.getType() != Type.SEND_LOCATION)
+		{
+			for(Item item : (Set<Item>) msg.getContents())
+			{
+				idItem.add(new Integer(item.getItemID()));
+			}
+		}
+		else
+		{
+
+			for(Entry<AgentID, Set<Item>> itemsLocation : ((Map<AgentID, Set<Item>>) msg.getContents()).entrySet())
+			{
+				for(Item item : itemsLocation.getValue())
+				{
+					idItem.add(new Integer(item.getItemID()));
+				}
+			}
+		}
+		log.lf("received "+msgP2P.getType()+ " for the items "+idItem.toString()+" from the agent ~", msg.getFrom().getId());
+		
+
 		this.waitingMessage.add((MessageP2P<?>) msg);
-		System.out.println(this.id + " reçois " + msg);
+		//System.out.println(this.id + " reÁois " + msg);
 	}
 
 	/**
@@ -144,8 +201,7 @@ public class P2PAgent extends AbstractAgent {
 		if (!this.itemsWanted.isEmpty()) {
 			for (AgentID contact : this.contacts) {
 				// System.out.println(this.id+" veut "+ this.itemsWanted);
-				this.sendMessage(contact, new MessageP2P<Set<Item>>(this.id, Type.REQUEST_ITEM,
-						this.itemsWanted));
+				this.sendMessage(contact, new MessageP2P<Set<Item>>(this.id, Type.REQUEST_ITEM, this.itemsWanted));
 			}
 		}
 	}
@@ -280,70 +336,75 @@ public class P2PAgent extends AbstractAgent {
 		if (!waitingMessage.isEmpty()) {
 			for (MessageP2P<?> msg : waitingMessage) {
 				switch (msg.getType()) {
-				// An other agent asks our agent if he has these items
-				case REQUEST_ITEM:
-					// System.out.println("pour"+this.id+"requete de "+msg.getFrom()+""+msg.getContents());
-					Set<Item> queriesItems = null;
-					if (this.pendingQueries.containsKey(msg.getFrom())) {
-						queriesItems = this.pendingQueries.get(msg.getFrom());
-					} else {
-						queriesItems = new HashSet<Item>();
-					}
-					queriesItems.addAll((Set<Item>) msg.getContents());
-					this.pendingQueries.put(msg.getFrom(), queriesItems);
+					// An other agent asks our agent if he has these items
+					case REQUEST_ITEM:
+						// System.out.println("pour"+this.id+"requete de "+msg.getFrom()+""+msg.getContents());
+						Set<Item> queriesItems = null;
+						if (this.pendingQueries.containsKey(msg.getFrom())) {
+							queriesItems = this.pendingQueries.get(msg.getFrom());
+						} else {
+							queriesItems = new HashSet<Item>();
+						}
+						queriesItems.addAll((Set<Item>) msg.getContents());
+						this.pendingQueries.put(msg.getFrom(), queriesItems);
 					break;
-
-				// an other agent informs our agent where to find some items
-				// that he wants
-				case SEND_LOCATION:
-					Map<AgentID, Set<Item>> responseToOurRequests = (Map<AgentID, Set<Item>>) msg
-							.getContents();
-
-					for (Entry<AgentID, Set<Item>> information : responseToOurRequests.entrySet()) {
-						Set<Item> itemsForUs = new HashSet<Item>();
-						for (Item itemCheck : information.getValue()) {
-							if (this.itemsWanted.contains(itemCheck)) {
-								itemsForUs.add(itemCheck);
+	
+					// an other agent informs our agent where to find some items
+					// that he wants
+					case SEND_LOCATION:
+						Map<AgentID, Set<Item>> responseToOurRequests = (Map<AgentID, Set<Item>>) msg
+								.getContents();
+	
+						for (Entry<AgentID, Set<Item>> information : responseToOurRequests.entrySet()) {
+							Set<Item> itemsForUs = new HashSet<Item>();
+							for (Item itemCheck : information.getValue()) {
+								//if we needed this item, we will send a request
+								if (this.itemsWanted.contains(itemCheck)) {
+									itemsForUs.add(itemCheck);
+								}
+								
+								//else if we look if we already possessed his location
+								else if (this.itemsLocation.containsKey(itemCheck)) {
+									this.itemsLocation.get(itemCheck).add(information.getKey());
+								} else {
+									Set<AgentID> agentLocation = new HashSet<AgentID>();
+									agentLocation.add(information.getKey());
+									this.itemsLocation.put(itemCheck, agentLocation);
+									
+									numberItemLocation= new Integer(numberItemLocation.intValue() + 1);
+								}
 							}
-
-							if (this.itemsLocation.containsKey(itemCheck)) {
-								this.itemsLocation.get(itemCheck).add(information.getKey());
-							} else {
-								Set<AgentID> agentLocation = new HashSet<AgentID>();
-								agentLocation.add(information.getKey());
-								this.itemsLocation.put(itemCheck, agentLocation);
+							// our agent reacts by sending a request to the agent
+							// which has the requested items
+							if (!itemsForUs.isEmpty()) {
+								this.sendMessage(information.getKey(), new MessageP2P<Set<Item>>(
+										this.id, Type.REQUEST_ITEM, itemsForUs));
+	
 							}
 						}
-						// our agent reacts by sending a request to the agent
-						// which has the requested items
-						if (!itemsForUs.isEmpty()) {
-							this.sendMessage(information.getKey(), new MessageP2P<Set<Item>>(
-									this.id, Type.REQUEST_ITEM, itemsForUs));
-
+						break;
+	
+					// response to a request
+					case SEND_ITEM:
+						if (this.items.addAll((Set<Item>) msg.getContents()))
+							numberItem = new Integer(numberItem.intValue() + ((Set<Item>) msg.getContents()).size());
+						
+						if(this.itemsWanted.removeAll((Set<Item>) msg.getContents()))
+							numberItemWanted = new Integer(numberItemWanted.intValue() - ((Set<Item>) msg.getContents()).size());
+						
+					break;
+	
+					// ask for the location of an item
+					case ASK_LOCATION:
+						if (!this.pendingQueries.containsKey(msg.getFrom())) {
+							Set<Item> itemsLocRequested = new HashSet<Item>();
+							this.pendingQueries.put(msg.getFrom(), itemsLocRequested);
 						}
-					}
+						this.pendingQueries.get(msg.getFrom()).addAll((Set<Item>) msg.getContents());
+	
 					break;
-
-				// response to a request
-				case SEND_ITEM:
-
-					if (this.items.addAll((Set<Item>) msg.getContents())) {
-						System.out.println("l'agent " + this.id + " download" + msg.getContents());
+	
 					}
-					this.itemsWanted.removeAll((Set<Item>) msg.getContents());
-					break;
-
-				// ask for the location of an item
-				case ASK_LOCATION:
-					if (!this.pendingQueries.containsKey(msg.getFrom())) {
-						Set<Item> itemsLocRequested = new HashSet<Item>();
-						this.pendingQueries.put(msg.getFrom(), itemsLocRequested);
-					}
-					this.pendingQueries.get(msg.getFrom()).addAll((Set<Item>) msg.getContents());
-
-					break;
-
-				}
 			}
 			// we erase the inbox at the end
 			waitingMessage.clear();
@@ -372,7 +433,7 @@ public class P2PAgent extends AbstractAgent {
 		return itemsWanted;
 	}
 
-	@SuppressWarnings("hiding")
+
 	/**Permit to set the environment of an agent*/
 	public void setParent(EnvironmentP2P parent) {
 		this.parent = parent;
@@ -391,8 +452,58 @@ public class P2PAgent extends AbstractAgent {
 	public Set<Item> getItems() {
 		return items;
 	}
+	
+	@Override
+	public boolean isSelected()
+	{
+		// TODO Auto-generated method stub
+		return selected;
+	}
 
-	static class test {
+	@Override
+	public void toggleSelected()
+	{
+		// TODO Auto-generated method stub
+		selected = !selected;
+		if (selected)
+			parent.addSelected(this);
+		else
+			parent.removeSelected(this);
+		parent.doUpdate();
+	}
+
+	public static Integer getNumberItem()
+	{
+		return numberItem;
+	}
+
+	public static void setNumberItem(Integer numberItem)
+	{
+		P2PAgent.numberItem = numberItem;
+	}
+
+	public static Integer getNumberItemWanted()
+	{
+		return numberItemWanted;
+	}
+
+	public static void setNumberItemWanted(Integer numberItemWanted)
+	{
+		P2PAgent.numberItemWanted = numberItemWanted;
+	}
+
+	public static Integer getNumberItemLocation()
+	{
+		return numberItemLocation;
+	}
+
+	public static void setNumberItemLocation(Integer numberItemLocation)
+	{
+		P2PAgent.numberItemLocation = numberItemLocation;
+	}
+	
+
+	/*static class test {
 		public static void main(String[] args) {
 			P2PAgent agent1 = new P2PAgent(null, new AgentID("" + 1));
 			P2PAgent agent2 = new P2PAgent(null, new AgentID("" + 2));
@@ -438,6 +549,5 @@ public class P2PAgent extends AbstractAgent {
 			}
 		}
 
-	}
-
+	}*/
 }

@@ -176,6 +176,11 @@ public class XMLTree
 			return this;
 		}
 
+		public XMLNode setAttribute(String attrName, String attrValue){
+			attributes.remove(attrName);
+			addAttribute(new XMLAttribute(attrName, attrValue));
+			return this;
+		}
 		public XMLNode addAttribute(XMLAttribute attr)
 		{
 			attributes.add(attr);

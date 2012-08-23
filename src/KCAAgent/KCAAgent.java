@@ -14,7 +14,6 @@ import java.util.TreeSet;
 import java.util.Vector;
 import java.util.concurrent.PriorityBlockingQueue;
 
-import logging.Log;
 import scenario.AbstractScenario;
 import KCAAgent.Goal.GoalList;
 import KCAAgent.Logix.Domain;
@@ -93,8 +92,8 @@ public class KCAAgent extends LocationAgent {
 																																		// from
 																																		// outside
 	// peer
-	private Queue<MessageKCA<Collection<Fact>>>	inbox					= new PriorityBlockingQueue<MessageKCA<Collection<Fact>>>();
-	private Queue<MessageKCA<Collection<Fact>>>	atemporalInbox			= new PriorityBlockingQueue<MessageKCA<Collection<Fact>>>();
+	private Queue<MessageKCA>	inbox					= new PriorityBlockingQueue<MessageKCA>();
+	private Queue<MessageKCA>	atemporalInbox			= new PriorityBlockingQueue<MessageKCA>();
 
 	private NumericMeasure						agentBalance;
 	private NumericMeasure						agentUselessFacts;
@@ -198,7 +197,7 @@ public class KCAAgent extends LocationAgent {
 			log.li("received ~", message);
 		else
 			log.lf("received ~", message);
-		atemporalInbox.offer((MessageKCA<Collection<Fact>>) message);
+		atemporalInbox.offer((MessageKCA) message);
 	}
 
 	@SuppressWarnings("boxing")
@@ -210,8 +209,8 @@ public class KCAAgent extends LocationAgent {
 		agentPrint();
 
 		// fill the inbox for this time step
-		for (Iterator<MessageKCA<Collection<Fact>>> it = atemporalInbox.iterator(); it.hasNext();) {
-			MessageKCA<Collection<Fact>> msg = it.next();
+		for (Iterator<MessageKCA> it = atemporalInbox.iterator(); it.hasNext();) {
+			MessageKCA msg = it.next();
 			if (!msg.isFuture()) {
 				inbox.offer(msg);
 				it.remove();
@@ -397,9 +396,9 @@ public class KCAAgent extends LocationAgent {
 		// check received facts, limited by the allowed amount of processing
 		// (according to agent pressure)
 		int nHandled = 0;
-		for (Iterator<MessageKCA<Collection<Fact>>> it = inbox.iterator(); it.hasNext()
+		for (Iterator<MessageKCA> it = inbox.iterator(); it.hasNext()
 				&& nHandled < amount.intValue(); nHandled++) {
-			MessageKCA<Collection<Fact>> m = it.next();
+			MessageKCA m = it.next();
 			switch (m.getType()) {
 			case INFORM:
 				for (Fact f : m.getContents()) { // getting informed on new
@@ -491,12 +490,9 @@ public class KCAAgent extends LocationAgent {
 							// if(nsuccess >= (neighbours.size() *
 							// Logix.getInformFraction()))
 							// {
-							i.goal.relatedFact.fadePressure(0.01f); // if it was
-																	// pressure
-																	// 1, take
-																	// it down
-																	// from
-																	// there
+							
+							//if it was pressure 1, take it down from here
+							i.goal.relatedFact.fadePressure(0.01f); 
 
 							log.li("plan done: ~", i);
 							// goal is satisfied
@@ -727,7 +723,7 @@ public class KCAAgent extends LocationAgent {
 		// Fact(id, action.relatedData).toCollection()));
 		// break;
 		case INFORM:
-			sendMessage(action.targetAgent, new MessageKCA<Collection<Fact>>(id, Type.INFORM,
+			sendMessage(action.targetAgent, new MessageKCA(id, Type.INFORM,
 					action.relatedFact.toCollection()));
 			break;
 
@@ -746,27 +742,10 @@ public class KCAAgent extends LocationAgent {
 				.floatValue()), MeasureName.HIGHPRESSURE);
 	}
 
-	public double gradeFactHistory(Specialty factSpec, int firstStep) { // AO:
-																		// returns
-																		// at
-																		// what
-																		// point
-																		// this
-																		// specialty
-																		// was
-																		// most
-																		// similar
-																		// to
-																		// the
-																		// agent's
-																		// specialty,
-																		// as a
-																		// fraction
-																		// of
-																		// the
-																		// agent's
-																		// entire
-																		// evolution
+	// AO returns at what point this specialty was most similar to the agent's specialty, 
+	// as a fraction of the agent's entire evolution
+	public double gradeFactHistory(Specialty factSpec, int firstStep) { 
+		
 		double maxI = 0.0f;
 		double maxSim = 0.0f;
 		double sim;
@@ -843,7 +822,7 @@ public class KCAAgent extends LocationAgent {
 		return intentions;
 	}
 
-	public Queue<MessageKCA<Collection<Fact>>> getInbox() // for Drawer
+	public Queue<MessageKCA> getInbox() // for Drawer
 	{
 		return inbox;
 	}

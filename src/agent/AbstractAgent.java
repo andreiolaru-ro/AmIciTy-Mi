@@ -23,13 +23,15 @@ public abstract class AbstractAgent implements Measurable
 	protected abstract void sendMessage(AgentID to, Message<?> msg);
 	public abstract void receiveMessage(Message<?> message);
 	
-	
+	//graphical functions to select an agent on the grid
+	public abstract boolean isSelected();
+	public abstract void toggleSelected();	
 	
 	public AbstractAgent(AgentID id) {
 		super();
 		this.id = id;
 		this.pause = false ;
-		this.log = new Log(null);
+		this.log = new Log(this);
 	}
 	
 	public AgentID getId()

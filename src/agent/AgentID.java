@@ -61,6 +61,10 @@ public class AgentID implements Comparable<AgentID>
 	public Integer getId() {
 		return id;
 	}
+	
+	public String getName(){
+		return name;
+	}
 
 	public void setId(Integer id) {
 		this.id = id;

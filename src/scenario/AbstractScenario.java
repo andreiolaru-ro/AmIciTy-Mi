@@ -1,7 +1,6 @@
 package scenario;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -21,6 +20,7 @@ import javax.xml.transform.TransformerFactoryConfigurationError;
 import XMLParsing.XMLParser;
 import XMLParsing.XMLTree;
 import XMLParsing.XMLTree.XMLNode;
+import XMLParsing.XMLTree.XMLNode.XMLAttribute;
 import agent.AbstractAgent;
 import agent.AgentID;
 import base.Command;
@@ -37,29 +37,28 @@ public class AbstractScenario<T extends AbstractAgent, C extends Command> {
 	protected static Random			rand;
 	protected static long			seed;
 
-	protected String				fileName;
+	protected String				scenarioFileName;
 	protected int					nsteps;
 	protected C[]					commands;
 	protected Map<AgentID, T>		agents			= new HashMap<AgentID, T>();
 
 	protected XMLTree				scenario;
 
-//	protected SortedSet<Command>	commandset		= new TreeSet<Command>(
-//															new Comparator<Command>() {
-//																@Override
-//																public int compare(Command c1,
-//																		Command c2) {
-//																	if (c1.getTime() != c2
-//																			.getTime()) {
-//																		return c1.getTime()
-//																				- c2.getTime();
-//																	}
-//																	return c1.hashCode()
-//																			- c2.hashCode();
-//																}
-//															});
+	// protected SortedSet<Command> commandset = new TreeSet<Command>(
+	// new Comparator<Command>() {
+	// @Override
+	// public int compare(Command c1,
+	// Command c2) {
+	// if (c1.getTime() != c2
+	// .getTime()) {
+	// return c1.getTime()
+	// - c2.getTime();
+	// }
+	// return c1.hashCode()
+	// - c2.hashCode();
+	// }
+	// });
 
-	
 	protected SortedSet<Command>	commandset		= new TreeSet<Command>(
 															new Comparator<Command>() {
 																@Override
@@ -74,10 +73,12 @@ public class AbstractScenario<T extends AbstractAgent, C extends Command> {
 																}
 															});
 
+	@SuppressWarnings("hiding")
 	protected AbstractScenario(String schemaFileName, String scenarioFileName) {
 		scenario = getScenarioTree(schemaFileName, scenarioFileName);
 		parseSeed();
 		parseDuration();
+		this.scenarioFileName = scenarioFileName;
 	}
 
 	/**
@@ -137,9 +138,6 @@ public class AbstractScenario<T extends AbstractAgent, C extends Command> {
 		for (String path : parameters.keySet()) {
 			events = generateValues(path, parameters, events);
 		}
-
-		// for (Map<String, String> event : events)
-		// System.out.println(event);
 
 		return events;
 	}
@@ -209,6 +207,7 @@ public class AbstractScenario<T extends AbstractAgent, C extends Command> {
 	 * @return a new tree with each {@link XMLNode} transformed in
 	 *         {@link ScenarioNode}
 	 */
+	@SuppressWarnings("hiding")
 	protected XMLTree getScenarioTree(String schemaFileName, String scenarioFileName) {
 
 		// parse scenario
@@ -285,9 +284,14 @@ public class AbstractScenario<T extends AbstractAgent, C extends Command> {
 		// or not : read seed value in test/seed
 		else {
 			AbstractScenario.initRandom();
+			updateSeedToRoot();
 		}
 	}
 
+	protected void updateSeedToRoot(){
+			scenario.getRoot().setAttribute("seed", new Long(seed).toString());
+	}
+	
 	protected void parseDuration() {
 		// attributes are always String
 		String steps = scenario.getRoot().getNodeIterator("timeline").next()
@@ -295,18 +299,20 @@ public class AbstractScenario<T extends AbstractAgent, C extends Command> {
 		nsteps = Integer.parseInt(steps);
 	}
 
-	/* need to FIX */
-	public void save(File file ) {
+	// FIXME : it doesn't work for the moment
+	public void save() {
 		try {
-			BufferedReader br = new BufferedReader(new FileReader(fileName));
-			String line = br.readLine();
-			PrintWriter pw = new PrintWriter(file);
-			pw.println("<scenario seed=\"" + seed + "\">");
-			while ((line = br.readLine()) != null) {
-				pw.println(line);
-			}
-			pw.close();
-			br.close();
+			updateSeedToRoot();
+			BufferedReader br = new BufferedReader(new FileReader(scenarioFileName+new Long(seed).toString()));
+			scenario.toString();
+//			String line = br.readLine();
+//			PrintWriter pw = new PrintWriter(file);
+//			pw.println("<scenario seed=\"" + seed + "\">");
+//			while ((line = br.readLine()) != null) {
+//				pw.println(line);
+//			}
+//			pw.close();
+//			br.close();
 			// DocumentBuilderFactory factory =
 			// DocumentBuilderFactory.newInstance();
 			// DocumentBuilder builder = factory.newDocumentBuilder();

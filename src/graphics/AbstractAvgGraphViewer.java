@@ -5,9 +5,8 @@ import java.awt.Color;
 import KCAAgent.EnvironmentKCA;
 import KCAAgent.KCAAgent;
 
-public abstract class AbstractAvgGraphViewer extends AbstractGraphViewer
+public abstract class AbstractAvgGraphViewer extends AbstractGraphViewer<EnvironmentKCA,KCAAgent>
 {
-	@SuppressWarnings("hiding")
 	protected AbstractAvgGraphViewer(EnvironmentKCA cm, Object data, Color color)
 	{
 		super(cm, data, color);

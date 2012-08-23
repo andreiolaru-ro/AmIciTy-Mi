@@ -7,63 +7,74 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import logging.Logger;
+import P2PAgent.P2PAgent;
 import agent.AbstractAgent;
 import agent.AgentID;
 
-public abstract class Environment<SIMULATION extends Simulation<?, ?>, AGENT extends AbstractAgent> {
-	protected SIMULATION			parent;
-	protected Logger				logger;
-	protected static int			step		= 0;
-	protected List<AbstractAgent>	selected;
-	Collection<UpdateListener>		listeners	= new ArrayList<UpdateListener>();
-	protected Map<AgentID, AGENT>	agents;
-	// sequence (sub-step) number for messages, used for comparing messages
-	protected static int			sequence	= 0;
+import logging.Logger;
 
-	// FIXME shouldn't the cells be updating simultaneously?
+
+
+public abstract class Environment<SIMULATION extends Simulation<?,?>, AGENT extends AbstractAgent>
+{
+	protected SIMULATION parent;
+	protected Logger logger;
+	protected static int step = 0;
+	protected List<AbstractAgent> selected;
+	Collection<UpdateListener> listeners = new ArrayList<UpdateListener>();
+	protected Map<AgentID, AGENT> agents;
+	// sequence (sub-step) number for messages, used for comparing messages
+	protected static int sequence = 0;
+	
+	// public because they are used for drawing
+	public double x;
+	public double y;
+	public double width;
+	public double height;
+	
+	//FIXME shouldn't the cells be updating simultaneously?
 	public void step() throws Exception {
 		for (AGENT agent : agents.values()) {
-//			if(!agent.isPause())
-				agent.step();
+			agent.step();
 		}
 
-		doUpdate(); // update UI
+		doUpdate(); //update UI
 
 		step++;
 		sequence = 0;
 	}
-
+	
 	public void addSelected(AbstractAgent agent) {
 		selected.add(agent);
-		 logger.addLog(agent.getLog());
+		logger.addLog(agent.getLog());
 	}
-
+	
 	public void removeSelected(AbstractAgent agent) {
 		selected.remove(agent);
-		 logger.removeLog(agent.getLog());
+		logger.removeLog(agent.getLog());
 	}
-
+	
 	public List<AbstractAgent> getSelected() {
 		return selected;
 	}
-
+	
 	public Logger getLogger() {
 		return logger;
 	}
 
-	public static int getStep() {
+	public static int getStep()
+	{
 		return step;
 	}
-
+	
 	public void addUpdateListener(UpdateListener ul) {
 		listeners.add(ul);
 	}
-
+	
 	public void removeUpdateListener(UpdateListener ul) {
 		listeners.remove(ul);
 	}
-
+	
 	public void doUpdate() {
 		for (UpdateListener ul : listeners) {
 			ul.update();
@@ -73,8 +84,14 @@ public abstract class Environment<SIMULATION extends Simulation<?, ?>, AGENT ext
 	public Collection<AGENT> getAgents() {
 		return agents.values();
 	}
-
+	
+	public AGENT getAgent(int idAgent){
+		return agents.get(new AgentID(new Integer(idAgent)));
+	}
+	
 	public static int getSequence() {
 		return sequence++;
 	}
+	
+	public abstract AGENT cellAt(double x, double y);
 }

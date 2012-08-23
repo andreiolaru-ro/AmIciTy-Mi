@@ -1,10 +1,12 @@
 package KCAAgent;
 
-import KCAAgent.MessageKCA.Type;
+import java.util.Collection;
+
 import agent.AgentID;
+import base.Environment;
 import base.Message;
 
-public class MessageKCA<T> extends Message<T> implements Comparable<MessageKCA<T>>
+public class MessageKCA extends Message<Collection<Fact>> implements Comparable<MessageKCA>
 {
 	public enum Type
 	{
@@ -16,19 +18,19 @@ public class MessageKCA<T> extends Message<T> implements Comparable<MessageKCA<T
 	
 	private Type type;
 	
-	@SuppressWarnings("hiding")
-	public MessageKCA(AgentID from, Type type, T content)
+
+	public MessageKCA(AgentID from, Type type, Collection<Fact> content)
 	{
 		super();
-		this.step = EnvironmentKCA.getStep();
-		this.sequence = EnvironmentKCA.getSequence();
+		this.step = Environment.getStep();
+		this.sequence = Environment.getSequence();
 		this.from = from;
 		this.type=type;
 		this.content = content;
 	}
 	
 	@Override
-	public int compareTo(MessageKCA<T> m)
+	public int compareTo(MessageKCA m)
 	{
 		if (m == null)
 			throw new NullPointerException();
@@ -55,6 +57,7 @@ public class MessageKCA<T> extends Message<T> implements Comparable<MessageKCA<T
 		// TODO Auto-generated method stub
 		return type;
 	}
+
 
 
 

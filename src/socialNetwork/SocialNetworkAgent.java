@@ -59,5 +59,17 @@ public class SocialNetworkAgent extends LocationAgent {
 		this.location = location;
 	}
 
+	@Override
+	public boolean isSelected() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void toggleSelected() {
+		// TODO Auto-generated method stub
+		
+	}
+
 	
 }

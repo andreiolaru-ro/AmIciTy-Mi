@@ -33,13 +33,6 @@ public class EnvironmentKCA extends Environment<SimulationKCA, KCAAgent> {
 }; */
 
 	
-	// public because they are used for drawing
-	public double x;
-	public double y;
-	public double width;
-	public double height;
-
-	
 	//private static int CAPACITY = Logix.agentCapacity;
 
 	
