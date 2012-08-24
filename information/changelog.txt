@@ -4,6 +4,10 @@
 // The commits should be added in inverse chronological order //
 
 
+===== 26.08.2012 =====
+
+  - merges
+
 ===== 31.07.2012 small fixes and changes (andreiolaru) =====
 
   - fixed the implementation of getFirstNode and getNode in XMLNode;
