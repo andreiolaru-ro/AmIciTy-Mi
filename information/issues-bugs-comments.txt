@@ -19,7 +19,7 @@ In this file:
 
 ===== Issues - things that work as expected, but should work in a different way / be implemented differently =====
 
-1.
+1. Agent balance generates some exceptions: the agent balance grid gets a sim measure that is outside the range for some agents; there is an error at the last step of the simulation (with currentSpecialtyIndex).
 
 == solved ==
 
