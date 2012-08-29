@@ -54,7 +54,6 @@ public class MessageKCA extends Message<Collection<Fact>> implements Comparable<
 
 	public Type getType()
 	{
-		// TODO Auto-generated method stub
 		return type;
 	}
 

@@ -4,6 +4,10 @@
 	elementFormDefault="qualified"
 	targetNamespace="http://www.example.org/parameterSchema">
 
+	<!-- 
+		You can have a set of parameters or just a value.
+		Set of parameters is useful to generate values.
+	 -->
 	<group name="parameters">
 		<sequence>
 			<element name="first" type="decimal" minOccurs="0" maxOccurs="1" />

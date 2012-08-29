@@ -427,7 +427,6 @@ public class QuickSet<T> extends AbstractList<T> implements SortedSet<T>
 	@Override
 	public T get(int arg0)
 	{
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
@@ -452,14 +451,12 @@ public class QuickSet<T> extends AbstractList<T> implements SortedSet<T>
 	@Override
 	public T last()
 	{
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
 	@Override
 	public SortedSet<T> headSet(T toElement)
 	{
-		// TODO Auto-generated method stub
 		return null;
 	}
 	

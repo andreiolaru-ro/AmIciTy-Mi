@@ -2,7 +2,6 @@ package XMLParsing;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Vector;
 
 import javax.xml.XMLConstants;
@@ -214,8 +213,9 @@ public class XMLParser extends DefaultHandler
 			thetree = new XMLTree(node);
 		}
 
-		for(int i = 0; i < att.getLength(); i++)
-			thetree.newAttribute(new XMLAttribute(att.getQName(i), att.getValue(i)));
+		for(int i = 0; i < att.getLength(); i++){
+			thetree.newAttribute(new XMLAttribute(att.getURI(i),att.getQName(i), att.getValue(i)));
+		}
 	}
 
 	@Override
@@ -276,58 +276,39 @@ public class XMLParser extends DefaultHandler
 		//		log.trace("enddoc");
 	}
 
-	@SuppressWarnings({ "static-method" })
-	protected void save(String filename, InputStream input)
+	public static void save(File file, XMLTree tree)
 	{
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder builder = null;
-		File file = new File(filename);
+		Document doc = tree.toDocument();
 		
+		Transformer transformer = null;
 		try
 		{
-			builder = factory.newDocumentBuilder();
-
-			Document doc = null;
+			transformer = TransformerFactory.newInstance().newTransformer();
+//			transformer.setOutputProperty(OutputKeys.METHOD, "text");
+			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+	        transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+	        transformer.setOutputProperty(OutputKeys.STANDALONE, "yes");
+			
+			// initialize StreamResult with File object to save to file
+			StreamResult result = new StreamResult(file);
+			DOMSource source = new DOMSource(doc);
 			try
 			{
-				doc = builder.parse(input);
-			} catch(SAXException e)
-			{
-				e.printStackTrace();
-			} catch(IOException e)
+				transformer.transform(source, result);
+			} catch(TransformerException e)
 			{
 				e.printStackTrace();
 			}
-
-			Transformer transformer = null;
-			try
-			{
-				transformer = TransformerFactory.newInstance().newTransformer();
-				transformer.setOutputProperty(OutputKeys.METHOD, "text");
-				transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-
-				// initialize StreamResult with File object to save to file
-				StreamResult result = new StreamResult(file);
-				DOMSource source = new DOMSource(doc);
-				try
-				{
-					transformer.transform(source, result);
-				} catch(TransformerException e)
-				{
-					e.printStackTrace();
-				}
-			} catch(TransformerConfigurationException e)
-			{
-				e.printStackTrace();
-			} catch(TransformerFactoryConfigurationError e)
-			{
-				e.printStackTrace();
-			}
-		} catch(ParserConfigurationException e)
+		} catch(TransformerConfigurationException e)
+		{
+			e.printStackTrace();
+		} catch(TransformerFactoryConfigurationError e)
 		{
 			e.printStackTrace();
 		}
 	}
+
+
 
 	public void close()
 	{

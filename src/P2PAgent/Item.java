@@ -20,7 +20,6 @@ public class Item implements Comparable<Item>
 	@Override
 	public int compareTo(Item itemOther)
 	{
-		// TODO Auto-generated method stub
 		Integer itemThis=new Integer(this.itemID);
 		Integer intItemOther= new Integer(itemOther.getItemID());
 		return itemThis.compareTo(intItemOther);

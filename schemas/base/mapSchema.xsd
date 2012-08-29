@@ -29,6 +29,10 @@
 					</sequence>
 				</complexType>
 			</element>
+			<!--
+ 				agent could be generate randomly
+ 				In addition, you can put an agent at a specific location too.
+ 			-->
 			<element name="agent" minOccurs="1" maxOccurs="unbounded">
 				<complexType>
 					<sequence>

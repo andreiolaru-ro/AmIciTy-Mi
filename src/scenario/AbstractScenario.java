@@ -1,6 +1,7 @@
 package scenario;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -20,11 +21,17 @@ import javax.xml.transform.TransformerFactoryConfigurationError;
 import XMLParsing.XMLParser;
 import XMLParsing.XMLTree;
 import XMLParsing.XMLTree.XMLNode;
-import XMLParsing.XMLTree.XMLNode.XMLAttribute;
 import agent.AbstractAgent;
 import agent.AgentID;
 import base.Command;
 
+/**
+ * Commun functions and variables for each scenarios. 
+ * @author Alexandre Hocquard
+ *
+ * @param <T> Type of the agent of the scenario
+ * @param <C> Type of the commands of the scenario
+ */
 public class AbstractScenario<T extends AbstractAgent, C extends Command> {
 
 	private static final String		SEED_FILE		= "test/seed";
@@ -44,34 +51,19 @@ public class AbstractScenario<T extends AbstractAgent, C extends Command> {
 
 	protected XMLTree				scenario;
 
-	// protected SortedSet<Command> commandset = new TreeSet<Command>(
-	// new Comparator<Command>() {
-	// @Override
-	// public int compare(Command c1,
-	// Command c2) {
-	// if (c1.getTime() != c2
-	// .getTime()) {
-	// return c1.getTime()
-	// - c2.getTime();
-	// }
-	// return c1.hashCode()
-	// - c2.hashCode();
-	// }
-	// });
-
 	protected SortedSet<Command>	commandset		= new TreeSet<Command>(
-															new Comparator<Command>() {
-																@Override
-																public int compare(Command c1,
-																		Command c2) {
-																	if (c1.getTime() != c2
-																			.getTime()) {
-																		return c1.getTime()
-																				- c2.getTime();
-																	}
-																	return c1.getId() - c2.getId();
-																}
-															});
+			new Comparator<Command>() {
+				@Override
+				public int compare(Command c1,
+						Command c2) {
+					if (c1.getTime() != c2
+							.getTime()) {
+						return c1.getTime()
+								- c2.getTime();
+					}
+					return c1.getId() - c2.getId();
+				}
+			});
 
 	@SuppressWarnings("hiding")
 	protected AbstractScenario(String schemaFileName, String scenarioFileName) {
@@ -238,7 +230,7 @@ public class AbstractScenario<T extends AbstractAgent, C extends Command> {
 	}
 
 	/**
-	 * Read seed in a file "test/seed"
+	 * Read seed in the file "test/seed".
 	 */
 	public static void initRandom() {
 		try {
@@ -272,6 +264,9 @@ public class AbstractScenario<T extends AbstractAgent, C extends Command> {
 		}
 	}
 
+	/**
+	 * Parse the seed in the xml scenario. If it's not specified, it will read it in test/seed.
+	 */
 	protected void parseSeed() {
 		// attributes are always String with XMLParser
 		String stringSeed = scenario.getRoot().getAttributeValue("seed");
@@ -288,10 +283,16 @@ public class AbstractScenario<T extends AbstractAgent, C extends Command> {
 		}
 	}
 
+	/**
+	 * Update teh seed in the scenario. Useful to save function.
+	 */
 	protected void updateSeedToRoot(){
-			scenario.getRoot().setAttribute("seed", new Long(seed).toString());
+		scenario.getRoot().setAttribute("seed", new Long(seed).toString());
 	}
-	
+
+	/**
+	 * Default parsing of the duration.
+	 */
 	protected void parseDuration() {
 		// attributes are always String
 		String steps = scenario.getRoot().getNodeIterator("timeline").next()
@@ -300,38 +301,9 @@ public class AbstractScenario<T extends AbstractAgent, C extends Command> {
 	}
 
 	// FIXME : it doesn't work for the moment
-	public void save() {
-		try {
-			updateSeedToRoot();
-			BufferedReader br = new BufferedReader(new FileReader(scenarioFileName+new Long(seed).toString()));
-			scenario.toString();
-//			String line = br.readLine();
-//			PrintWriter pw = new PrintWriter(file);
-//			pw.println("<scenario seed=\"" + seed + "\">");
-//			while ((line = br.readLine()) != null) {
-//				pw.println(line);
-//			}
-//			pw.close();
-//			br.close();
-			// DocumentBuilderFactory factory =
-			// DocumentBuilderFactory.newInstance();
-			// DocumentBuilder builder = factory.newDocumentBuilder();
-			// Document doc = builder.parse(new File(fileName));
-			//
-			// Transformer transformer =
-			// TransformerFactory.newInstance().newTransformer();
-			// transformer.setOutputProperty(OutputKeys.METHOD, "text");
-			// transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-			//
-			// //initialize StreamResult with File object to save to file
-			// StreamResult result = new StreamResult(file);
-			// DOMSource source = new DOMSource(doc);
-			// transformer.transform(source, result);
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (TransformerFactoryConfigurationError e) {
-			e.printStackTrace();
-		}
+	public void save(File file) {
+		updateSeedToRoot();
+		XMLParser.save(file, scenario);
 	}
 
 	public static Long getSeed() {

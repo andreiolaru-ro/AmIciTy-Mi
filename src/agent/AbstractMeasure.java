@@ -23,7 +23,6 @@ public abstract class AbstractMeasure<T> implements Measure<T>
 	@Override
 	public T getValue()
 	{
-		// TODO Auto-generated method stub
 		return  this.value;
 	}
 
@@ -48,7 +47,6 @@ public abstract class AbstractMeasure<T> implements Measure<T>
 	@Override
 	public MeasureName getName()
 	{
-		// TODO Auto-generated method stub
 		return this.name;
 	}
 
@@ -58,7 +56,6 @@ public abstract class AbstractMeasure<T> implements Measure<T>
 		public NumericMeasure(Double value, MeasureName name)
 		{
 			super(value, name);
-			// TODO Auto-generated constructor stub
 		}
 		
 		public NumericMeasure(double value, MeasureName name)
@@ -73,7 +70,6 @@ public abstract class AbstractMeasure<T> implements Measure<T>
 		public FloatMeasure(Float value, MeasureName name)
 		{
 			super(value, name);
-			// TODO Auto-generated constructor stub
 		}
 		
 		public FloatMeasure(float value, MeasureName name)
@@ -88,7 +84,6 @@ public abstract class AbstractMeasure<T> implements Measure<T>
 		public VectorMeasure(List<Measure> value,NameMeasure name)
 		{
 			super(value, name);
-			// TODO Auto-generated constructor stub
 		}
 
 		public Measure getValue(String name)

@@ -37,7 +37,6 @@ public abstract class AbstractGridViewerWhitoutLocation<ENVIRONMENT extends Envi
 	@Override
 	protected void draw(Graphics2D g)
 	{
-		// TODO Auto-generated method stub
 		w = getWidth();
 		h = getHeight();
 		g.setBackground(Color.white);
@@ -84,7 +83,6 @@ public abstract class AbstractGridViewerWhitoutLocation<ENVIRONMENT extends Envi
 	@Override
 	public void mouseClicked(MouseEvent e)
 	{
-		// TODO Auto-generated method stub
 		int mx = e.getX();
 		int my = e.getY();
 		double x = cm.x + mx * cm.width / w;
@@ -98,28 +96,24 @@ public abstract class AbstractGridViewerWhitoutLocation<ENVIRONMENT extends Envi
 	@Override
 	public void mouseEntered(MouseEvent arg0)
 	{
-		// TODO Auto-generated method stub
 		
 	}
 	
 	@Override
 	public void mouseExited(MouseEvent arg0)
 	{
-		// TODO Auto-generated method stub
 		
 	}
 	
 	@Override
 	public void mousePressed(MouseEvent arg0)
 	{
-		// TODO Auto-generated method stub
 		
 	}
 	
 	@Override
 	public void mouseReleased(MouseEvent arg0)
 	{
-		// TODO Auto-generated method stub
 
 	}
 	

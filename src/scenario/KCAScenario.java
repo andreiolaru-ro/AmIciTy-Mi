@@ -12,11 +12,17 @@ import KCAAgent.Fact;
 import KCAAgent.KCAAgent;
 import KCAAgent.Logix;
 import KCAAgent.Specialty;
+import XMLParsing.XMLParser;
 import XMLParsing.XMLTree.XMLNode;
 import agent.AgentID;
 import agent.Location;
 import base.Command;
 
+/**
+ * Scenario of the {@link SimulationKCA}.
+ * @author Alexandre Hocquard
+ *
+ */
 public class KCAScenario extends AbstractLocationScenario<KCAAgent, CommandKCA> {
 
 	private final static String			SCHEMA_FILE_NAME	= "schemas/agent/kcaSchema.xsd";
@@ -33,13 +39,14 @@ public class KCAScenario extends AbstractLocationScenario<KCAAgent, CommandKCA> 
 	public KCAScenario(String scenarioFileName) {
 
 		super(SCHEMA_FILE_NAME, scenarioFileName);
-
+		System.out.println(scenario);
+//		XMLParser.save("scenarios/ooo.xml", scenario);
 		/********************************** creation of agents ************************************/
 		// coordinates are randomly generated,
 		// actually, Strings are Double : need to parse them into double
 
 		Iterator<XMLNode> iAgents = scenario.getRoot().getFirstNode("map").getNodeIterator("agent");
-
+		
 		while (iAgents.hasNext()) {
 
 			XMLNode currentAgentLocation = iAgents.next();

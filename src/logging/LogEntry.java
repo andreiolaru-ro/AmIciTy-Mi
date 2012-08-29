@@ -34,7 +34,14 @@ public class LogEntry implements Comparable<LogEntry>
 		{
 			entry = new StringBuffer();
 			int indexInMsg = 0;
-			entry.append(owner);
+			if(owner!=null)
+			{
+				entry.append("agent "+owner.getId().getName());
+			}
+			else
+			{
+				entry.append(owner);
+			}
 			entry.append(" - ");
 			for(Object obj : data)
 			{

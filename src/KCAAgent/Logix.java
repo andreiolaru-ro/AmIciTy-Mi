@@ -250,7 +250,6 @@ public class Logix
 	//	
 	// static Fact setDistantGoalFact(Specialty agentSpec, Fact f, int distance)
 	// {
-	// // TODO
 	// return f;
 	// }
 	
@@ -287,7 +286,6 @@ public class Logix
 		
 		float mc = i + p + d;
 		
-		// FIXME
 //		if(f.getDepth() > 0)
 //			return null;
 		
@@ -300,13 +298,11 @@ public class Logix
 	
 	static Goal makeNewDataInformGoal(Fact f)
 	{
-		// TODO
 		return new Goal(f).setImportance(f.getPressure());
 	}
 	
 	static Goal makeInformGoal(Fact f)
 	{ // the fact should also contain some context information
-		// TODO
 		return new Goal(f).setImportance(f.getPressure());
 	}
 	
@@ -324,14 +320,12 @@ public class Logix
 	{ // the fact should also contain some context information
 	// return new Goal(f.getDataRecursive()).setImportance(Math.max(f.getInterest(), f.getPressure()));
 		return null;
-		// TODO
 	}
 	
 	@SuppressWarnings("unused")
 	static Goal makeUnExRqGoal(Fact f)
 	{
 		// return new Goal(f.getData()).setImportance(f.getPressure());
-		// TODO
 		return null;
 	}
 	
@@ -345,7 +339,6 @@ public class Logix
 	
 	static void promoteGoal(Goal goal, Intention.IntentionList intentions)
 	{
-		// FIXME ?
 		Intention i = intentions.containsGoal(goal);
 		if(i == null)
 			// ERROR
@@ -382,7 +375,6 @@ public class Logix
 	
 	static float getInformFraction()
 	{
-		// TODO
 		return informFraction;
 	}
 	

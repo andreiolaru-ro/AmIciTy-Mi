@@ -26,7 +26,6 @@ public class Location implements Measure<Map<String, NumericMeasure>>{
 	}
 	
 	public Location(Location lastLocation) {
-		// TODO Auto-generated constructor stub
 		this.x = lastLocation.getX();
 		this.y = lastLocation.getY();
 		coord= new HashMap<String,NumericMeasure>();
@@ -69,14 +68,12 @@ public class Location implements Measure<Map<String, NumericMeasure>>{
 	@Override
 	public Map<String,NumericMeasure> getValue()
 	{
-		// TODO Auto-generated method stub
 		return coord;
 	}
 
 	@Override
 	public void setValue(Map<String, NumericMeasure> measure) throws Exception
 	{
-		// TODO Auto-generated method stub
 		this.coord=measure;
 		this.x=coord.get("x").getValue().doubleValue();
 		this.y=coord.get("y").getValue().doubleValue();
@@ -85,7 +82,6 @@ public class Location implements Measure<Map<String, NumericMeasure>>{
 	@Override
 	public MeasureName getName()
 	{
-		// TODO Auto-generated method stub
 		return MeasureName.LOCATION;
 	}
 }

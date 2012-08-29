@@ -15,12 +15,16 @@ import P2PAgent.P2PAgent;
 import XMLParsing.XMLTree.XMLNode;
 import agent.AgentID;
 
+/**
+ * Scenario of the {@link SimulationP2P}.
+ * @author Alexandre Hocquard
+ *
+ */
 public class P2PScenario extends AbstractScenario<P2PAgent, CommandP2P> {
 
 
 	private final static String				SCHEMA_FILE_NAME	= "schemas/agent/p2pSchema.xsd";
 	protected Map<AgentID, Set<AgentID>>	contacts			= new HashMap<AgentID, Set<AgentID>>();
-
 
 	public P2PScenario(String scenarioFileName) {
 

@@ -40,24 +40,7 @@ public class KCAAgent extends LocationAgent {
 	// internal workings
 	KnowledgeBase								kb;
 	private GoalList							goals					= new GoalList();
-	// these
-	// are
-	// the
-	// agent's
-	// desires.
-	// they
-	// must
-	// be
-	// transformed
-	// in
-	// intentions
-	// in
-	// order
-	// to
-	// take
-	// action
-	// for
-	// them
+	//these are the agent's desires. they must be transformed in intentions in order to take action
 
 	private NumericMeasure						capacity;
 
@@ -67,9 +50,7 @@ public class KCAAgent extends LocationAgent {
 	// behaviour
 	private Specialty							agent_specialty;																		// sorry
 																																		// for
-	// the
-	// naming
-	// convention
+	// the naming convention
 	public Specialty[]							specialtyHistory;
 	public int									currentSpecialtyIndex	= -1;
 	private FloatMeasure						agent_pressure;																		// sorry
@@ -79,11 +60,7 @@ public class KCAAgent extends LocationAgent {
 																																		// convention
 	private FloatMeasure						lowPressure;
 	private FloatMeasure						highPressure;																			// only
-	// positive
-	// measures
-
-	// communication
-	// up
+	// positive measures communication up
 	private EnvironmentKCA						parent;
 	@SuppressWarnings("unused")
 	private Vector<Fact>						externalRequests		= new Vector<Fact>();											// data
@@ -436,10 +413,8 @@ public class KCAAgent extends LocationAgent {
 					// if(fa.getDepth() == 1)
 					// // it's a neighbour's goal
 					// // collaborate
-					// // TODO
 					// ;
 					// else
-					// // TODO this souldn't really happen at this point
 					// ;
 					// }
 					// else if(fa.getDataRecursive() != null)
@@ -503,7 +478,6 @@ public class KCAAgent extends LocationAgent {
 							break;
 						}
 					} catch (Exception e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					break;
@@ -847,13 +821,11 @@ public class KCAAgent extends LocationAgent {
 
 	@Override
 	public Map<MeasureName, Measure<?>> getAllMeasures() {
-		// TODO Auto-generated method stub
 		return this.measures.getMeasures();
 	}
 
 	@Override
 	public Measure<?> getMeasure(MeasureName measure) {
-		// TODO Auto-generated method stub
 		return this.measures.getMeasures().get(measure);
 	}
 

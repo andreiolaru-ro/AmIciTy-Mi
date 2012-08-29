@@ -10,24 +10,45 @@
 		</all>
 	</complexType>
 
+	<!-- 
+		An area is described by a function and center location.
+		
+		Inside is particular : 
+		- if the value is true, it means that agents in
+		the area of the function will be add at the set of agents of 
+		the final area of "selectionAction".
+		- if the value is false, it means that agents in the area of the function
+		will be removed of the final area of "selectionAction".
+		
+		These ADD and REMOVE action depends of the order of the area function.
+		It executed with a linear way.
+		
+		Area could depend of the time : it could grow up with the time.
+		Example : circle equation =  x^2 + y^2 < 3+t
+			
+	 -->
 	<complexType name="areaFunction">
 		<sequence>
 			<element name="function" type="string" />
 			<element name="centerCoordinates" type="tns:coordinates" />
 			<element name="inside" type="boolean" />
-
-			<!-- <element name="dependsOn" minOccurs="0" maxOccurs="3"> -->
-			<!-- <simpleType> -->
-			<!-- <restriction base="string"> -->
-			<!-- <enumeration value="x" /> -->
-			<!-- <enumeration value="y" /> -->
-			<!-- <enumeration value="t" /> -->
-			<!-- </restriction> -->
-			<!-- </simpleType> -->
-			<!-- </element> -->
 		</sequence>
 	</complexType>
 
+	<!--
+		Unpause not implemented : some rules to define.
+		(priority : unpause and pause from two different "selectionAction")
+		An improvement of the algorithm could be done.
+		
+		For the moment, pause has a superior priority compared to unpause.
+		
+		First function need to be inside[yes] in theory, because if it's
+		inside[false], you try to remove agents in an empty set of agents.
+		
+		Area could depend of the time : it could grow up with the time.
+		Example : circle equation =  x^2 + y^2 < 3+t
+		
+	-->
 	<complexType name="selectionAction">
 		<sequence>
 			<element name="area" type="tns:areaFunction" minOccurs="1"

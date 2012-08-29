@@ -33,7 +33,6 @@ public class Intention
 		@Override
 		public String toString()
 		{
-			// TODO make nice
 			return super.toString();
 		}
 	}

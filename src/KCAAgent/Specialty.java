@@ -74,21 +74,18 @@ public class Specialty implements Measure<Map<Domain,NumericMeasure>>//NumericMe
 	@Override
 	public Map<Domain,NumericMeasure> getValue()
 	{
-		// TODO Auto-generated method stub
 		return this.specMap;
 	}
 
 	@Override
 	public MeasureName getName()
 	{
-		// TODO Auto-generated method stub
 		return this.name;
 	}
 
 	@Override
 	public void setValue(Map<Domain, NumericMeasure> value)
 	{
-		// TODO Auto-generated method stub
 			this.specMap=value;
 	}
 }

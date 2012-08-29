@@ -79,7 +79,6 @@ public class ViewerFactoryP2P
 					@Override
 					protected double calculateValue()
 					{
-						// TODO Auto-generated method stub
 						return P2PAgent.getNumberItem().doubleValue();
 					}
 				}.setTitle("Item owned");
@@ -102,7 +101,6 @@ public class ViewerFactoryP2P
 					@Override
 					protected double calculateValue()
 					{
-						// TODO Auto-generated method stub
 						return P2PAgent.getNumberItemLocation().doubleValue();
 					}
 				}.setTitle("Item location");
@@ -125,7 +123,6 @@ public class ViewerFactoryP2P
 					@Override
 					protected double calculateValue()
 					{
-						// TODO Auto-generated method stub
 						return P2PAgent.getNumberItemWanted().doubleValue();
 					}
 				}.setTitle("Item wanted");

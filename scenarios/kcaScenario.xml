@@ -42,7 +42,7 @@
 		<!-- </ma:agent> -->
 	</scen:map>
 
-	<scen:timeline duration="100">
+	<scen:timeline duration="60">
 		<scen:event>
 			<scen:type>inject</scen:type>
 			<scen:pressure>

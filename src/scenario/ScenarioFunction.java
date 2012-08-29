@@ -2,6 +2,11 @@ package scenario;
 
 import agent.Location;
 
+/**
+ * Function parameters you could have in an xml.
+ * @author Alexandre Hocquard
+ *
+ */
 public class ScenarioFunction {
 
 	Location coordinates;

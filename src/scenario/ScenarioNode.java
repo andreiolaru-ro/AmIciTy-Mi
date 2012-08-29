@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import XMLParsing.XMLTree;
 import XMLParsing.XMLTree.XMLNode;
 
 /**
  *  * {@link ScenarioNode} is a {@link XMLNode} with a set of parameters. These
  * parameters could generate random values.
+ * 
+ * @author Alexandre Hocquard
+ * 
  */
 public class ScenarioNode extends XMLNode {
 	

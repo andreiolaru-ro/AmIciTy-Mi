@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -36,7 +37,10 @@ public class SimulationP2P extends Simulation<EnvironmentP2P, CommandP2P>
 	 */
 	private static final long	serialVersionUID	= 1L;
 	private static SimulationP2P p2p;
-	P2PScenario scenario = new P2PScenario("scenarios/p2pScenario.xml");
+	
+	public final static   String scenarioName = "scenarios/p2pScenario.xml";
+
+	P2PScenario scenario = new P2PScenario(scenarioName);
 	
 	private ControllableView<EnvironmentP2P>[]		viewers		= null;
 	private static StepNumber		sn			= new StepNumber();
@@ -91,7 +95,6 @@ public class SimulationP2P extends Simulation<EnvironmentP2P, CommandP2P>
 	
 	private void init1()
 	{
-		// TODO Auto-generated method stub
 		environment= new EnvironmentP2P(this, scenario);
 		environment.getLogger().setLevel(LEVEL);
 		log = new Log(null);
@@ -131,7 +134,6 @@ public class SimulationP2P extends Simulation<EnvironmentP2P, CommandP2P>
 	@Override
 	public void run()
 	{
-		// TODO Auto-generated method stub
 		active=true;//don't forget to change it after
 		
 		int step = Environment.getStep();
@@ -159,7 +161,6 @@ public class SimulationP2P extends Simulation<EnvironmentP2P, CommandP2P>
 				environment.step();
 			} catch (Exception e1)
 			{
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			try
@@ -182,14 +183,12 @@ public class SimulationP2P extends Simulation<EnvironmentP2P, CommandP2P>
 	@Override
 	public void update()
 	{
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void createMainWindow(int x, int y, int w, int h)
 	{
-		// TODO Auto-generated method stub
 		this.setLayout(new BorderLayout());
 		
 		Panel box = new Panel();
@@ -259,6 +258,19 @@ public class SimulationP2P extends Simulation<EnvironmentP2P, CommandP2P>
 			}
 		});
 		box.add(save);
+		
+		JButton override = new JButton("Override");
+		override.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				String scenarioNameMod = new String(scenarioName);
+				scenarioNameMod = scenarioNameMod.replaceAll(".xml", "-mod.xml");
+				scenario.save(new File(scenarioNameMod));
+			}
+		});
+		box.add(override);
+		
 		this.add(box, BorderLayout.CENTER);
 		
 		box = new Panel();

@@ -20,7 +20,47 @@
 	</complexType>
 
 
-
+	<!-- 
+		First function HAVE TO be inside[yes] in theory, because if it's
+		inside[false], you try to remove agents in an empty set of agents,
+		and because movements is relative to the center of this first area.
+		 
+		Only agents selected at the start step are selected for the rest of
+		the movements of the agents (area is calculate only at start step, 
+		and not for the other steps). So, area can't grow up depending 
+		of the time.
+		
+		moveFunctions is for the two dimensions : x and y.
+		It calculates the moving of the center of the area, and 
+		if you don't specify "dependsOn", it could depend on the former value
+		of x and y, and even the time.
+		If you specify, it's only for one of the two dimensions. Either x
+		depends on the new value of y, either y depends on the new value of x.
+		Never the two in the same time (it's logic).
+		
+		Example (behaviour not checked, it's just an complete example for 
+		the values) : 
+		
+		x function : x+(y/4)+cos(t), dependsOn not specified.
+		Behaviour : it will take, at each step, the former location of x and y,
+		the current time, and generate the new value of x.
+		
+		x function : x+(y/4)+cos(t), dependsOn of y.
+		y function : y+(x/4)+sin(t), dependsOn HAVE TO NOT been specified
+		Behaviour : calculate new y, then calculate x with the new value of y,
+		the former value of x, and the current time.
+		
+		Another simple example for a better understanding :
+		x function : x+1, dependsOn not specified.
+		y function : y+1, dependsOn not specified.
+					equivalent to
+		x function : y, dependsOn y.
+		y function : y+1, dependsOn not specified.
+					equivalent to
+		x function : x+1, dependsOn not specified.
+		y function : x, dependsOn x.		 			
+		
+	 -->
 	<complexType name="movement">
 		<sequence>
 			<element name="area" type="sel:areaFunction" minOccurs="1"

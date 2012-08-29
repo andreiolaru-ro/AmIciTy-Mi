@@ -101,7 +101,7 @@ AbstractScenario<A, C> {
 	}
 
 	/**
-	 * Default parsing of the size and coordinates of the map.
+	 * Parse the size and coordinates of the map.
 	 */
 	protected void parseMapFeatures() {
 		x = ((Double) scenario.getRoot().getFirstNode("map").getFirstNode("features")
@@ -118,13 +118,15 @@ AbstractScenario<A, C> {
 	 * Parse pause events. If an agent is unpause and pause at the same step,
 	 * pause has the priority.
 	 * 
-	 * @return
+	 * @return for each step, you have a map of agents id and if they will move or not
 	 */
-	// FIXME : delete consecutive agents
+	// FIXME : delete consecutive agents pause two steps in a row
 	protected Map<Integer, Map<AgentID, Boolean>> parsePauseEvents() {
+		
 		Iterator<XMLNode> selections = scenario.getRoot().getFirstNode("timeline")
 				.getNodeIterator("selection");
 
+		// see return javadoc
 		Map<Integer, Map<AgentID, Boolean>> pauseUnpause = new HashMap<Integer, Map<AgentID,Boolean>>();
 
 		while (selections.hasNext()) {
@@ -158,6 +160,8 @@ AbstractScenario<A, C> {
 			for (int step = stepStart; step <= stepEnd; step++) {
 				Set<AgentID> agentsArea = new TreeSet<AgentID>();
 
+				// get area and update the final area depeding of the inside boolean
+				// look selectionSchema.xsd comments
 				for(ScenarioFunction function : functions){
 					Set<AgentID> newArea = getAgentsInArea(function.getFunction(), function.getCoordinates(), step);
 					agentsArea = AbstractLocationScenario.mergeAreas(agentsArea, newArea, function.isInside());
@@ -215,7 +219,10 @@ AbstractScenario<A, C> {
 		return pauseUnpause;
 	}
 
-
+	/**
+	 * Parse moving events. 
+	 * @return for each steps, a map with agents which are moving and their new {@link Location}.
+	 */
 	protected Map<Integer, Map<AgentID, Location>> parseMoveEvents() {
 		Iterator<XMLNode> movements = scenario.getRoot().getFirstNode("timeline")
 				.getNodeIterator("movement");
@@ -256,7 +263,8 @@ AbstractScenario<A, C> {
 				deltaLeap = Integer.parseInt(new Long(Math.round((new Double(stepEnd-stepStart).doubleValue()/new Double(numberLeap-1).doubleValue()) - 0.5f)).toString());
 			}
 
-			// Never xDependance and yDependance could have a value in the same time 
+			// Never xDependance and yDependance could have a value in the same time
+			// look moveSchema.xsd comments for more details
 			String xDependance = null ;
 			String yDependance = null ;
 			String xFunction = movement.getFirstNode("moveFunctions").getFirstNode("x").getFirstNode("function").getValue().toString();
@@ -268,9 +276,9 @@ AbstractScenario<A, C> {
 			if(movement.getFirstNode("moveFunctions").getFirstNode("y").getFirstNode("dependsOn") != null)
 				yDependance = movement.getFirstNode("moveFunctions").getFirstNode("y").getFirstNode("dependsOn").getValue().toString();
 
+			// area is just check at the start, and then always the same agents are moving
 			Set<AgentID> agentsArea = new TreeSet<AgentID>();
 			for(ScenarioFunction function : functions){
-				// TODO: area must be not depends on step like with pause
 				Set<AgentID> newArea = getAgentsInArea(function.getFunction(), function.getCoordinates(), 0);
 				agentsArea = AbstractLocationScenario.mergeAreas(agentsArea, newArea, function.isInside());
 			}
@@ -280,7 +288,7 @@ AbstractScenario<A, C> {
 			
 			for (int step = stepStart; step <= stepEnd; step+=deltaLeap) {
 				
-				// moving relatively to the center of the area
+				// we move each agents relatively like the center of the area moving
 				Location centerCoordinates = new Location(lastCenterCoordinates);
 
 				// x and y could depends of t, it doesn't matter
@@ -314,6 +322,7 @@ AbstractScenario<A, C> {
 				Double deltaY = new Double(lastCenterCoordinates.getY() - centerCoordinates.getY());
 				
 				
+				// agents move exactly like the center of the area moves
 				for(AgentID  agent: agentsArea){
 
 					Location agentLocation = new Location(getLastLocation(moveEvents, agent));
@@ -336,6 +345,15 @@ AbstractScenario<A, C> {
 		return moveEvents;
 	}
 
+	/**
+	 * Update the new {@link Location} of an agent. An agent can't be outside of the map.
+	 * This rule have to be thought more seriously.
+	 * @param agentLocation location to update
+	 * @param deltaX moving on axis x
+	 * @param deltaY moving on axis y
+	 */
+	// FIXME : an agent could maybe get outside of the map
+	// for the moment it won't
 	private void adjustLocation(Location agentLocation, Double deltaX, Double deltaY) {
 		
 		// set X
@@ -355,6 +373,16 @@ AbstractScenario<A, C> {
 			agentLocation.setY(agentLocation.getY()+deltaY.doubleValue());
 	}
 
+	/**
+	 * Get the value depending on a function. This value is bounded between a maximum value and zero.
+	 * Function could depend of the the value of the former location.
+	 * 
+	 * @param function String describing the function.
+	 * @param formerLocation Former location you need to update
+	 * @param step step is useful to move depending of the time
+	 * @param maxValue maximum value it could return
+	 * @return the new calculate value 
+	 */
 	private static Double getNewValue(String function, Location formerLocation, int step, double maxValue) {
 		Double newValue = null;
 		Expr expr;
@@ -373,6 +401,7 @@ AbstractScenario<A, C> {
 			if(newValue.doubleValue() < 0)
 				newValue = new Double(0);
 			if(newValue.doubleValue() > maxValue){
+				// FIXME : bug without minus
 				newValue = new Double(maxValue-0.05);
 			}
 		} catch (SyntaxException e) {
@@ -382,7 +411,13 @@ AbstractScenario<A, C> {
 		return newValue;
 	}
 
-
+	/**
+	 * Get teh last location of an agent in the list. Useful to update the moving events of an agent.
+	 * @param moveEvents List containing the moves events for every agents in an area.
+	 * @param id Id of the agents you need to get the last location
+	 * @return the last location of this agent in the list
+	 */
+	
 	private Location getLastLocation(Map<Integer, Map<AgentID, Location>> moveEvents, AgentID id) {
 		// default
 		Location newLocation = agents.get(id).getLocation();
@@ -398,7 +433,15 @@ AbstractScenario<A, C> {
 	}
 
 
-
+	/**
+	 * Merge two areas in one. 
+	 * If inside is at true, it will be the intersection of the two areas. 
+	 * If it's at false, agents in areaToMerge will be removed of teh actual area. 
+	 * @param actualArea main area
+	 * @param areaToMerge area you will merge with actualArea 
+	 * @param inside specify it additions the two areas or it removes agents of areaToMerge from actualArea
+	 * @return the merging between the two areas
+	 */
 	private static  Set<AgentID> mergeAreas(Set<AgentID> actualArea, Set<AgentID> areaToMerge, boolean inside) {
 		Set<AgentID> newArea = new TreeSet<AgentID>(actualArea);
 
