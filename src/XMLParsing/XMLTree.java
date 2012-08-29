@@ -478,18 +478,19 @@ public class XMLTree {
 			e.printStackTrace();
 		}
 		
-		Document document2 = null;
-		DocumentBuilderFactory factory2 = DocumentBuilderFactory.newInstance();
-		try {
-			DocumentBuilder builder2 = factory2.newDocumentBuilder();
-			document2 = builder2.newDocument();
-			Element em = document2.createElement("test");
-			em.appendChild(document2.createTextNode("ceci est du texte"));
-			document2.appendChild(em);
-			displayDocument(document);
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
-		}		
+//		// Debugging....
+//		Document document2 = null;
+//		DocumentBuilderFactory factory2 = DocumentBuilderFactory.newInstance();
+//		try {
+//			DocumentBuilder builder2 = factory2.newDocumentBuilder();
+//			document2 = builder2.newDocument();
+//			Element em = document2.createElement("test");
+//			em.appendChild(document2.createTextNode("ceci est du texte"));
+//			document2.appendChild(em);
+//			displayDocument(document);
+//		} catch (ParserConfigurationException e) {
+//			e.printStackTrace();
+//		}		
 		
 		return document;
 	}

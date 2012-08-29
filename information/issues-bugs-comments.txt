@@ -8,7 +8,9 @@ In this file:
 
 ===== Bugs - things that are expected to work and don't work as expected =====
 
-1.
+1. If gnujaxp.jar is removed from classpath (use the implementation in the JRE), the parsing using characters() changes.
+2. Due to the fact that JAX is also implemented in the JRE (now), there is an exception when saving.
+3. When saving the XML, the namespaces are not correctly parsed when reading the saved file.
 
 == solved ==
 0. --sample solved bug--

@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<scenario xmlns:ns0="xmlns"
+    xmlns:ns1="xmlns"
+    xmlns:ns2="xmlns"
+    xmlns:ns3="xmlns"
+    xmlns:ns4="xsi"
+    xmlns:ns5="xmlns"
+    xmlns:ns6="xmlns"
+    seed="-56552949266271195"
+    xmlns="scen"
+    ns0:ma="http://www.example.org/mapSchema"
+    ns1:mov="http://www.example.org/moveSchema"
+    ns2:pr="http://www.example.org/parameterSchema"
+    ns3:scen="http://www.example.org/scenarioSchema"
+    ns4:schemaLocation="http://www.example.org/scenarioSchema ../schemas/agent/kcaSchema.xsd "
+    ns5:sel="http://www.example.org/selectionSchema"
+    ns6:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+
+    <map>
+
+        <features xmlns="ma" >
+
+            <coordinates>
+
+                <x>
+0.0
+                </x>
+
+                <y>
+0.0
+                </y>
+            </coordinates>
+
+            <size>
+
+                <width>
+31.0
+                </width>
+
+                <height>
+31.0
+                </height>
+            </size>
+        </features>
+
+        <agent xmlns="ma" >
+
+            <location>
+
+                <x>
+
+                    <first xmlns="pr" >
+0.0
+                    </first>
+
+                    <last xmlns="pr" >
+30.0
+                    </last>
+
+                    <count xmlns="pr" >
+40.0
+                    </count>
+                </x>
+
+                <y>
+
+                    <first xmlns="pr" >
+0.0
+                    </first>
+
+                    <last xmlns="pr" >
+30.0
+                    </last>
+
+                    <count xmlns="pr" >
+40.0
+                    </count>
+                </y>
+            </location>
+        </agent>
+    </map>
+
+    <timeline duration="60" >
+
+        <event>
+
+            <type>
+inject
+            </type>
+
+            <pressure>
+
+                <value xmlns="pr" >
+0.0
+                </value>
+            </pressure>
+
+            <persistence>
+
+                <value xmlns="pr" >
+0.2
+                </value>
+            </persistence>
+
+            <domain>
+
+                <a>
+
+                    <min xmlns="pr" >
+0.0
+                    </min>
+
+                    <max xmlns="pr" >
+0.1
+                    </max>
+
+                    <select xmlns="pr" >
+1.0
+                    </select>
+
+                    <foreach xmlns="pr" >
+location/x
+                    </foreach>
+
+                    <foreach xmlns="pr" >
+location/y
+                    </foreach>
+                </a>
+
+                <b>
+
+                    <min xmlns="pr" >
+0.7
+                    </min>
+
+                    <max xmlns="pr" >
+1.0
+                    </max>
+
+                    <select xmlns="pr" >
+1.0
+                    </select>
+
+                    <foreach xmlns="pr" >
+location/x
+                    </foreach>
+
+                    <foreach xmlns="pr" >
+location/y
+                    </foreach>
+
+                    <foreach xmlns="pr" >
+domain/a
+                    </foreach>
+                </b>
+
+                <c>
+
+                    <min xmlns="pr" >
+0.0
+                    </min>
+
+                    <max xmlns="pr" >
+0.3
+                    </max>
+
+                    <select xmlns="pr" >
+3.0
+                    </select>
+
+                    <foreach xmlns="pr" >
+location/x
+                    </foreach>
+
+                    <foreach xmlns="pr" >
+location/y
+                    </foreach>
+                </c>
+            </domain>
+
+            <location>
+
+                <x>
+
+                    <min xmlns="pr" >
+7.0
+                    </min>
+
+                    <max xmlns="pr" >
+23.0
+                    </max>
+
+                    <select xmlns="pr" >
+1.0
+                    </select>
+                </x>
+
+                <y>
+
+                    <min xmlns="pr" >
+7.0
+                    </min>
+
+                    <max xmlns="pr" >
+23.0
+                    </max>
+
+                    <select xmlns="pr" >
+2.0
+                    </select>
+
+                    <foreach xmlns="pr" >
+location/x
+                    </foreach>
+                </y>
+            </location>
+
+            <time>
+
+                <min xmlns="pr" >
+1.0
+                </min>
+
+                <max xmlns="pr" >
+90.0
+                </max>
+
+                <select xmlns="pr" >
+40.0
+                </select>
+            </time>
+        </event>
+
+        <selection>
+
+            <area xmlns="sel" >
+
+                <function>
+(14-t)
+                </function>
+
+                <centerCoordinates>
+
+                    <x>
+15.0
+                    </x>
+
+                    <y>
+15.0
+                    </y>
+                </centerCoordinates>
+
+                <inside>
+true
+                </inside>
+            </area>
+
+            <area xmlns="sel" >
+
+                <function>
+2.0
+                </function>
+
+                <centerCoordinates>
+
+                    <x>
+15.0
+                    </x>
+
+                    <y>
+15.0
+                    </y>
+                </centerCoordinates>
+
+                <inside>
+false
+                </inside>
+            </area>
+
+            <area xmlns="sel" >
+
+                <function>
+3.0
+                </function>
+
+                <centerCoordinates>
+
+                    <x>
+8.0
+                    </x>
+
+                    <y>
+8.0
+                    </y>
+                </centerCoordinates>
+
+                <inside>
+false
+                </inside>
+            </area>
+
+            <action xmlns="sel" >
+pause
+            </action>
+
+            <timeStart xmlns="sel" >
+0.0
+            </timeStart>
+
+            <timeEnd xmlns="sel" >
+7.0
+            </timeEnd>
+        </selection>
+
+        <selection>
+
+            <area xmlns="sel" >
+
+                <function>
+3.0
+                </function>
+
+                <centerCoordinates>
+
+                    <x>
+20.0
+                    </x>
+
+                    <y>
+20.0
+                    </y>
+                </centerCoordinates>
+
+                <inside>
+true
+                </inside>
+            </area>
+
+            <action xmlns="sel" >
+pause
+            </action>
+
+            <timeStart xmlns="sel" >
+10.0
+            </timeStart>
+
+            <timeEnd xmlns="sel" >
+18.0
+            </timeEnd>
+        </selection>
+
+        <selection>
+
+            <area xmlns="sel" >
+
+                <function>
+2.0
+                </function>
+
+                <centerCoordinates>
+
+                    <x>
+15.0
+                    </x>
+
+                    <y>
+15.0
+                    </y>
+                </centerCoordinates>
+
+                <inside>
+true
+                </inside>
+            </area>
+
+            <action xmlns="sel" >
+pause
+            </action>
+
+            <timeStart xmlns="sel" >
+6.0
+            </timeStart>
+
+            <timeEnd xmlns="sel" >
+15.0
+            </timeEnd>
+        </selection>
+
+        <movement>
+
+            <area xmlns="mov" >
+
+                <function xmlns="sel" >
+4.0
+                </function>
+
+                <centerCoordinates xmlns="sel" >
+
+                    <x>
+5.0
+                    </x>
+
+                    <y>
+5.0
+                    </y>
+                </centerCoordinates>
+
+                <inside xmlns="sel" >
+true
+                </inside>
+            </area>
+
+            <moveFunctions xmlns="mov" >
+
+                <x>
+
+                    <function>
+x+1
+                    </function>
+                </x>
+
+                <y>
+
+                    <function>
+((x-5)*(x-5))/20
+                    </function>
+
+                    <dependsOn>
+x
+                    </dependsOn>
+                </y>
+            </moveFunctions>
+
+            <numberLeap xmlns="mov" >
+4.0
+            </numberLeap>
+
+            <timeStart xmlns="mov" >
+8.0
+            </timeStart>
+
+            <timeEnd xmlns="mov" >
+17.0
+            </timeEnd>
+        </movement>
+    </timeline>
+
+</scenario>

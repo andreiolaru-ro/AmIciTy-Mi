@@ -219,7 +219,7 @@ public class SimulationKCA extends Simulation<EnvironmentKCA, CommandKCA>
 		});
 		box.add(save);
 
-		JButton override = new JButton("Override");
+		JButton override = new JButton("Overwrite");
 		override.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e)
