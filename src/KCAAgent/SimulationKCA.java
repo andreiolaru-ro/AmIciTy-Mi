@@ -126,7 +126,7 @@ public class SimulationKCA extends Simulation<EnvironmentKCA, CommandKCA>
 		row.add(new WindowParameters(Type.MAX_PRESSURE_GRAPH));
 		row.add(new WindowParameters(Type.MESSAGE_AVG_GRAPH));
 		row.add(new WindowParameters(Type.USELESS_FACTS_AVG_GRAF));
-		row.add(new WindowParameters(Type.AGENT_BALANCE));
+//		row.add(new WindowParameters(Type.AGENT_BALANCE));
 		row.add(new WindowParameters(Type.AGENT_BALANCE_AVG_GRAF));
 
 		row = layout.addRow(Type.GLOBAL_GOAL_NUMBER_GRAPH, 3, new AbstractGraphViewer.GraphParam(null, new AbstractGraphViewer.GraphLink("LG"), new Integer(1)));
