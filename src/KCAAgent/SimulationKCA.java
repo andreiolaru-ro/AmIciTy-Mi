@@ -71,9 +71,9 @@ public class SimulationKCA extends Simulation<EnvironmentKCA, CommandKCA> {
 		}
 	}
 
-	public final static String					scenarioName	= "scenarios/kcaScenario.xml";
+	// public final static String scenarioName = "scenarios/kcaScenario.xml";
 	// public final static String scenarioName = "scenarios/ooo.xml";
-	// public final static String scenarioName = "scenarios/kca_test3r.xml";
+	public final static String					scenarioName	= "scenarios/kca_test3r.xml";
 
 	KCAScenario									scenario		= new KCAScenario(scenarioName);
 
