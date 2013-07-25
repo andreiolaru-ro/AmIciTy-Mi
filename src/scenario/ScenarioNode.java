@@ -1,3 +1,14 @@
+/*******************************************************************************
+ * Copyright (C) 2013 Andrei Olaru. See the AUTHORS file for more information.
+ * 
+ * This file is part of AmIciTy-Mi.
+ * 
+ * AmIciTy-Mi is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
+ * 
+ * AmIciTy-Mi is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with AmIciTy-Mi.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package scenario;
 
 import java.util.ArrayList;
@@ -7,17 +18,16 @@ import java.util.List;
 import XMLParsing.XMLTree.XMLNode;
 
 /**
- *  * {@link ScenarioNode} is a {@link XMLNode} with a set of parameters. These
+ * * {@link ScenarioNode} is a {@link XMLNode} with a set of parameters. These
  * parameters could generate random values.
  * 
  * @author Alexandre Hocquard
  * 
  */
 public class ScenarioNode extends XMLNode {
-	
-	private Parameters parameters ;
-	
-	
+
+	private Parameters	parameters;
+
 	public ScenarioNode(XMLNode node) {
 		super(node);
 		parameters = new Parameters(this);
@@ -78,12 +88,12 @@ public class ScenarioNode extends XMLNode {
 					allValueNull = false;
 				}
 				if (node.getNodeIterator("count").hasNext()) {
-					count = new Integer(((Double) node.getNodeIterator("count").next()
-							.getValue()).intValue());
+					count = new Integer(
+							((Double) node.getNodeIterator("count").next().getValue()).intValue());
 				}
 				if (node.getNodeIterator("select").hasNext()) {
-					select = new Integer(((Double) node.getNodeIterator("select").next()
-							.getValue()).intValue());
+					select = new Integer(
+							((Double) node.getNodeIterator("select").next().getValue()).intValue());
 				}
 				if (node.getNodeIterator("step").hasNext()) {
 					step = (Double) node.getNodeIterator("step").next().getValue();
@@ -97,8 +107,6 @@ public class ScenarioNode extends XMLNode {
 				}
 			}
 		}
-
-
 
 		List<String> getValues() {
 			List<String> res = new ArrayList<String>();
@@ -114,8 +122,8 @@ public class ScenarioNode extends XMLNode {
 				for (int i = 0; i < select.intValue(); i++) {
 					if (mean != null && stdev != null) {
 						while (true) {
-							double val = mean.doubleValue() + AbstractScenario.rand().nextGaussian()
-									* stdev.doubleValue();
+							double val = mean.doubleValue()
+									+ AbstractScenario.rand().nextGaussian() * stdev.doubleValue();
 							if (max.doubleValue() <= val && val <= min.doubleValue()) {
 								res.add(new Double(val).toString());
 								break;
@@ -155,22 +163,20 @@ public class ScenarioNode extends XMLNode {
 				double val = 0.0;
 				if (step == null) {
 					assert count.intValue() >= (first != null ? 1 : 0) + (last != null ? 1 : 0);
-					step = new Double(
-							(stop - start)
+					step = new Double((stop - start)
 							/ (count.intValue() - (first != null ? 0.5 : 0.0) - (last != null ? 0.5
 									: 0.0)));
 					val = first != null ? start : start + step.intValue() / 2;
 				}
 				if (count == null) {
 					assert first == null || last == null;
-					count = new Integer(1 + (int) Math.floor((stop - start)
-							/ step.doubleValue()));
-					val = first != null ? start : start
-							+ step.doubleValue()
-							* (last != null ? stop - (count.intValue() - 1)
-									* step.doubleValue()
-									: (stop + start - (count.intValue() - 1)
-											* step.doubleValue()) / 2);
+					count = new Integer(1 + (int) Math.floor((stop - start) / step.doubleValue()));
+					val = first != null ? start
+							: start
+									+ step.doubleValue()
+									* (last != null ? stop - (count.intValue() - 1)
+											* step.doubleValue() : (stop + start - (count
+											.intValue() - 1) * step.doubleValue()) / 2);
 				}
 				for (int i = 0; i < count.intValue(); i++) {
 					if (stdev != null) {
@@ -179,12 +185,12 @@ public class ScenarioNode extends XMLNode {
 									* stdev.doubleValue();
 							boolean ok1 = i == 0 && v >= min.doubleValue()
 									|| v >= val - stdev.doubleValue();
-									boolean ok2 = i == count.intValue() - 1 && v <= max.doubleValue()
-											|| v <= val + stdev.doubleValue();
-									if (ok1 && ok2) {
-										res.add(new Double(v).toString());
-										break;
-									}
+							boolean ok2 = i == count.intValue() - 1 && v <= max.doubleValue()
+									|| v <= val + stdev.doubleValue();
+							if (ok1 && ok2) {
+								res.add(new Double(v).toString());
+								break;
+							}
 						}
 					} else {
 						res.add(new Double(val).toString());
@@ -215,12 +221,11 @@ public class ScenarioNode extends XMLNode {
 
 		@Override
 		public String toString() {
-			return "Parameters [list=" + list + ", mean=" + mean + ", stdev=" + stdev
-					+ ", min=" + min + ", max=" + max + ", first=" + first + ", last=" + last
-					+ ", count=" + count + ", select=" + select + ", step=" + step
-					+ ", foreach=" + foreach + "]";
+			return "Parameters [list=" + list + ", mean=" + mean + ", stdev=" + stdev + ", min="
+					+ min + ", max=" + max + ", first=" + first + ", last=" + last + ", count="
+					+ count + ", select=" + select + ", step=" + step + ", foreach=" + foreach
+					+ "]";
 		}
 
 	}
 }
-

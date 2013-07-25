@@ -1,3 +1,14 @@
+/*******************************************************************************
+ * Copyright (C) 2013 Andrei Olaru. See the AUTHORS file for more information.
+ * 
+ * This file is part of AmIciTy-Mi.
+ * 
+ * AmIciTy-Mi is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
+ * 
+ * AmIciTy-Mi is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with AmIciTy-Mi.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package KCAAgent;
 
 import java.util.Collection;
@@ -30,56 +41,57 @@ import base.Environment;
 import base.Message;
 
 public class KCAAgent extends LocationAgent {
-	private static double						balanceMinimum			= 0.4;
+	private static double			balanceMinimum			= 0.4;
 
 	// payload
-	private int									usedCapacity			= 0;
+	private int						usedCapacity			= 0;
 	// private Collection<Data> data = new Vector<Data>(); // data held by this
 	// agent
 
 	// internal workings
-	KnowledgeBase								kb;
-	private GoalList							goals					= new GoalList();
-	//these are the agent's desires. they must be transformed in intentions in order to take action
+	KnowledgeBase					kb;
+	private GoalList				goals					= new GoalList();
+	// these are the agent's desires. they must be transformed in intentions in
+	// order to take action
 
-	private NumericMeasure						capacity;
+	private NumericMeasure			capacity;
 
-	private Goal								freeGoal				= null;
-	private Intention.IntentionList				intentions				= new Intention.IntentionList();
+	private Goal					freeGoal				= null;
+	private Intention.IntentionList	intentions				= new Intention.IntentionList();
 
 	// behaviour
-	private Specialty							agent_specialty;																		// sorry
-																																		// for
+	private Specialty				agent_specialty;													// sorry
+																										// for
 	// the naming convention
-	public Specialty[]							specialtyHistory;
-	public int									currentSpecialtyIndex	= -1;
-	private FloatMeasure						agent_pressure;																		// sorry
-																																		// for
-																																		// the
-																																		// naming
-																																		// convention
-	private FloatMeasure						lowPressure;
-	private FloatMeasure						highPressure;																			// only
+	public Specialty[]				specialtyHistory;
+	public int						currentSpecialtyIndex	= -1;
+	private FloatMeasure			agent_pressure;													// sorry
+																										// for
+																										// the
+																										// naming
+																										// convention
+	private FloatMeasure			lowPressure;
+	private FloatMeasure			highPressure;														// only
 	// positive measures communication up
-	private EnvironmentKCA						parent;
+	private EnvironmentKCA			parent;
 	@SuppressWarnings("unused")
-	private Vector<Fact>						externalRequests		= new Vector<Fact>();											// data
-																																		// id's
-																																		// requested
-																																		// from
-																																		// outside
+	private Vector<Fact>			externalRequests		= new Vector<Fact>();						// data
+																										// id's
+																										// requested
+																										// from
+																										// outside
 	// peer
-	private Queue<MessageKCA>	inbox					= new PriorityBlockingQueue<MessageKCA>();
-	private Queue<MessageKCA>	atemporalInbox			= new PriorityBlockingQueue<MessageKCA>();
+	private Queue<MessageKCA>		inbox					= new PriorityBlockingQueue<MessageKCA>();
+	private Queue<MessageKCA>		atemporalInbox			= new PriorityBlockingQueue<MessageKCA>();
 
-	private NumericMeasure						agentBalance;
-	private NumericMeasure						agentUselessFacts;
+	private NumericMeasure			agentBalance;
+	private NumericMeasure			agentUselessFacts;
 
 	// logging
-	private boolean								selected				= false;
+	private boolean					selected				= false;
 
-	private Map<AgentID, KCAAgent>				neighbours;
-	private Measures							measures;
+	private Map<AgentID, KCAAgent>	neighbours;
+	private Measures				measures;
 
 	@SuppressWarnings("hiding")
 	public KCAAgent(EnvironmentKCA parent, AgentID id, Location loc, int capacity, int nsteps) {
@@ -146,7 +158,6 @@ public class KCAAgent extends LocationAgent {
 			}
 		}
 	}
-
 
 	public void setHistory(int nsteps) {
 		specialtyHistory = new Specialty[nsteps + 1];
@@ -465,9 +476,9 @@ public class KCAAgent extends LocationAgent {
 							// if(nsuccess >= (neighbours.size() *
 							// Logix.getInformFraction()))
 							// {
-							
-							//if it was pressure 1, take it down from here
-							i.goal.relatedFact.fadePressure(0.01f); 
+
+							// if it was pressure 1, take it down from here
+							i.goal.relatedFact.fadePressure(0.01f);
 
 							log.li("plan done: ~", i);
 							// goal is satisfied
@@ -697,8 +708,8 @@ public class KCAAgent extends LocationAgent {
 		// Fact(id, action.relatedData).toCollection()));
 		// break;
 		case INFORM:
-			sendMessage(action.targetAgent, new MessageKCA(id, Type.INFORM,
-					action.relatedFact.toCollection()));
+			sendMessage(action.targetAgent,
+					new MessageKCA(id, Type.INFORM, action.relatedFact.toCollection()));
 			break;
 
 		}
@@ -716,10 +727,11 @@ public class KCAAgent extends LocationAgent {
 				.floatValue()), MeasureName.HIGHPRESSURE);
 	}
 
-	// AO returns at what point this specialty was most similar to the agent's specialty, 
+	// AO returns at what point this specialty was most similar to the agent's
+	// specialty,
 	// as a fraction of the agent's entire evolution
-	public double gradeFactHistory(Specialty factSpec, int firstStep) { 
-		
+	public double gradeFactHistory(Specialty factSpec, int firstStep) {
+
 		double maxI = 0.0f;
 		double maxSim = 0.0f;
 		double sim;
@@ -801,10 +813,12 @@ public class KCAAgent extends LocationAgent {
 		return inbox;
 	}
 
+	@Override
 	public boolean isSelected() {
 		return selected;
 	}
 
+	@Override
 	public void toggleSelected() {
 		selected = !selected;
 		if (selected)

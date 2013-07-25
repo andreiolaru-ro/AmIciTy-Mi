@@ -1,3 +1,14 @@
+/*******************************************************************************
+ * Copyright (C) 2013 Andrei Olaru. See the AUTHORS file for more information.
+ * 
+ * This file is part of AmIciTy-Mi.
+ * 
+ * AmIciTy-Mi is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
+ * 
+ * AmIciTy-Mi is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with AmIciTy-Mi.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package XMLParsing;
 
 import java.util.HashSet;
@@ -106,7 +117,7 @@ public class XMLTree {
 				super();
 				this.name = attrName;
 				this.value = attrValue;
-				this.namespace = attNS; 
+				this.namespace = attNS;
 			}
 		}
 
@@ -312,34 +323,30 @@ public class XMLTree {
 		public Node toElement(Document document) {
 
 			Element node = document.createElementNS(this.namespace, this.name);
-			
-			if (valueDouble != null){
+
+			if (valueDouble != null) {
 				node.appendChild(document.createTextNode(valueDouble.toString()));
-			}
-			else if (valueInt != null){
+			} else if (valueInt != null) {
 				node.appendChild(document.createTextNode(valueInt.toString()));
-			}
-			else if (valueString != null){
+			} else if (valueString != null) {
 				node.appendChild(document.createTextNode(valueString));
-			}
-			else {
-				for (XMLAttribute attribute : attributes){
-//					System.out.println(attribute.value);
-//					System.out.println(attribute.name);
+			} else {
+				for (XMLAttribute attribute : attributes) {
+					// System.out.println(attribute.value);
+					// System.out.println(attribute.name);
 					String split[] = attribute.name.split(":");
-					if(split.length < 2){
+					if (split.length < 2) {
 						node.setAttribute(split[0], attribute.value);
-					}
-					else{
+					} else {
 						node.setAttributeNS(split[0], split[1], attribute.value);
 					}
 				}
 				for (XMLNode child : nodes)
 					node.appendChild(child.toElement(document));
 			}
-			return node ;
+			return node;
 		}
-		
+
 	}
 
 	XMLNode			root	= null;
@@ -477,52 +484,60 @@ public class XMLTree {
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
 		}
-		
-//		// Debugging....
-//		Document document2 = null;
-//		DocumentBuilderFactory factory2 = DocumentBuilderFactory.newInstance();
-//		try {
-//			DocumentBuilder builder2 = factory2.newDocumentBuilder();
-//			document2 = builder2.newDocument();
-//			Element em = document2.createElement("test");
-//			em.appendChild(document2.createTextNode("ceci est du texte"));
-//			document2.appendChild(em);
-//			displayDocument(document);
-//		} catch (ParserConfigurationException e) {
-//			e.printStackTrace();
-//		}		
-		
+
+		// // Debugging....
+		// Document document2 = null;
+		// DocumentBuilderFactory factory2 =
+		// DocumentBuilderFactory.newInstance();
+		// try {
+		// DocumentBuilder builder2 = factory2.newDocumentBuilder();
+		// document2 = builder2.newDocument();
+		// Element em = document2.createElement("test");
+		// em.appendChild(document2.createTextNode("ceci est du texte"));
+		// document2.appendChild(em);
+		// displayDocument(document);
+		// } catch (ParserConfigurationException e) {
+		// e.printStackTrace();
+		// }
+
 		return document;
 	}
 
 	/**
 	 * Display an XML {@link Document} with the correct indentation
+	 * 
 	 * @param document
 	 */
-	public void displayDocument(Document document){
+	public void displayDocument(Document document) {
 		NodeList nodes = document.getChildNodes();
 		displayDocument(nodes, 0);
 	}
-	
+
 	/**
 	 * Display a {@link NodeList} with indentation specified by depth
-	 * @param nodes nodes to display
-	 * @param depth number of tabulation in order to indent correctly
+	 * 
+	 * @param nodes
+	 *            nodes to display
+	 * @param depth
+	 *            number of tabulation in order to indent correctly
 	 */
-	public void displayDocument(NodeList nodes, int depth){
-		for(int i=0 ; i<nodes.getLength() ; i++){
-			for(int j=0 ; j<depth ; j++)
+	public void displayDocument(NodeList nodes, int depth) {
+		for (int i = 0; i < nodes.getLength(); i++) {
+			for (int j = 0; j < depth; j++)
 				System.out.print('\t');
-			System.out.print(nodes.item(i).getNamespaceURI() + ":" + nodes.item(i).getNodeName() + "=" + nodes.item(i).getNodeValue());
+			System.out.print(nodes.item(i).getNamespaceURI() + ":" + nodes.item(i).getNodeName()
+					+ "=" + nodes.item(i).getNodeValue());
 			NamedNodeMap attributes = nodes.item(i).getAttributes();
-			if(attributes != null){
-				for(int k=0 ; k<attributes.getLength() ; k++){
+			if (attributes != null) {
+				for (int k = 0; k < attributes.getLength(); k++) {
 					Attr attribute = (Attr) attributes.item(k);
-					System.out.print("[" +  attribute.getNamespaceURI() + ":" + attributes.item(k).getNodeName() + "=" + attributes.item(k).getNodeValue() + "]");
+					System.out.print("[" + attribute.getNamespaceURI() + ":"
+							+ attributes.item(k).getNodeName() + "="
+							+ attributes.item(k).getNodeValue() + "]");
 				}
 			}
 			System.out.println("");
-			displayDocument(nodes.item(i).getChildNodes(), depth+1);
+			displayDocument(nodes.item(i).getChildNodes(), depth + 1);
 		}
 
 	}

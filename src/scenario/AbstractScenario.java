@@ -1,3 +1,14 @@
+/*******************************************************************************
+ * Copyright (C) 2013 Andrei Olaru. See the AUTHORS file for more information.
+ * 
+ * This file is part of AmIciTy-Mi.
+ * 
+ * AmIciTy-Mi is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
+ * 
+ * AmIciTy-Mi is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with AmIciTy-Mi.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package scenario;
 
 import java.io.BufferedReader;
@@ -16,8 +27,6 @@ import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import javax.xml.transform.TransformerFactoryConfigurationError;
-
 import XMLParsing.XMLParser;
 import XMLParsing.XMLTree;
 import XMLParsing.XMLTree.XMLNode;
@@ -26,11 +35,14 @@ import agent.AgentID;
 import base.Command;
 
 /**
- * Commun functions and variables for each scenarios. 
+ * Commun functions and variables for each scenarios.
+ * 
  * @author Alexandre Hocquard
- *
- * @param <T> Type of the agent of the scenario
- * @param <C> Type of the commands of the scenario
+ * 
+ * @param <T>
+ *            Type of the agent of the scenario
+ * @param <C>
+ *            Type of the commands of the scenario
  */
 public class AbstractScenario<T extends AbstractAgent, C extends Command> {
 
@@ -52,18 +64,18 @@ public class AbstractScenario<T extends AbstractAgent, C extends Command> {
 	protected XMLTree				scenario;
 
 	protected SortedSet<Command>	commandset		= new TreeSet<Command>(
-			new Comparator<Command>() {
-				@Override
-				public int compare(Command c1,
-						Command c2) {
-					if (c1.getTime() != c2
-							.getTime()) {
-						return c1.getTime()
-								- c2.getTime();
-					}
-					return c1.getId() - c2.getId();
-				}
-			});
+															new Comparator<Command>() {
+																@Override
+																public int compare(Command c1,
+																		Command c2) {
+																	if (c1.getTime() != c2
+																			.getTime()) {
+																		return c1.getTime()
+																				- c2.getTime();
+																	}
+																	return c1.getId() - c2.getId();
+																}
+															});
 
 	@SuppressWarnings("hiding")
 	protected AbstractScenario(String schemaFileName, String scenarioFileName) {
@@ -265,7 +277,8 @@ public class AbstractScenario<T extends AbstractAgent, C extends Command> {
 	}
 
 	/**
-	 * Parse the seed in the xml scenario. If it's not specified, it will read it in test/seed.
+	 * Parse the seed in the xml scenario. If it's not specified, it will read
+	 * it in test/seed.
 	 */
 	protected void parseSeed() {
 		// attributes are always String with XMLParser
@@ -286,7 +299,7 @@ public class AbstractScenario<T extends AbstractAgent, C extends Command> {
 	/**
 	 * Update teh seed in the scenario. Useful to save function.
 	 */
-	protected void updateSeedToRoot(){
+	protected void updateSeedToRoot() {
 		scenario.getRoot().setAttribute("seed", new Long(seed).toString());
 	}
 

@@ -1,3 +1,14 @@
+/*******************************************************************************
+ * Copyright (C) 2013 Andrei Olaru. See the AUTHORS file for more information.
+ * 
+ * This file is part of AmIciTy-Mi.
+ * 
+ * AmIciTy-Mi is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
+ * 
+ * AmIciTy-Mi is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with AmIciTy-Mi.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package XMLParsing;
 
 import java.io.File;
@@ -35,13 +46,13 @@ import XMLParsing.XMLTree.XMLNode;
 import XMLParsing.XMLTree.XMLNode.XMLAttribute;
 
 /**
- * Executes the parsing of an XML file, using the SAX parser. Parsing should be done using one of the provided static functions.
+ * Executes the parsing of an XML file, using the SAX parser. Parsing should be
+ * done using one of the provided static functions.
  * 
  * @author Andrei Olaru
  * 
  */
-public class XMLParser extends DefaultHandler
-{
+public class XMLParser extends DefaultHandler {
 	protected String	unitName		= null; // for logging
 	protected Logger	log				= null;
 
@@ -58,8 +69,7 @@ public class XMLParser extends DefaultHandler
 	 * 
 	 * @return The {@link XMLTree} containing the information in the XML file.
 	 */
-	public static XMLTree validateParse(String schema, String file)
-	{
+	public static XMLTree validateParse(String schema, String file) {
 		String schemas[] = new String[1];
 		schemas[0] = schema;
 
@@ -75,11 +85,9 @@ public class XMLParser extends DefaultHandler
 	 *            The file to parse.
 	 * @return The {@link XMLTree} containing the information in the XML file.
 	 */
-	public static XMLTree validateParse(String schemas[], String file)
-	{
+	public static XMLTree validateParse(String schemas[], String file) {
 		XMLParser parser = new XMLParser(schemas);
-		if(parser.validate(file))
-		{
+		if (parser.validate(file)) {
 			XMLTree ret = parser.parse(file);
 			parser.close();
 			return ret;
@@ -87,81 +95,71 @@ public class XMLParser extends DefaultHandler
 		return null;
 	}
 
-	public XMLParser(String schemas[])
-	{
+	public XMLParser(String schemas[]) {
 		this.schemaFiles = schemas;
 		String names = "";
-		for(String schema : schemas)
+		for (String schema : schemas)
 			names += schema.substring(schema.lastIndexOf('/') + 1) + "; ";
 		this.unitName = this.getClass().getName() + ":" + names;
-		//		log = cm.getLogger();
-		//		log.setLevel(Level.INFO);
+		// log = cm.getLogger();
+		// log.setLevel(Level.INFO);
 	}
 
-	protected boolean validate(String file)
-	{
+	protected boolean validate(String file) {
 		// build an XSD-aware SchemaFactory
 		SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 
 		// hook up org.xml.sax.ErrorHandler implementation.
 		schemaFactory.setErrorHandler(this);
 
-		// get the custom xsd schema describing the required format for my XML files.
+		// get the custom xsd schema describing the required format for my XML
+		// files.
 		Schema schemaXSD;
-		try
-		{
-			Vector<Source> src = new Vector<Source>(schemaFiles.length); 
-			for(String schemaFile : schemaFiles)
-			{
+		try {
+			Vector<Source> src = new Vector<Source>(schemaFiles.length);
+			for (String schemaFile : schemaFiles) {
 				File schema = new File(schemaFile);
-				if(!schema.exists())
-					try
-				{
+				if (!schema.exists())
+					try {
 						throw new IOException("File does not exist [" + schemaFiles + "]");
-				} catch(IOException e)
-				{
-					e.printStackTrace();
-					return false;
-				}
+					} catch (IOException e) {
+						e.printStackTrace();
+						return false;
+					}
 				src.add(new StreamSource(schema));
 			}
 			Source srcA[] = src.toArray(new Source[0]);
 			schemaXSD = schemaFactory.newSchema(srcA);
-		} catch(SAXException e)
-		{
+		} catch (SAXException e) {
 			e.printStackTrace();
 			return false;
 		}
 
-		// Create a validator capable of validating XML files according to my custom schema.
+		// Create a validator capable of validating XML files according to my
+		// custom schema.
 		Validator validator = schemaXSD.newValidator();
 
 		// Get a parser capable of parsing vanilla XML into a DOM tree
 		DocumentBuilder parser;
-		try
-		{
+		try {
 			DocumentBuilderFactory fact = DocumentBuilderFactory.newInstance();
 			fact.setNamespaceAware(true);
 			parser = fact.newDocumentBuilder();
-		} catch(ParserConfigurationException e)
-		{
+		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
 			return false;
 		}
 
 		// parse the XML purely as XML and get a DOM tree representation.
 		Document document;
-		try
-		{
+		try {
 			document = parser.parse(new File(file));
 			// parse the XML DOM tree against the stricter XSD schema
 			validator.validate(new DOMSource(document));
-		} catch(SAXException e)
-		{
+		} catch (SAXException e) {
 			e.printStackTrace();
 			return false;
-		} catch(IOException e)
-		{
+		} catch (IOException e) {
 			e.printStackTrace();
 			return false;
 		}
@@ -170,10 +168,8 @@ public class XMLParser extends DefaultHandler
 
 	}
 
-	protected XMLTree parse(String fileName)
-	{
-		try
-		{
+	protected XMLTree parse(String fileName) {
+		try {
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			SAXParser parser = factory.newSAXParser();
 			parser.parse(new File(fileName), this);
@@ -181,138 +177,119 @@ public class XMLParser extends DefaultHandler
 			XMLTree ret = thetree;
 			thetree = null;
 			return ret;
-		} catch(ParserConfigurationException e)
-		{
+		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
-		} catch(SAXException e)
-		{
+		} catch (SAXException e) {
 			e.printStackTrace();
-		} catch(IOException e)
-		{
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
 
 	@Override
-	public void startElement(String ns, String localName, String qName, Attributes att) throws SAXException
-	{
-		//		String attr = "";
-		//		for(int i = 0; i < att.getLength(); i++)
-		//			attr += "[" + att.getQName(i) + " " + att.getValue(i) + "]";
-		//		log.trace("> " + ns + " | " + localName + " | " + qName + " | " + attr);
+	public void startElement(String ns, String localName, String qName, Attributes att)
+			throws SAXException {
+		// String attr = "";
+		// for(int i = 0; i < att.getLength(); i++)
+		// attr += "[" + att.getQName(i) + " " + att.getValue(i) + "]";
+		// log.trace("> " + ns + " | " + localName + " | " + qName + " | " +
+		// attr);
 
 		XMLNode node = new XMLNode(qName);
 
-		if(thetree != null)
-		{
+		if (thetree != null) {
 			thetree.newNode(node);
-		}
-		else
-		{
+		} else {
 			thetree = new XMLTree(node);
 		}
 
-		for(int i = 0; i < att.getLength(); i++){
-			thetree.newAttribute(new XMLAttribute(att.getURI(i),att.getQName(i), att.getValue(i)));
+		for (int i = 0; i < att.getLength(); i++) {
+			thetree.newAttribute(new XMLAttribute(att.getURI(i), att.getQName(i), att.getValue(i)));
 		}
 	}
 
 	@Override
-	public void endElement(String uri, String localName, String qName) throws SAXException
-	{
-		//		log.trace("> " + uri + " | " + localName + " | " + qName + "//" + thetree.currentNode().toString());
+	public void endElement(String uri, String localName, String qName) throws SAXException {
+		// log.trace("> " + uri + " | " + localName + " | " + qName + "//" +
+		// thetree.currentNode().toString());
 		thetree.finishNode();
 	}
 
 	@Override
-	public void characters(char[] ch, int start, int length) throws SAXException
-	{
+	public void characters(char[] ch, int start, int length) throws SAXException {
 		String value = (new String(ch, start, length)).trim();
-		//		log.trace("value: [" + value + "]");
+		// log.trace("value: [" + value + "]");
 
-		if(!value.equals("")){
+		if (!value.equals("")) {
 
-			try
-			{
-				double dvalue= Double.parseDouble(value) ;
-				//				double dvalueRound = new Double(Math.round(dvalue)).doubleValue() ;
+			try {
+				double dvalue = Double.parseDouble(value);
+				// double dvalueRound = new
+				// Double(Math.round(dvalue)).doubleValue() ;
 
-				//				if(dvalue != dvalueRound)
-				//				{
+				// if(dvalue != dvalueRound)
+				// {
 				thetree.currentNode().setValue(dvalue);
-				//				}
-				//				else{
-				//					thetree.currentNode().setValue(new Long(Math.round(dvalue)).intValue());
-				//				}
-			}
-			catch(NumberFormatException ex)
-			{
-				//				try
-				//				{
-				//					int nvalue = Integer.parseInt(value);
-				//					thetree.currentNode().setValue(nvalue);
-				//				} catch(NumberFormatException ex2)
-				//				{
+				// }
+				// else{
+				// thetree.currentNode().setValue(new
+				// Long(Math.round(dvalue)).intValue());
+				// }
+			} catch (NumberFormatException ex) {
+				// try
+				// {
+				// int nvalue = Integer.parseInt(value);
+				// thetree.currentNode().setValue(nvalue);
+				// } catch(NumberFormatException ex2)
+				// {
 				thetree.currentNode().setValue(value);
-				//				}
+				// }
 			}
 		}
 
-
 	}
 
 	@Override
-	public void startDocument() throws SAXException
-	{
-		//		log.trace("startdoc");
+	public void startDocument() throws SAXException {
+		// log.trace("startdoc");
 	}
 
 	@Override
-	public void endDocument()
-	{
-		//		if(thetree.currentNode() != null)
-		//			log.error("XML tree not consistent");
-		//		log.trace("enddoc");
+	public void endDocument() {
+		// if(thetree.currentNode() != null)
+		// log.error("XML tree not consistent");
+		// log.trace("enddoc");
 	}
 
-	public static void save(File file, XMLTree tree)
-	{
+	public static void save(File file, XMLTree tree) {
 		Document doc = tree.toDocument();
-		
+
 		Transformer transformer = null;
-		try
-		{
+		try {
 			transformer = TransformerFactory.newInstance().newTransformer();
-//			transformer.setOutputProperty(OutputKeys.METHOD, "text");
+			// transformer.setOutputProperty(OutputKeys.METHOD, "text");
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-	        transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-	        transformer.setOutputProperty(OutputKeys.STANDALONE, "yes");
-			
+			transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+			transformer.setOutputProperty(OutputKeys.STANDALONE, "yes");
+
 			// initialize StreamResult with File object to save to file
 			StreamResult result = new StreamResult(file);
 			DOMSource source = new DOMSource(doc);
-			try
-			{
+			try {
 				transformer.transform(source, result);
-			} catch(TransformerException e)
-			{
+			} catch (TransformerException e) {
 				e.printStackTrace();
 			}
-		} catch(TransformerConfigurationException e)
-		{
+		} catch (TransformerConfigurationException e) {
 			e.printStackTrace();
-		} catch(TransformerFactoryConfigurationError e)
-		{
+		} catch (TransformerFactoryConfigurationError e) {
 			e.printStackTrace();
 		}
 	}
 
-
-
-	public void close()
-	{
-		//		Log.exitLogger(unitName);
+	public void close() {
+		// Log.exitLogger(unitName);
 	}
 
 }
