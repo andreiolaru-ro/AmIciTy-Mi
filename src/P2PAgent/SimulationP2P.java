@@ -1,5 +1,12 @@
 package P2PAgent;
 
+import graphics.ControllableView;
+import graphics.UpdateListener;
+import graphics.ViewerFactory.WindowLayout;
+import graphics.ViewerFactory.WindowLayout.Row;
+import graphics.ViewerFactory.WindowParameters;
+import graphics.ViewerFactoryP2P;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Panel;
@@ -15,13 +22,6 @@ import javax.swing.JSlider;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 
-import graphics.ControllableView;
-import graphics.UpdateListener;
-import graphics.ViewerFactory.Type;
-import graphics.ViewerFactory.WindowLayout;
-import graphics.ViewerFactory.WindowLayout.Row;
-import graphics.ViewerFactory.WindowParameters;
-import graphics.ViewerFactoryP2P;
 import logging.Log;
 import scenario.AbstractScenario;
 import scenario.P2PScenario;
@@ -78,14 +78,15 @@ public class SimulationP2P extends Simulation<EnvironmentP2P, CommandP2P>
 		init1();
 		WindowLayout layout = new WindowLayout(0, 0, 1280, 1000, 15, 1, 5, true, true);
 		Row row = null;
-		row = layout.addRow(Type.ITEM_GRAF, 4);
 		
-		row.add(new WindowParameters(Type.AGENT_SELECTION_GRID));
-		row.add(new WindowParameters(Type.ITEM_GRAF));
-		row.add(new WindowParameters(Type.ITEM_LOCATION_GRAF));
-		row.add(new WindowParameters(Type.ITEM_WANTED_GRAF));
-		layout.addMain(new WindowParameters(Type.CONTROL, -1, -1, this));
-		layout.addMain(new WindowParameters(Type.LOG_VIEWER, -1, -1, 0, 0));
+		row = layout.addRow(graphics.ViewerFactory.Type.ITEM_GRAF, 4);
+		
+		row.add(new WindowParameters(graphics.ViewerFactory.Type.AGENT_SELECTION_GRID));
+		row.add(new WindowParameters(graphics.ViewerFactory.Type.ITEM_GRAF));
+		row.add(new WindowParameters(graphics.ViewerFactory.Type.ITEM_LOCATION_GRAF));
+		row.add(new WindowParameters(graphics.ViewerFactory.Type.ITEM_WANTED_GRAF));
+		layout.addMain(new WindowParameters(graphics.ViewerFactory.Type.CONTROL, -1, -1, this));
+		layout.addMain(new WindowParameters(graphics.ViewerFactory.Type.LOG_VIEWER, -1, -1, 0, 0));
 		
 		// layout.addMain(new WindowParameters(Type.AGENT_DETAILS, -1, -1, 0, 0));
 		
