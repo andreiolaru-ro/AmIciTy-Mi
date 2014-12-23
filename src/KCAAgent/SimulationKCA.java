@@ -37,12 +37,10 @@ import base.agent.AgentID;
 import base.agent.LocationAgent;
 import base.graphics.AbstractGraphViewer;
 import base.graphics.ControllableView;
-import base.graphics.ViewerFactoryKCA;
 import base.graphics.ViewerFactory.WindowLayout;
 import base.graphics.ViewerFactory.WindowParameters;
 import base.graphics.ViewerFactory.WindowLayout.Row;
 import base.scenario.AbstractScenario;
-import base.scenario.KCAScenario;
 
 /**
  * Main class for managing a KCA-type simulation

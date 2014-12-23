@@ -32,12 +32,10 @@ import base.Simulation;
 import base.agent.AgentID;
 import base.graphics.ControllableView;
 import base.graphics.UpdateListener;
-import base.graphics.ViewerFactoryP2P;
 import base.graphics.ViewerFactory.WindowLayout;
 import base.graphics.ViewerFactory.WindowParameters;
 import base.graphics.ViewerFactory.WindowLayout.Row;
 import base.scenario.AbstractScenario;
-import base.scenario.P2PScenario;
 
 public class SimulationP2P extends Simulation<EnvironmentP2P, CommandP2P> {
 	/**

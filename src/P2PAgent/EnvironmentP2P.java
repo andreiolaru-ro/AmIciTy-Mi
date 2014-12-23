@@ -19,7 +19,6 @@ import base.agent.AbstractAgent;
 import base.agent.AgentID;
 import base.agent.Location;
 import base.graphics.AbstractGridViewerWhitoutLocation;
-import base.scenario.P2PScenario;
 
 public class EnvironmentP2P extends Environment<SimulationP2P, P2PAgent> {
 

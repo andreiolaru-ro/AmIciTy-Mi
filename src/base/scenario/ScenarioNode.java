@@ -108,7 +108,7 @@ public class ScenarioNode extends XMLNode {
 			}
 		}
 
-		List<String> getValues() {
+		public List<String> getValues() {
 			List<String> res = new ArrayList<String>();
 			if (value != null) {
 				res.add(value);

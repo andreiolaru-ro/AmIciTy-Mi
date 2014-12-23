@@ -21,7 +21,6 @@ import base.agent.AbstractAgent;
 import base.agent.AgentID;
 import base.agent.Location;
 import base.graphics.UpdateListener;
-import base.scenario.KCAScenario;
 
 public class EnvironmentKCA extends Environment<SimulationKCA, KCAAgent> {
 

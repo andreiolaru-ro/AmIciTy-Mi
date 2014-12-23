@@ -9,17 +9,18 @@
  * 
  * You should have received a copy of the GNU General Public License along with AmIciTy-Mi.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package base.graphics;
+package P2PAgent;
 
 import java.awt.Color;
 
 import base.agent.AbstractAgent;
+import base.graphics.AbstractGraphViewer;
+import base.graphics.AbstractGridViewerWhitoutLocation;
+import base.graphics.ControllableView;
+import base.graphics.ViewerFactory;
 import base.graphics.ViewerFactory.Type;
 import base.graphics.ViewerFactory.WindowParameters;
 import logging.LogViewer;
-import P2PAgent.EnvironmentP2P;
-import P2PAgent.P2PAgent;
-import P2PAgent.SimulationP2P;
 
 public class ViewerFactoryP2P {
 

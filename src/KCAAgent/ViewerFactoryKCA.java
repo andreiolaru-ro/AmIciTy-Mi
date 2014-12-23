@@ -9,23 +9,23 @@
  * 
  * You should have received a copy of the GNU General Public License along with AmIciTy-Mi.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package base.graphics;
+package KCAAgent;
 
 import java.awt.Color;
 import java.util.Collection;
 
-import base.graphics.AbstractGraphViewer.GraphParam;
-import base.measure.MeasureName;
 import logging.LogViewer;
-import KCAAgent.DataContent;
-import KCAAgent.EnvironmentKCA;
-import KCAAgent.Fact;
-import KCAAgent.Goal;
 import KCAAgent.Goal.GoalType;
-import KCAAgent.KCAAgent;
 import KCAAgent.Logix.Domain;
-import KCAAgent.SimulationKCA;
-import KCAAgent.Specialty;
+import base.graphics.AbstractAggregGraphViewer;
+import base.graphics.AbstractApproxGridViewer;
+import base.graphics.AbstractAvgGraphViewer;
+import base.graphics.AbstractGraphViewer.GraphParam;
+import base.graphics.AbstractGridViewer;
+import base.graphics.AbstractMaxGraphViewer;
+import base.graphics.ControllableView;
+import base.graphics.ViewerFactory;
+import base.measure.MeasureName;
 
 public class ViewerFactoryKCA extends ViewerFactory {
 	public static ControllableView<EnvironmentKCA>[] createViewers(EnvironmentKCA cm,

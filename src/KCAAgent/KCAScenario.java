@@ -9,7 +9,7 @@
  * 
  * You should have received a copy of the GNU General Public License along with AmIciTy-Mi.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package base.scenario;
+package KCAAgent;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -17,17 +17,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import KCAAgent.CommandKCA;
-import KCAAgent.DataContent;
-import KCAAgent.Fact;
-import KCAAgent.KCAAgent;
-import KCAAgent.Logix;
-import KCAAgent.SimulationKCA;
-import KCAAgent.Specialty;
 import XMLParsing.XMLTree.XMLNode;
 import base.Command;
 import base.agent.AgentID;
 import base.agent.Location;
+import base.scenario.AbstractLocationScenario;
+import base.scenario.ScenarioNode;
 
 /**
  * Scenario of the {@link SimulationKCA}.

@@ -9,7 +9,7 @@
  * 
  * You should have received a copy of the GNU General Public License along with AmIciTy-Mi.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package base.scenario;
+package P2PAgent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,10 +21,8 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import base.agent.AgentID;
-import P2PAgent.CommandP2P;
-import P2PAgent.Item;
-import P2PAgent.P2PAgent;
-import P2PAgent.SimulationP2P;
+import base.scenario.AbstractScenario;
+import base.scenario.ScenarioNode;
 import XMLParsing.XMLTree.XMLNode;
 
 /**
