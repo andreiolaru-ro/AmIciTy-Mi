@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import XMLParsing.XMLTree.XMLNode;
+import net.xqhs.util.XML.XMLTree.XMLNode;
 
 /**
  * * {@link ScenarioNode} is a {@link XMLNode} with a set of parameters. These

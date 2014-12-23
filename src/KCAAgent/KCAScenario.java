@@ -17,7 +17,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import XMLParsing.XMLTree.XMLNode;
+import net.xqhs.util.XML.XMLTree.XMLNode;
 import base.Command;
 import base.agent.AgentID;
 import base.agent.Location;

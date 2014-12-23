@@ -27,9 +27,9 @@ import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import XMLParsing.XMLParser;
-import XMLParsing.XMLTree;
-import XMLParsing.XMLTree.XMLNode;
+import net.xqhs.util.XML.XMLParser;
+import net.xqhs.util.XML.XMLTree;
+import net.xqhs.util.XML.XMLTree.XMLNode;
 import base.Command;
 import base.agent.AbstractAgent;
 import base.agent.AgentID;

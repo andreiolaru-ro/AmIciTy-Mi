@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+  Copyright (C) 2013 Andrei Olaru.
+  
+  This file is part of net.xqhs.XML.
+  
+  net.xqhs.XML is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
+  
+  net.xqhs.XML is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public License along with net.xqhs.XML.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<!-- place this in the root of the importing project -->
+<!-- if you use multiple imports, copy the target and add it to the dependencies of the default target -->
+<!--  be sure to check for collisions between the dependencies of the current jar and other jars -->
+
+<project default="import">
+
+	<!-- the directory where the project is, relative to the parent of the current project -->
+	<property name="import-directory" value="." />
+
+	<!-- the target for the current project -->
+	<target name="XML">
+		<copy file="../${import-directory}/net.xqhs.XML/deploy/net.xqhs.XML.jar" todir="lib/" />
+	</target>
+	
+	<target name="Logging">
+		<copy file="../${import-directory}/Logging/deploy/Logging-full.jar" todir="lib/" />
+	</target>
+		
+	<target name="import" depends="XML,Logging" />
+</project>

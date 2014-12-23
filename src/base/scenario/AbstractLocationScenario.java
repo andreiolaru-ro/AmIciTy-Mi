@@ -20,7 +20,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import XMLParsing.XMLTree.XMLNode;
+import net.xqhs.util.XML.XMLTree.XMLNode;
 import base.Command;
 import base.agent.AgentID;
 import base.agent.Location;

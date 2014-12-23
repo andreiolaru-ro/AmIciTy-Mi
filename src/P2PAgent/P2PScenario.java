@@ -20,10 +20,10 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import net.xqhs.util.XML.XMLTree.XMLNode;
 import base.agent.AgentID;
 import base.scenario.AbstractScenario;
 import base.scenario.ScenarioNode;
-import XMLParsing.XMLTree.XMLNode;
 
 /**
  * Scenario of the {@link SimulationP2P}.
