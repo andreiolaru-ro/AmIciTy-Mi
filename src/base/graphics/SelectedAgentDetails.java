@@ -9,29 +9,34 @@
  * 
  * You should have received a copy of the GNU General Public License along with AmIciTy-Mi.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package logging;
+package base.graphics;
 
-import java.awt.TextArea;
+import KCAAgent.EnvironmentKCA;
 
-import base.Environment;
-import base.graphics.AbstractViewer;
-
-public class LogViewer<ENVIRONMENT extends Environment<?, ?>> extends AbstractViewer<ENVIRONMENT> {
-	Logger		logger;
-	TextArea	text;
-
-	public LogViewer(ENVIRONMENT cm) {
-		super(cm, null);
-		this.logger = cm.getLogger();
-		text = new TextArea();
-		addDrawer(text);
-		setSize(600, 600);
+public class SelectedAgentDetails extends AgentDetails {
+	@SuppressWarnings("hiding")
+	public SelectedAgentDetails(EnvironmentKCA cm) {
+		super(cm);
 	}
 
-	@Override
-	public void update() {
-		// text.setText(logger.getEntries());
-		text.setText(logger.printEntries());
-		text.append("."); // should make it always scroll down.
-	}
+	// @Override
+	// protected void draw(Graphics2D g) {
+	// int w = getWidth();
+	// int h = getHeight();
+	// g.clearRect(0, 0, w, h);
+	// int n = cm.getSelected().size();
+	// if (n == 0) {
+	// return;
+	// }
+	// int k = 1 + (int) Math.floor(Math.sqrt(n - 1));
+	// int padding = 5;
+	// int dw = (w - padding) / k - padding;
+	// int dh = (h - padding) / k - padding;
+	// int x = (w - k * dw - (k - 1) * padding) / 2;
+	// int y = (h - k * dh - (k - 1) * padding) / 2;
+	// for (int i = 0; i < n; i++) {
+	// drawCell(g, cm.getSelected().get(i), x + i % k * (dw + padding), y + i /
+	// k * (dh + padding), dw, dh);
+	// }
+	// }
 }

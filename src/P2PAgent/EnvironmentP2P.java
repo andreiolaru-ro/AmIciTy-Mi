@@ -11,16 +11,15 @@
  ******************************************************************************/
 package P2PAgent;
 
-import graphics.AbstractGridViewerWhitoutLocation;
-
 import java.util.ArrayList;
 
 import logging.Logger;
-import scenario.P2PScenario;
-import agent.AbstractAgent;
-import agent.AgentID;
-import agent.Location;
 import base.Environment;
+import base.agent.AbstractAgent;
+import base.agent.AgentID;
+import base.agent.Location;
+import base.graphics.AbstractGridViewerWhitoutLocation;
+import base.scenario.P2PScenario;
 
 public class EnvironmentP2P extends Environment<SimulationP2P, P2PAgent> {
 

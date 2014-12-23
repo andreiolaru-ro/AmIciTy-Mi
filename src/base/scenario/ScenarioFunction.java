@@ -9,29 +9,51 @@
  * 
  * You should have received a copy of the GNU General Public License along with AmIciTy-Mi.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package logging;
+package base.scenario;
 
-import java.awt.TextArea;
+import base.agent.Location;
 
-import base.Environment;
-import base.graphics.AbstractViewer;
+/**
+ * Function parameters you could have in an xml.
+ * 
+ * @author Alexandre Hocquard
+ * 
+ */
+public class ScenarioFunction {
 
-public class LogViewer<ENVIRONMENT extends Environment<?, ?>> extends AbstractViewer<ENVIRONMENT> {
-	Logger		logger;
-	TextArea	text;
+	Location	coordinates;
+	String		function;
+	boolean		inside;
 
-	public LogViewer(ENVIRONMENT cm) {
-		super(cm, null);
-		this.logger = cm.getLogger();
-		text = new TextArea();
-		addDrawer(text);
-		setSize(600, 600);
+	public ScenarioFunction(Location coordinates, String function, boolean inside) {
+		super();
+		this.coordinates = coordinates;
+		this.function = function;
+		this.inside = inside;
 	}
 
-	@Override
-	public void update() {
-		// text.setText(logger.getEntries());
-		text.setText(logger.printEntries());
-		text.append("."); // should make it always scroll down.
+	public Location getCoordinates() {
+		return coordinates;
 	}
+
+	public void setCoordinates(Location coordinates) {
+		this.coordinates = coordinates;
+	}
+
+	public String getFunction() {
+		return function;
+	}
+
+	public void setFunction(String function) {
+		this.function = function;
+	}
+
+	public boolean isInside() {
+		return inside;
+	}
+
+	public void setInside(boolean inside) {
+		this.inside = inside;
+	}
+
 }

@@ -15,10 +15,10 @@ import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
 
+import base.measure.Measure;
+import base.measure.MeasureName;
+import base.measure.AbstractMeasure.NumericMeasure;
 import KCAAgent.Logix.Domain;
-import agent.AbstractMeasure.NumericMeasure;
-import agent.Measure;
-import agent.MeasureName;
 
 public class Specialty implements Measure<Map<Domain, NumericMeasure>>// NumericMeasure
 																		// now

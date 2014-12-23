@@ -11,9 +11,9 @@
  ******************************************************************************/
 package KCAAgent;
 
-import agent.Location;
 import base.Command;
 import base.PauseCommand;
+import base.agent.Location;
 
 public class CommandKCA extends PauseCommand {
 

@@ -17,10 +17,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import scenario.AbstractScenario;
-import agent.AbstractMeasure.NumericMeasure;
-import agent.AgentID;
-import agent.MeasureName;
+import base.agent.AgentID;
+import base.measure.MeasureName;
+import base.measure.AbstractMeasure.NumericMeasure;
+import base.scenario.AbstractScenario;
 
 public class Logix {
 	public static class FactComparator implements Comparator<Fact> {

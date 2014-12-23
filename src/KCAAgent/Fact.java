@@ -18,9 +18,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
-import agent.AbstractMeasure.FloatMeasure;
-import agent.AgentID;
-import agent.MeasureName;
+import base.agent.AgentID;
+import base.measure.MeasureName;
+import base.measure.AbstractMeasure.FloatMeasure;
 
 public class Fact {
 	// FIXME this function should be eventually removed

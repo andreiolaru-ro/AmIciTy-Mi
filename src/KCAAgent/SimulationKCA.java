@@ -11,13 +11,6 @@
  ******************************************************************************/
 package KCAAgent;
 
-import graphics.AbstractGraphViewer;
-import graphics.ControllableView;
-import graphics.ViewerFactory.WindowLayout;
-import graphics.ViewerFactory.WindowLayout.Row;
-import graphics.ViewerFactory.WindowParameters;
-import graphics.ViewerFactoryKCA;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Panel;
@@ -34,16 +27,22 @@ import javax.swing.JSlider;
 import javax.swing.WindowConstants;
 
 import logging.Log;
-import scenario.AbstractScenario;
-import scenario.KCAScenario;
 import KCAAgent.Goal.GoalType;
 import KCAAgent.Logix.Domain;
-import agent.AgentID;
-import agent.LocationAgent;
 import base.Command;
 import base.Environment;
 import base.Message;
 import base.Simulation;
+import base.agent.AgentID;
+import base.agent.LocationAgent;
+import base.graphics.AbstractGraphViewer;
+import base.graphics.ControllableView;
+import base.graphics.ViewerFactoryKCA;
+import base.graphics.ViewerFactory.WindowLayout;
+import base.graphics.ViewerFactory.WindowParameters;
+import base.graphics.ViewerFactory.WindowLayout.Row;
+import base.scenario.AbstractScenario;
+import base.scenario.KCAScenario;
 
 /**
  * Main class for managing a KCA-type simulation
@@ -99,19 +98,19 @@ public class SimulationKCA extends Simulation<EnvironmentKCA, CommandKCA> {
 
 		int ndata = scenario.getData().length;
 
-		row = layout.addRow(graphics.ViewerFactory.Type.FACTS_GRID, ndata);
+		row = layout.addRow(base.graphics.ViewerFactory.Type.FACTS_GRID, ndata);
 		for (int i = 0; i < ndata; i++)
 			row.add(data[i]);
 
-		row = layout.addRow(graphics.ViewerFactory.Type.DOMAIN_INTEREST_GRID, 6);
-		row.add(new WindowParameters(graphics.ViewerFactory.Type.SPECIALTY_GRID));
+		row = layout.addRow(base.graphics.ViewerFactory.Type.DOMAIN_INTEREST_GRID, 6);
+		row.add(new WindowParameters(base.graphics.ViewerFactory.Type.SPECIALTY_GRID));
 		for (Domain dom : Domain.values())
 			row.add(dom);
-		row.add(new WindowParameters(graphics.ViewerFactory.Type.PRESSURE_GRID));
-		row.add(new WindowParameters(graphics.ViewerFactory.Type.AGENT_SELECTION_GRID));
-		row.add(new WindowParameters(graphics.ViewerFactory.Type.PAUSE_GRID));
+		row.add(new WindowParameters(base.graphics.ViewerFactory.Type.PRESSURE_GRID));
+		row.add(new WindowParameters(base.graphics.ViewerFactory.Type.AGENT_SELECTION_GRID));
+		row.add(new WindowParameters(base.graphics.ViewerFactory.Type.PAUSE_GRID));
 
-		row = layout.addRow(graphics.ViewerFactory.Type.GLOBAL_FACT_NUMBER_GRAPH, ndata + 1,
+		row = layout.addRow(base.graphics.ViewerFactory.Type.GLOBAL_FACT_NUMBER_GRAPH, ndata + 1,
 				new AbstractGraphViewer.GraphParam(null, new AbstractGraphViewer.GraphLink("LF"),
 						new Integer(1)));
 		for (int i = 0; i < ndata; i++)
@@ -119,14 +118,14 @@ public class SimulationKCA extends Simulation<EnvironmentKCA, CommandKCA> {
 		row.add((Object) null);
 
 		row = layout.addRow(null, 6);
-		row.add(new WindowParameters(graphics.ViewerFactory.Type.GLOBAL_PRESSURE_GRAPH));
-		row.add(new WindowParameters(graphics.ViewerFactory.Type.MAX_PRESSURE_GRAPH));
-		row.add(new WindowParameters(graphics.ViewerFactory.Type.MESSAGE_AVG_GRAPH));
-		row.add(new WindowParameters(graphics.ViewerFactory.Type.USELESS_FACTS_AVG_GRAF));
+		row.add(new WindowParameters(base.graphics.ViewerFactory.Type.GLOBAL_PRESSURE_GRAPH));
+		row.add(new WindowParameters(base.graphics.ViewerFactory.Type.MAX_PRESSURE_GRAPH));
+		row.add(new WindowParameters(base.graphics.ViewerFactory.Type.MESSAGE_AVG_GRAPH));
+		row.add(new WindowParameters(base.graphics.ViewerFactory.Type.USELESS_FACTS_AVG_GRAF));
 		// row.add(new WindowParameters(Type.AGENT_BALANCE));
-		row.add(new WindowParameters(graphics.ViewerFactory.Type.AGENT_BALANCE_AVG_GRAF));
+		row.add(new WindowParameters(base.graphics.ViewerFactory.Type.AGENT_BALANCE_AVG_GRAF));
 
-		row = layout.addRow(graphics.ViewerFactory.Type.GLOBAL_GOAL_NUMBER_GRAPH, 3,
+		row = layout.addRow(base.graphics.ViewerFactory.Type.GLOBAL_GOAL_NUMBER_GRAPH, 3,
 				new AbstractGraphViewer.GraphParam(null, new AbstractGraphViewer.GraphLink("LG"),
 						new Integer(1)));
 		row.add((GoalType) null);
@@ -134,9 +133,9 @@ public class SimulationKCA extends Simulation<EnvironmentKCA, CommandKCA> {
 		// row.add(GoalType.GET);
 		row.add(GoalType.FREE);
 
-		layout.addMain(new WindowParameters(graphics.ViewerFactory.Type.CONTROL, -1, -1, this));
+		layout.addMain(new WindowParameters(base.graphics.ViewerFactory.Type.CONTROL, -1, -1, this));
 
-		layout.addMain(new WindowParameters(graphics.ViewerFactory.Type.LOG_VIEWER, -1, -1, 0, 0));
+		layout.addMain(new WindowParameters(base.graphics.ViewerFactory.Type.LOG_VIEWER, -1, -1, 0, 0));
 
 		// layout.addMain(new WindowParameters(Type.AGENT_DETAILS, -1, -1, 0,
 		// 0));

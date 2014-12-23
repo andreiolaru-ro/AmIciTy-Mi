@@ -21,13 +21,13 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import P2PAgent.MessageP2P.Type;
-import agent.AbstractAgent;
-import agent.AbstractMeasure.NumericMeasure;
-import agent.AgentID;
-import agent.Measure;
-import agent.MeasureName;
-import agent.Measures;
 import base.Message;
+import base.agent.AbstractAgent;
+import base.agent.AgentID;
+import base.measure.Measure;
+import base.measure.MeasureName;
+import base.measure.Measures;
+import base.measure.AbstractMeasure.NumericMeasure;
 
 /**
  * class which will simulate the basic behaviors of an agent on a p2p network

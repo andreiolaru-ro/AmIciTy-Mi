@@ -11,8 +11,8 @@
  ******************************************************************************/
 package base;
 
+import base.agent.AbstractAgent;
 import KCAAgent.KCAAgent;
-import agent.AbstractAgent;
 
 public class PauseCommand extends Command {
 

@@ -16,9 +16,9 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Set;
 
-import scenario.AbstractScenario;
-import agent.AbstractAgent;
 import base.Environment;
+import base.agent.AbstractAgent;
+import base.scenario.AbstractScenario;
 
 public class Log {
 	public enum Level {

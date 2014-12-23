@@ -9,29 +9,31 @@
  * 
  * You should have received a copy of the GNU General Public License along with AmIciTy-Mi.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package logging;
+package base.measure;
 
-import java.awt.TextArea;
+import java.util.Map;
 
-import base.Environment;
-import base.graphics.AbstractViewer;
+/**
+ * 
+ * interface to implement some specific methods to have a generic agent
+ * 
+ * @param <T>
+ */
 
-public class LogViewer<ENVIRONMENT extends Environment<?, ?>> extends AbstractViewer<ENVIRONMENT> {
-	Logger		logger;
-	TextArea	text;
+public interface Measurable<T> {
+	/**
+	 * get one specific measure of an agent
+	 * 
+	 * @param measure
+	 *            the name of the measure that we want to get
+	 * @return the specific measure
+	 */
+	Measure<T> getMeasure(MeasureName measure);
 
-	public LogViewer(ENVIRONMENT cm) {
-		super(cm, null);
-		this.logger = cm.getLogger();
-		text = new TextArea();
-		addDrawer(text);
-		setSize(600, 600);
-	}
-
-	@Override
-	public void update() {
-		// text.setText(logger.getEntries());
-		text.setText(logger.printEntries());
-		text.append("."); // should make it always scroll down.
-	}
+	/**
+	 * get all measures of an agent
+	 * 
+	 * @return a map which contains all the measures of the agent
+	 */
+	Map<MeasureName, Measure<T>> getAllMeasures();
 }

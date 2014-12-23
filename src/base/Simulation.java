@@ -13,13 +13,12 @@ package base;
 
 import java.awt.Color;
 
-import graphics.UpdateListener;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JSlider;
 import javax.swing.SwingConstants;
 
+import base.graphics.UpdateListener;
 import logging.Log;
 
 /**

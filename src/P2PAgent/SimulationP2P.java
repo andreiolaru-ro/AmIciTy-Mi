@@ -11,13 +11,6 @@
  ******************************************************************************/
 package P2PAgent;
 
-import graphics.ControllableView;
-import graphics.UpdateListener;
-import graphics.ViewerFactory.WindowLayout;
-import graphics.ViewerFactory.WindowLayout.Row;
-import graphics.ViewerFactory.WindowParameters;
-import graphics.ViewerFactoryP2P;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Panel;
@@ -34,11 +27,17 @@ import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 
 import logging.Log;
-import scenario.AbstractScenario;
-import scenario.P2PScenario;
-import agent.AgentID;
 import base.Environment;
 import base.Simulation;
+import base.agent.AgentID;
+import base.graphics.ControllableView;
+import base.graphics.UpdateListener;
+import base.graphics.ViewerFactoryP2P;
+import base.graphics.ViewerFactory.WindowLayout;
+import base.graphics.ViewerFactory.WindowParameters;
+import base.graphics.ViewerFactory.WindowLayout.Row;
+import base.scenario.AbstractScenario;
+import base.scenario.P2PScenario;
 
 public class SimulationP2P extends Simulation<EnvironmentP2P, CommandP2P> {
 	/**
@@ -82,14 +81,14 @@ public class SimulationP2P extends Simulation<EnvironmentP2P, CommandP2P> {
 		WindowLayout layout = new WindowLayout(0, 0, 1280, 1000, 15, 1, 5, true, true);
 		Row row = null;
 
-		row = layout.addRow(graphics.ViewerFactory.Type.ITEM_GRAF, 4);
+		row = layout.addRow(base.graphics.ViewerFactory.Type.ITEM_GRAF, 4);
 
-		row.add(new WindowParameters(graphics.ViewerFactory.Type.AGENT_SELECTION_GRID));
-		row.add(new WindowParameters(graphics.ViewerFactory.Type.ITEM_GRAF));
-		row.add(new WindowParameters(graphics.ViewerFactory.Type.ITEM_LOCATION_GRAF));
-		row.add(new WindowParameters(graphics.ViewerFactory.Type.ITEM_WANTED_GRAF));
-		layout.addMain(new WindowParameters(graphics.ViewerFactory.Type.CONTROL, -1, -1, this));
-		layout.addMain(new WindowParameters(graphics.ViewerFactory.Type.LOG_VIEWER, -1, -1, 0, 0));
+		row.add(new WindowParameters(base.graphics.ViewerFactory.Type.AGENT_SELECTION_GRID));
+		row.add(new WindowParameters(base.graphics.ViewerFactory.Type.ITEM_GRAF));
+		row.add(new WindowParameters(base.graphics.ViewerFactory.Type.ITEM_LOCATION_GRAF));
+		row.add(new WindowParameters(base.graphics.ViewerFactory.Type.ITEM_WANTED_GRAF));
+		layout.addMain(new WindowParameters(base.graphics.ViewerFactory.Type.CONTROL, -1, -1, this));
+		layout.addMain(new WindowParameters(base.graphics.ViewerFactory.Type.LOG_VIEWER, -1, -1, 0, 0));
 
 		// layout.addMain(new WindowParameters(Type.AGENT_DETAILS, -1, -1, 0,
 		// 0));

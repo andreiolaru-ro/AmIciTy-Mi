@@ -9,29 +9,24 @@
  * 
  * You should have received a copy of the GNU General Public License along with AmIciTy-Mi.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package logging;
+package base.graphics;
 
-import java.awt.TextArea;
+import java.awt.Color;
 
-import base.Environment;
-import base.graphics.AbstractViewer;
+import KCAAgent.EnvironmentKCA;
+import KCAAgent.KCAAgent;
 
-public class LogViewer<ENVIRONMENT extends Environment<?, ?>> extends AbstractViewer<ENVIRONMENT> {
-	Logger		logger;
-	TextArea	text;
-
-	public LogViewer(ENVIRONMENT cm) {
-		super(cm, null);
-		this.logger = cm.getLogger();
-		text = new TextArea();
-		addDrawer(text);
-		setSize(600, 600);
+public abstract class AbstractAvgGraphViewer extends AbstractGraphViewer<EnvironmentKCA, KCAAgent> {
+	protected AbstractAvgGraphViewer(EnvironmentKCA cm, Object data, Color color) {
+		super(cm, data, color);
 	}
 
 	@Override
-	public void update() {
-		// text.setText(logger.getEntries());
-		text.setText(logger.printEntries());
-		text.append("."); // should make it always scroll down.
+	protected double calculateValue() {
+		double value = 0;
+		for (KCAAgent cell : cm.getAgents()) {
+			value += getCellValue(cell);
+		}
+		return value / cm.getAgents().size();
 	}
 }

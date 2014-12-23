@@ -11,16 +11,15 @@
  ******************************************************************************/
 package base;
 
-import graphics.UpdateListener;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import base.agent.AbstractAgent;
+import base.agent.AgentID;
+import base.graphics.UpdateListener;
 import logging.Logger;
-import agent.AbstractAgent;
-import agent.AgentID;
 
 public abstract class Environment<SIMULATION extends Simulation<?, ?>, AGENT extends AbstractAgent> {
 	protected SIMULATION			parent;

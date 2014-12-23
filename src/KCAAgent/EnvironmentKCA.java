@@ -11,18 +11,17 @@
  ******************************************************************************/
 package KCAAgent;
 
-import graphics.UpdateListener;
-
 import java.util.ArrayList;
 import java.util.Collection;
 
 import logging.Logger;
-import scenario.KCAScenario;
-import agent.AbstractAgent;
-import agent.AgentID;
-import agent.Location;
 import base.Environment;
 import base.Message;
+import base.agent.AbstractAgent;
+import base.agent.AgentID;
+import base.agent.Location;
+import base.graphics.UpdateListener;
+import base.scenario.KCAScenario;
 
 public class EnvironmentKCA extends Environment<SimulationKCA, KCAAgent> {
 

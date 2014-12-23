@@ -11,7 +11,7 @@
  ******************************************************************************/
 package base;
 
-import agent.AgentID;
+import base.agent.AgentID;
 
 public abstract class Message<T> {
 

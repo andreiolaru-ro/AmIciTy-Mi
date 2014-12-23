@@ -13,9 +13,9 @@ package KCAAgent;
 
 import java.util.Collection;
 
-import agent.AgentID;
 import base.Environment;
 import base.Message;
+import base.agent.AgentID;
 
 public class MessageKCA extends Message<Collection<Fact>> implements Comparable<MessageKCA> {
 	public enum Type {

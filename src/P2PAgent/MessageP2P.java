@@ -11,9 +11,9 @@
  ******************************************************************************/
 package P2PAgent;
 
-import agent.AgentID;
 import base.Environment;
 import base.Message;
+import base.agent.AgentID;
 
 public class MessageP2P<T> extends Message<T> implements Comparable<MessageP2P<T>> {
 	public enum Type {

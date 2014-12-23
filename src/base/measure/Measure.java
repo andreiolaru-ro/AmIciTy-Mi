@@ -9,29 +9,18 @@
  * 
  * You should have received a copy of the GNU General Public License along with AmIciTy-Mi.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package logging;
+package base.measure;
 
-import java.awt.TextArea;
+/**
+ * 
+ * this interface represent a measure for an agent
+ * 
+ * @param <T>
+ */
+public interface Measure<T> {
+	public T getValue();
 
-import base.Environment;
-import base.graphics.AbstractViewer;
+	public void setValue(T measure) throws Exception;
 
-public class LogViewer<ENVIRONMENT extends Environment<?, ?>> extends AbstractViewer<ENVIRONMENT> {
-	Logger		logger;
-	TextArea	text;
-
-	public LogViewer(ENVIRONMENT cm) {
-		super(cm, null);
-		this.logger = cm.getLogger();
-		text = new TextArea();
-		addDrawer(text);
-		setSize(600, 600);
-	}
-
-	@Override
-	public void update() {
-		// text.setText(logger.getEntries());
-		text.setText(logger.printEntries());
-		text.append("."); // should make it always scroll down.
-	}
+	public MeasureName getName();
 }

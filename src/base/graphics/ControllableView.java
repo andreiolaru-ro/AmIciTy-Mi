@@ -9,29 +9,23 @@
  * 
  * You should have received a copy of the GNU General Public License along with AmIciTy-Mi.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package logging;
-
-import java.awt.TextArea;
+package base.graphics;
 
 import base.Environment;
-import base.graphics.AbstractViewer;
 
-public class LogViewer<ENVIRONMENT extends Environment<?, ?>> extends AbstractViewer<ENVIRONMENT> {
-	Logger		logger;
-	TextArea	text;
+public interface ControllableView<ENVIRONMENT extends Environment<?, ?>> {
+	// sets viewer location
+	void setLocation(int x, int y);
 
-	public LogViewer(ENVIRONMENT cm) {
-		super(cm, null);
-		this.logger = cm.getLogger();
-		text = new TextArea();
-		addDrawer(text);
-		setSize(600, 600);
-	}
+	// sets viewer size
+	void setSize(int width, int height);
 
-	@Override
-	public void update() {
-		// text.setText(logger.getEntries());
-		text.setText(logger.printEntries());
-		text.append("."); // should make it always scroll down.
-	}
+	// shows viewer and updates it
+	void show();
+
+	// hides viewer and cancels updates
+	void hide();
+
+	// links viewer to an environment
+	void relink(ENVIRONMENT cm);
 }

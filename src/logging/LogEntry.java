@@ -11,7 +11,7 @@
  ******************************************************************************/
 package logging;
 
-import agent.AbstractAgent;
+import base.agent.AbstractAgent;
 
 public class LogEntry implements Comparable<LogEntry> {
 	private static String	REPLACE_STRING		= "~";

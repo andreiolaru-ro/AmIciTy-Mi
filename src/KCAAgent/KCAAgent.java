@@ -25,20 +25,20 @@ import java.util.TreeSet;
 import java.util.Vector;
 import java.util.concurrent.PriorityBlockingQueue;
 
-import scenario.AbstractScenario;
 import KCAAgent.Goal.GoalList;
 import KCAAgent.Logix.Domain;
 import KCAAgent.MessageKCA.Type;
-import agent.AbstractMeasure.FloatMeasure;
-import agent.AbstractMeasure.NumericMeasure;
-import agent.AgentID;
-import agent.Location;
-import agent.LocationAgent;
-import agent.Measure;
-import agent.MeasureName;
-import agent.Measures;
 import base.Environment;
 import base.Message;
+import base.agent.AgentID;
+import base.agent.Location;
+import base.agent.LocationAgent;
+import base.measure.Measure;
+import base.measure.MeasureName;
+import base.measure.Measures;
+import base.measure.AbstractMeasure.FloatMeasure;
+import base.measure.AbstractMeasure.NumericMeasure;
+import base.scenario.AbstractScenario;
 
 public class KCAAgent extends LocationAgent {
 	private static double			balanceMinimum			= 0.4;

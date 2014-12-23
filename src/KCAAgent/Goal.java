@@ -16,8 +16,8 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 
-import base.QuickSet;
-import base.QuickSet.QuickFadable;
+import base.util.QuickSet;
+import base.util.QuickSet.QuickFadable;
 
 public class Goal implements QuickFadable {
 	public enum GoalType {

@@ -17,9 +17,9 @@ import java.util.Iterator;
 import java.util.Map;
 
 import logging.Log;
-import agent.AgentID;
-import base.QuickSet;
-import base.QuickSet.QuickForgetConfirmer;
+import base.agent.AgentID;
+import base.util.QuickSet;
+import base.util.QuickSet.QuickForgetConfirmer;
 
 public class KnowledgeBase implements QuickForgetConfirmer<Fact> {
 	private Log					log;

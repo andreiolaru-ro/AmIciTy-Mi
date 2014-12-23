@@ -11,8 +11,8 @@
  ******************************************************************************/
 package P2PAgent;
 
-import agent.AgentID;
 import base.Command;
+import base.agent.AgentID;
 
 public class CommandP2P extends Command {
 

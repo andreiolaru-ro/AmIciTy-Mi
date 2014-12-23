@@ -14,7 +14,7 @@ package KCAAgent;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import agent.AgentID;
+import base.agent.AgentID;
 
 public class Action {
 	enum ActionType {
