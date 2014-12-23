@@ -53,9 +53,7 @@ public class SimulationP2P extends Simulation<EnvironmentP2P, CommandP2P> {
 
 	private ControllableView<EnvironmentP2P>[]	viewers				= null;
 	private static StepNumber					sn					= new StepNumber();
-	private static JSlider						sw					= new JSlider(
-																			SwingConstants.HORIZONTAL,
-																			0, 200, 0);
+	private static JSlider						sw					= new StepDuration();
 
 	private static class StepNumber extends JLabel implements UpdateListener {
 		/**

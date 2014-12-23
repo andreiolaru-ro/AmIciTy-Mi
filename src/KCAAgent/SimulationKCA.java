@@ -13,7 +13,6 @@ package KCAAgent;
 
 import graphics.AbstractGraphViewer;
 import graphics.ControllableView;
-import graphics.UpdateListener;
 import graphics.ViewerFactory.WindowLayout;
 import graphics.ViewerFactory.WindowLayout.Row;
 import graphics.ViewerFactory.WindowParameters;
@@ -31,9 +30,7 @@ import java.io.PrintStream;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
-import javax.swing.JLabel;
 import javax.swing.JSlider;
-import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 
 import logging.Log;
@@ -48,50 +45,34 @@ import base.Environment;
 import base.Message;
 import base.Simulation;
 
+/**
+ * Main class for managing a KCA-type simulation
+ */
 public class SimulationKCA extends Simulation<EnvironmentKCA, CommandKCA> {
 	/**
-	 * 
+	 * The serial version UID.
 	 */
-	private static final long	serialVersionUID	= 1L;
+	private static final long					serialVersionUID	= 1L;
 
-	private static class StepNumber extends JLabel implements UpdateListener {
-		/**
-		 * 
-		 */
-		private static final long	serialVersionUID	= 1L;
-
-		public StepNumber() {
-			super("   ---   ");
-			setForeground(Color.black);
-		}
-
-		@Override
-		public void update() {
-			setText("   step " + Environment.getStep() + "   ");
-		}
-	}
-
+	/**
+	 * The name of the scenario to use.
+	 */
 	// public final static String scenarioName = "scenarios/kcaScenario.xml";
 	// public final static String scenarioName = "scenarios/ooo.xml";
-	public final static String					scenarioName	= "scenarios/kca_test3r.xml";
+	public final static String					scenarioName		= "scenarios/kca_test3r.xml";
 
-	KCAScenario									scenario		= new KCAScenario(scenarioName);
+	KCAScenario									scenario			= new KCAScenario(scenarioName);
 
-	private DataContent[]						data			= scenario.getData();
+	private DataContent[]						data				= scenario.getData();
 
-	private static StepNumber					sn				= new StepNumber();
-	private static JSlider						sw				= new JSlider(
-																		SwingConstants.HORIZONTAL,
-																		0, 200, 0);
+	private static StepNumber					sn					= new StepNumber();
+	private static JSlider						sw					= new StepDuration();
 
-	private ControllableView<EnvironmentKCA>[]	viewers			= null;
+	private ControllableView<EnvironmentKCA>[]	viewers				= null;
 
-	private static SimulationKCA				kca;
-
-	// private Command[] absCommands = scenario.getAbsCommands();
-
+	@SuppressWarnings("unused")
 	public static void main(String[] args) {
-		setKca(new SimulationKCA());
+		new SimulationKCA();
 	}
 
 	public SimulationKCA() {
@@ -99,15 +80,20 @@ public class SimulationKCA extends Simulation<EnvironmentKCA, CommandKCA> {
 
 		init1();
 
-		WindowLayout layout = new WindowLayout(0, 0, 1280, 1000, 15, 1, 5, true, true); // (1366),
-																						// windows
-																						// 7
+		// (1366), windows 7
+		WindowLayout layout = new WindowLayout(0, 0, 1280, 1000, 15, 1, 5, true, true);
+
+		// larger (1680), windows 7
 		// WindowLayout layout = new WindowLayout(70, 0, 1600, 1000, 15, 1, 5,
-		// true, true); // larger (1680), windows 7
+		// true, true);
+
+		// large (1280), windows 7
 		// WindowLayout layout = new WindowLayout(70, 0, 1200, 800, 20, 1, 5,
-		// true, true); // large (1280), windows 7
+		// true, true);
+
+		// small (1024)
 		// WindowLayout layout = new WindowLayout(0, 0, 1000, 600, 60, 1, 5,
-		// true, true); // small (1024)
+		// true, true);
 
 		Row row;
 
@@ -191,16 +177,6 @@ public class SimulationKCA extends Simulation<EnvironmentKCA, CommandKCA> {
 			}
 		});
 		box.add(step);
-		// JButton reset = new JButton("Reset !");
-		// reset.addActionListener(new ActionListener() {
-		// @Override
-		// public void actionPerformed(ActionEvent e)
-		// {
-		// init1();
-		// init2();
-		// }
-		// });
-		// box.add(reset);
 
 		box.add(sn);
 
@@ -371,12 +347,4 @@ public class SimulationKCA extends Simulation<EnvironmentKCA, CommandKCA> {
 		this.setTitle("KCA - " + Environment.getStep());
 	}
 
-	public static SimulationKCA getKca() {
-		return kca;
-	}
-
-	public static void setKca(SimulationKCA kca1) {
-		SimulationKCA.kca = kca1;
-
-	}
 }
