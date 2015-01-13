@@ -13,43 +13,46 @@ package P2PAgent;
 
 import java.awt.Color;
 
+import logging.LogViewer;
+import net.xqhs.windowLayout.WindowParameters;
+import net.xqhs.windowLayout.rows.RowsLayout.RowsWindowParameters;
 import base.agent.AbstractAgent;
 import base.graphics.AbstractGraphViewer;
 import base.graphics.AbstractGridViewerWhitoutLocation;
 import base.graphics.ControllableView;
-import base.graphics.ViewerFactory;
 import base.graphics.ViewerFactory.Type;
-import base.graphics.ViewerFactory.WindowParameters;
-import logging.LogViewer;
 
-public class ViewerFactoryP2P {
-
+public class ViewerFactoryP2P
+{
+	
 	public static ControllableView<EnvironmentP2P>[] createViewers(EnvironmentP2P environment,
-			WindowParameters params[]) {
+			RowsWindowParameters params[])
+	{
 		ControllableView<EnvironmentP2P>[] viewers = new ControllableView[params.length];
-		WindowParameters control = null;
-		for (int i = 0; i < params.length && control == null; i++)
-			if (params[i].getType() == Type.CONTROL)
+		RowsWindowParameters control = null;
+		for(int i = 0; i < params.length && control == null; i++)
+			if(params[i].getType().equals(Type.CONTROL.toString()))
 				control = params[i];
-
+		
 		SimulationP2P p2p = (SimulationP2P) (control.getData());
-		p2p.createMainWindow(control.getX(), control.getY(), control.getWidth(),
-				control.getHeight());
-
-		for (int i = 0; i < params.length; i++) {
-			if (params[i].getType() != Type.CONTROL)
+		p2p.createMainWindow(control.getX(), control.getY(), control.getWidth(), control.getHeight());
+		
+		for(int i = 0; i < params.length; i++)
+		{
+			if(!params[i].getType().equals(Type.CONTROL.toString()))
 				viewers[i] = createViewer(environment, params[i]);
 		}
-
+		
 		return viewers;
 	}
-
-	public static ControllableView<EnvironmentP2P> createViewer(EnvironmentP2P environment,
-			WindowParameters params) {
-		ControllableView<EnvironmentP2P> viewer = createViewerSub(environment, params.getType(),
-				params.getData(), params.getSpecific());
+	
+	public static ControllableView<EnvironmentP2P> createViewer(EnvironmentP2P environment, RowsWindowParameters params)
+	{
+		ControllableView<EnvironmentP2P> viewer = createViewerSub(environment, Type.valueOf(params.getType()), params.getData(),
+				params.getData());
 		viewer.setLocation(params.getX(), params.getY());
-		if (params.getWidth() != 0 && params.getHeight() != 0) {
+		if(params.getWidth() != 0 && params.getHeight() != 0)
+		{
 			// System.out.println("setting dim: " + params.width + ", " +
 			// params.height);
 			viewer.setSize(params.getWidth(), params.getHeight());
@@ -58,69 +61,81 @@ public class ViewerFactoryP2P {
 		viewer.show();
 		return viewer;
 	}
-
-	private static ControllableView<EnvironmentP2P> createViewerSub(EnvironmentP2P environment,
-			Type type, Object data, Object specific) {
-		switch (type) {
+	
+	private static ControllableView<EnvironmentP2P> createViewerSub(EnvironmentP2P environment, Type type, Object data,
+			Object specific)
+	{
+		switch(type)
+		{
 		case AGENT_SELECTION_GRID:
 			return new AbstractGridViewerWhitoutLocation<EnvironmentP2P>(environment) {
 				@Override
-				public Color getColor(AbstractAgent cell) {
+				public Color getColor(AbstractAgent cell)
+				{
 					return Color.GREEN;
 				}
 			}.setTitle("Selection Grid");
 		case ITEM_GRAF:
 			return new AbstractGraphViewer<EnvironmentP2P, P2PAgent>(environment, null, Color.red) {
 				@Override
-				public double getCellValue(P2PAgent cell) {
+				public double getCellValue(P2PAgent cell)
+				{
 					return P2PAgent.getNumberItem().doubleValue();
 				}
-
+				
 				@Override
-				public double stringScale() {
+				public double stringScale()
+				{
 					return 1;
 				}
-
+				
 				@Override
-				protected double calculateValue() {
+				protected double calculateValue()
+				{
 					return P2PAgent.getNumberItem().doubleValue();
 				}
 			}.setTitle("Item owned");
 		case ITEM_LOCATION_GRAF:
 			return new AbstractGraphViewer<EnvironmentP2P, P2PAgent>(environment, null, Color.red) {
 				@Override
-				public double getCellValue(P2PAgent cell) {
+				public double getCellValue(P2PAgent cell)
+				{
 					return P2PAgent.getNumberItem().doubleValue();
 				}
-
+				
 				@Override
-				public double stringScale() {
+				public double stringScale()
+				{
 					return 1;
 				}
-
+				
 				@Override
-				protected double calculateValue() {
+				protected double calculateValue()
+				{
 					return P2PAgent.getNumberItemLocation().doubleValue();
 				}
 			}.setTitle("Item location");
 		case ITEM_WANTED_GRAF:
 			return new AbstractGraphViewer<EnvironmentP2P, P2PAgent>(environment, null, Color.red) {
 				@Override
-				public double getCellValue(P2PAgent cell) {
+				public double getCellValue(P2PAgent cell)
+				{
 					return P2PAgent.getNumberItem().doubleValue();
 				}
-
+				
 				@Override
-				public double stringScale() {
+				public double stringScale()
+				{
 					return 1;
 				}
-
+				
 				@Override
-				protected double calculateValue() {
+				protected double calculateValue()
+				{
 					return P2PAgent.getNumberItemWanted().doubleValue();
 				}
 			}.setTitle("Item wanted");
-
+			
 		case LOG_VIEWER:
 			return new LogViewer<EnvironmentP2P>(environment).setTitle("Event Log");
 		case CONTROL:
@@ -128,7 +143,7 @@ public class ViewerFactoryP2P {
 		default:
 			return null;
 		}
-
+		
 	}
-
+	
 }
