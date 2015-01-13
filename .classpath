@@ -6,6 +6,6 @@
 	<classpathentry kind="lib" path="lib/gnujaxp.jar"/>
 	<classpathentry kind="lib" path="lib/Logging-full.jar"/>
 	<classpathentry kind="lib" path="lib/net.xqhs.XML.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/net.xqhs.WindowLayout"/>
+	<classpathentry kind="lib" path="lib/net.xqhs.WindowLayout.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

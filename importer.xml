@@ -27,6 +27,10 @@
 	<target name="Logging">
 		<copy file="../${import-directory}/Logging/deploy/Logging-full.jar" todir="lib/" />
 	</target>
-		
-	<target name="import" depends="XML,Logging" />
+	
+	<target name="WindowLayout">
+		<copy file="../${import-directory}/net.xqhs.WindowLayout/deploy/net.xqhs.WindowLayout.jar" todir="lib/" />
+	</target>
+			
+	<target name="import" depends="XML,Logging,WindowLayout" />
 </project>
