@@ -15,6 +15,7 @@ import java.awt.Color;
 import java.util.Collection;
 
 import logging.LogViewer;
+import net.xqhs.windowLayout.rows.RowsLayout.RowsWindowParameters;
 import KCAAgent.Goal.GoalType;
 import KCAAgent.Logix.Domain;
 import base.graphics.AbstractAggregGraphViewer;
@@ -29,11 +30,11 @@ import base.measure.MeasureName;
 
 public class ViewerFactoryKCA extends ViewerFactory {
 	public static ControllableView<EnvironmentKCA>[] createViewers(EnvironmentKCA cm,
-			WindowParameters params[]) {
+			RowsWindowParameters params[]) {
 		ControllableView<EnvironmentKCA>[] viewers = new ControllableView[params.length];
-		WindowParameters control = null;
+		RowsWindowParameters control = null;
 		for (int i = 0; i < params.length && control == null; i++)
-			if (params[i].getType() == Type.CONTROL)
+			if (params[i].getType().equals(Type.CONTROL.toString()))
 				control = params[i];
 
 		SimulationKCA kca = (SimulationKCA) (control.getData());
@@ -41,16 +42,16 @@ public class ViewerFactoryKCA extends ViewerFactory {
 				control.getHeight());
 
 		for (int i = 0; i < params.length; i++) {
-			if (params[i].getType() != Type.CONTROL)
+			if (!params[i].getType().equals(Type.CONTROL.toString()))
 				viewers[i] = (ControllableView<EnvironmentKCA>) createViewer(cm, params[i]);
 		}
 
 		return viewers;
 	}
 
-	public static ControllableView<?> createViewer(EnvironmentKCA cm, WindowParameters params) {
-		ControllableView<?> viewer = createViewerSub(cm, params.getType(), params.getData(),
-				params.getSpecific());
+	public static ControllableView<?> createViewer(EnvironmentKCA cm, RowsWindowParameters params) {
+		ControllableView<?> viewer = createViewerSub(cm, Type.valueOf(params.getType()),
+				params.getData());
 		viewer.setLocation(params.getX(), params.getY());
 		if (params.getWidth() != 0 && params.getHeight() != 0) {
 			// System.out.println("setting dim: " + params.width + ", " +
@@ -63,7 +64,7 @@ public class ViewerFactoryKCA extends ViewerFactory {
 	}
 
 	private static ControllableView<EnvironmentKCA> createViewerSub(EnvironmentKCA cm, Type type,
-			Object data, Object specific) {
+			Object data) {
 		switch (type) {
 		// case SELECTED_AGENT_DETAILS:
 		// return new
@@ -207,17 +208,16 @@ public class ViewerFactoryKCA extends ViewerFactory {
 			// }
 			// }.setTitle("Data Facts Surface - " + data);
 		case GLOBAL_FACT_NUMBER_GRAPH:
-			return new AbstractAggregGraphViewer(cm, data, (GraphParam) specific) {
+			return new AbstractAggregGraphViewer(cm, data) {
 				@Override
 				public double getCellValue(KCAAgent cell) {
 					if (data != null)
-						return Fact.filterCollectionOnAbstractContent(cell.getFacts(false),
-								(DataContent) data).size();
+						return Fact.filterCollectionOnAbstractContent(cell.getFacts(false), data)
+								.size();
 					return cell.getFacts(false).size();
 				}
-				// }.setTitle(data!=null ? "Data Facts Number - " + data :
-				// "Total Facts Number");
-			}.setTitle(data != null ? data + " - Facts Number" : "Total Facts Number");
+			}.setTitle(data != null ? ((data instanceof GraphParam) ? ((GraphParam) data).getData()
+					: data) + " - Facts Number" : "Total Facts Number");
 		case GLOBAL_GOAL_NUMBER_GRAPH: // ca receive in data the GoalType to
 										// filter goals by
 			return new AbstractAggregGraphViewer(cm, data) {

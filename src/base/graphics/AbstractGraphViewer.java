@@ -18,6 +18,7 @@ import java.text.DecimalFormat;
 import java.util.LinkedList;
 import java.util.List;
 
+import KCAAgent.DataContent;
 import KCAAgent.Specialty;
 import base.Environment;
 import base.agent.AbstractAgent;
@@ -28,11 +29,17 @@ public abstract class AbstractGraphViewer<ENVIRONMENT extends Environment<?, ?>,
 		Color		color;
 		GraphLink	link;
 		int			traces;
+		Object		dataSource;
 
-		public GraphParam(Color color, GraphLink link, Integer traces) {
+		public GraphParam(Color color, GraphLink link, int traces, Object data) {
 			this.link = (link == null) ? new GraphLink() : link;
 			this.color = (color == null) ? Color.black : color;
-			this.traces = (traces == null) ? 1 : traces.intValue();
+			this.traces = (traces < 0) ? 1 : traces;
+			this.dataSource = data;
+		}
+
+		public Object getData() {
+			return dataSource;
 		}
 	}
 
@@ -95,23 +102,20 @@ public abstract class AbstractGraphViewer<ENVIRONMENT extends Environment<?, ?>,
 	boolean					dolines	= true;
 	GraphParam				param;
 
-	protected AbstractGraphViewer(ENVIRONMENT cm, Object data) {
-		this(cm, data, new GraphParam(null, null, null));
-	}
-
 	protected AbstractGraphViewer(ENVIRONMENT cm, Object data, Color color) {
-		this(cm, data, new GraphParam(color, null, null));
+		this(cm, new GraphParam(color, null, -1, data));
 	}
 
-	protected AbstractGraphViewer(ENVIRONMENT cm, Object data, GraphParam param) {
-		super(cm, data);
-
+	protected AbstractGraphViewer(ENVIRONMENT cm, Object param) {
+		super(cm, (param instanceof GraphParam) ? ((GraphParam) param).dataSource : param);
+		
+		GraphParam p = (GraphParam) param;
 		if ((data != null) && (data instanceof Specialty))
-			param.color = ((Specialty) data).getColor();
+			p.color = ((Specialty) data).getColor();
 
-		this.param = param;
+		this.param = p;
 
-		for (int i = 0; i < param.traces; i++)
+		for (int i = 0; i < p.traces; i++)
 			points.add(new LinkedList<GraphPoint>());
 	}
 

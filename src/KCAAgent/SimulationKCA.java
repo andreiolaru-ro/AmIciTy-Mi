@@ -27,6 +27,9 @@ import javax.swing.JSlider;
 import javax.swing.WindowConstants;
 
 import logging.Log;
+import net.xqhs.windowLayout.LayoutIndications.BarPosition;
+import net.xqhs.windowLayout.rows.RowsLayout;
+import net.xqhs.windowLayout.rows.RowsLayoutIndications;
 import KCAAgent.Goal.GoalType;
 import KCAAgent.Logix.Domain;
 import base.Command;
@@ -36,10 +39,8 @@ import base.Simulation;
 import base.agent.AgentID;
 import base.agent.LocationAgent;
 import base.graphics.AbstractGraphViewer;
+import base.graphics.AbstractGraphViewer.GraphParam;
 import base.graphics.ControllableView;
-import base.graphics.ViewerFactory.WindowLayout;
-import base.graphics.ViewerFactory.WindowParameters;
-import base.graphics.ViewerFactory.WindowLayout.Row;
 import base.scenario.AbstractScenario;
 
 /**
@@ -77,8 +78,10 @@ public class SimulationKCA extends Simulation<EnvironmentKCA, CommandKCA> {
 
 		init1();
 
-		// (1366), windows 7
-		WindowLayout layout = new WindowLayout(0, 0, 1280, 1000, 15, 1, 5, true, true);
+		RowsLayout layout = new RowsLayout((RowsLayoutIndications) new RowsLayoutIndications()
+				.indicateNMainsIndications(1).indicateMainPercent(30).indicateRowCount(5)
+				.makeSquare().indicateBar(BarPosition.LEFT, 100, 0)
+				.indicateBar(BarPosition.TOP, 70, 0).indicateW(1050).indicateH(900));
 
 		// larger (1680), windows 7
 		// WindowLayout layout = new WindowLayout(70, 0, 1600, 1000, 15, 1, 5,
@@ -92,53 +95,49 @@ public class SimulationKCA extends Simulation<EnvironmentKCA, CommandKCA> {
 		// WindowLayout layout = new WindowLayout(0, 0, 1000, 600, 60, 1, 5,
 		// true, true);
 
-		Row row;
+		layout.addRow(base.graphics.ViewerFactory.Type.FACTS_GRID.toString(), data);
 
-		int ndata = scenario.getData().length;
+		String[] types = new String[4 + Domain.values().length];
+		int i = 0;
+		for (@SuppressWarnings("unused")
+		Domain dom : Domain.values())
+			types[i++] = base.graphics.ViewerFactory.Type.DOMAIN_INTEREST_GRID.toString();
+		types[i++] = base.graphics.ViewerFactory.Type.SPECIALTY_GRID.toString();
+		types[i++] = base.graphics.ViewerFactory.Type.PRESSURE_GRID.toString();
+		types[i++] = base.graphics.ViewerFactory.Type.AGENT_SELECTION_GRID.toString();
+		types[i++] = base.graphics.ViewerFactory.Type.PAUSE_GRID.toString();
+		layout.addRow(-1, -1, types, Domain.values());
 
-		row = layout.addRow(base.graphics.ViewerFactory.Type.FACTS_GRID, ndata);
-		for (int i = 0; i < ndata; i++)
-			row.add(data[i]);
+		GraphParam[] param = new GraphParam[data.length];
+		i = 0;
+		for (Object datum : data)
+			param[i++] = new AbstractGraphViewer.GraphParam(null,
+					new AbstractGraphViewer.GraphLink("LF"), 1, datum);
 
-		row = layout.addRow(base.graphics.ViewerFactory.Type.DOMAIN_INTEREST_GRID, 6);
-		row.add(new WindowParameters(base.graphics.ViewerFactory.Type.SPECIALTY_GRID));
-		for (Domain dom : Domain.values())
-			row.add(dom);
-		row.add(new WindowParameters(base.graphics.ViewerFactory.Type.PRESSURE_GRID));
-		row.add(new WindowParameters(base.graphics.ViewerFactory.Type.AGENT_SELECTION_GRID));
-		row.add(new WindowParameters(base.graphics.ViewerFactory.Type.PAUSE_GRID));
+		layout.addRow(base.graphics.ViewerFactory.Type.GLOBAL_FACT_NUMBER_GRAPH.toString(), param);
 
-		row = layout.addRow(base.graphics.ViewerFactory.Type.GLOBAL_FACT_NUMBER_GRAPH, ndata + 1,
-				new AbstractGraphViewer.GraphParam(null, new AbstractGraphViewer.GraphLink("LF"),
-						new Integer(1)));
-		for (int i = 0; i < ndata; i++)
-			row.add(data[i]);
-		row.add((Object) null);
+		layout.addRow(new String[] {
+				base.graphics.ViewerFactory.Type.GLOBAL_PRESSURE_GRAPH.toString(),
+				base.graphics.ViewerFactory.Type.MAX_PRESSURE_GRAPH.toString(),
+				base.graphics.ViewerFactory.Type.MESSAGE_AVG_GRAPH.toString(),
+				base.graphics.ViewerFactory.Type.USELESS_FACTS_AVG_GRAF.toString(),
+				base.graphics.ViewerFactory.Type.AGENT_BALANCE_AVG_GRAF.toString(), });
 
-		row = layout.addRow(null, 6);
-		row.add(new WindowParameters(base.graphics.ViewerFactory.Type.GLOBAL_PRESSURE_GRAPH));
-		row.add(new WindowParameters(base.graphics.ViewerFactory.Type.MAX_PRESSURE_GRAPH));
-		row.add(new WindowParameters(base.graphics.ViewerFactory.Type.MESSAGE_AVG_GRAPH));
-		row.add(new WindowParameters(base.graphics.ViewerFactory.Type.USELESS_FACTS_AVG_GRAF));
-		// row.add(new WindowParameters(Type.AGENT_BALANCE));
-		row.add(new WindowParameters(base.graphics.ViewerFactory.Type.AGENT_BALANCE_AVG_GRAF));
-
-		row = layout.addRow(base.graphics.ViewerFactory.Type.GLOBAL_GOAL_NUMBER_GRAPH, 3,
-				new AbstractGraphViewer.GraphParam(null, new AbstractGraphViewer.GraphLink("LG"),
-						new Integer(1)));
-		row.add((GoalType) null);
-		row.add(GoalType.INFORM);
-		// row.add(GoalType.GET);
-		row.add(GoalType.FREE);
-
-		layout.addMain(new WindowParameters(base.graphics.ViewerFactory.Type.CONTROL, -1, -1, this));
-
-		layout.addMain(new WindowParameters(base.graphics.ViewerFactory.Type.LOG_VIEWER, -1, -1, 0, 0));
+		Object[] items = new Object[]{null, GoalType.INFORM, /* GoalType.GET,*/ GoalType.FREE};
+		GraphParam[] param1 = new GraphParam[items.length];
+		i = 0;
+		for (Object item : items)
+			param1[i++] = new AbstractGraphViewer.GraphParam(null,
+					new AbstractGraphViewer.GraphLink("LG"), 1, item);
+		layout.addRow(base.graphics.ViewerFactory.Type.GLOBAL_GOAL_NUMBER_GRAPH.toString(), param1);
+		
+		layout.addMain(-1, 100, base.graphics.ViewerFactory.Type.CONTROL.toString(), this);
+		layout.addMain(-1, -1, base.graphics.ViewerFactory.Type.LOG_VIEWER.toString(), null);
 
 		// layout.addMain(new WindowParameters(Type.AGENT_DETAILS, -1, -1, 0,
 		// 0));
 
-		viewers = ViewerFactoryKCA.createViewers(environment, layout.toCollection());
+		viewers = ViewerFactoryKCA.createViewers(environment, layout.getAllWindows());
 
 		init2();
 	}
@@ -219,6 +218,7 @@ public class SimulationKCA extends Simulation<EnvironmentKCA, CommandKCA> {
 		this.setTitle("KCA");
 		this.setLocation(x, y);
 		this.setSize(w, h);
+		this.pack();
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		this.setVisible(true);
 	}

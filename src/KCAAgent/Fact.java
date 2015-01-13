@@ -25,7 +25,7 @@ import base.measure.AbstractMeasure.FloatMeasure;
 public class Fact {
 	// FIXME this function should be eventually removed
 	public static Collection<Fact> filterCollectionOnAbstractContent(Collection<Fact> c,
-			DataContent d) {
+			Object d) {
 		Collection<Fact> ret = new HashSet<Fact>();
 		for (Fact f : c)
 			if (f.getAbstractContentRecursive().equals(d))

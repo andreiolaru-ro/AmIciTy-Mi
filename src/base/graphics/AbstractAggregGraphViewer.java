@@ -13,6 +13,7 @@ package base.graphics;
 
 import java.awt.Color;
 
+import base.graphics.AbstractGraphViewer.GraphParam;
 import KCAAgent.EnvironmentKCA;
 import KCAAgent.KCAAgent;
 
@@ -23,16 +24,12 @@ public abstract class AbstractAggregGraphViewer extends
 	double	max;
 	double	min;
 
-	protected AbstractAggregGraphViewer(EnvironmentKCA cm, Object data) {
-		this(cm, data, new GraphParam(null, null, null));
-	}
-
 	protected AbstractAggregGraphViewer(EnvironmentKCA cm, Object data, Color color) {
-		this(cm, data, new GraphParam(color, null, null));
+		this(cm, new GraphParam(color, null, -1, data));
 	}
-
-	protected AbstractAggregGraphViewer(EnvironmentKCA cm, Object data, GraphParam param) {
-		super(cm, data, param);
+	
+	protected AbstractAggregGraphViewer(EnvironmentKCA cm, Object param) {
+		super(cm, param);
 	}
 
 	@Override
